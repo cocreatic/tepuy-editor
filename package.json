@@ -1,0 +1,39 @@
+{
+  "name": "tepuy-editor",
+  "version": "1.0.0",
+  "description": "An authoring tool for writing tepuy enabled learning objects",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bambuco/tepuy-editor.git"
+  },
+  "keywords": [
+    "SCORM",
+    "tepuy",
+    "ova",
+    "dco",
+    "elearning"
+  ],
+  "author": "Jesus Otero",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/bambuco/tepuy-editor/issues"
+  },
+  "homepage": "https://github.com/bambuco/tepuy-editor#readme",
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "cssnano": "^4.1.10",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^6.0.0",
+    "gulp-postcss": "^8.0.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2"
+  }
+}
