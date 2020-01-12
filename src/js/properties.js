@@ -4,4 +4,4 @@ export default {
     ],
     themes: [""],
     gui: "gui.default"
-}
+};

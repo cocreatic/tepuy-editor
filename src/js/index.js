@@ -1,5 +1,4 @@
 import properties from './properties';
-import '../css/style.css';
 
 class App {
 
@@ -26,7 +25,7 @@ class App {
                 this.plugins[plugin.id] = new tepuyEditor[objectName];
             }
             else {
-                import (`./js/plugins/${plugin.id}/component.js`).then(function (pClass) {
+                import(`../plugins/${plugin.id}/component.js`).then(function (pClass) {
                     this.plugins[plugin.id] = new pClass();
                 })
             }

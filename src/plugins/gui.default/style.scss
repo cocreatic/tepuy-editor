@@ -18,16 +18,16 @@ section {
     bottom: 20px;
     height: auto;
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
 }
 
 #tpe-sidebar {
     width: 150px;
-    border: solid 1px #333;
+    border-right: solid 1px #333;
 }
 
 #tpe-content {
-
+    flex: 1;
 }
 
 #tpe-content iframe {

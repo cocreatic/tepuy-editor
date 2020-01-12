@@ -1,4 +1,4 @@
-import { App } from '../../index';
+import { App } from '../../js/index';
 
 export class GuiDefault {
 
