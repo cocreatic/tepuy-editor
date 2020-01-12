@@ -1,7 +1,7 @@
 # tepuy-editor
 A WYSIWYG authoring tool for tepuy
 
-#Requirements
+# Requirements
 Node.js (v12 recommended)
 Gulp cli installed (```npm install -g gulp-cli```)
 
