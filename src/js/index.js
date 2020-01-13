@@ -1,4 +1,5 @@
 import properties from './properties';
+import { sortInsert } from './utils';
 
 class App {
 
@@ -7,10 +8,9 @@ class App {
         this.plugins = {};
     }
 
-    registerHook(id, callback, priority) {
+    registerHook(id, callback, priority = 999) {
         if (!this.hooks[id]) this.hooks[id] = [];
-        //ToDo: Register the hook according to the priority
-        this.hooks[id].push({ callback, priority });
+        sortInsert(this.hooks[id], { callback, priority }, (a, b) => a.priority - b.priority);
     }
 
     init(options) {

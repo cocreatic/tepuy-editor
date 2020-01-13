@@ -47,6 +47,7 @@
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
+    "html-minifier": "^4.0.0",
     "postcss-cssnext": "^3.1.0",
     "postcss-nested": "^4.2.1",
     "postcss-simple-vars": "^5.0.2",
@@ -60,6 +61,8 @@
     "rollup-plugin-uglify": "^6.0.4"
   },
   "dependencies": {
-    "debug": "^4.1.1"
+    "debug": "^4.1.1",
+    "jquery-ui-dist": "^1.12.1",
+    "jsviews": "^1.0.5"
   }
 }
