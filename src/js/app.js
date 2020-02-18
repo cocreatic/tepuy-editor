@@ -1,5 +1,6 @@
 import properties from './properties';
 import { sortInsert } from './utils';
+import { Api } from './api';
 
 class App {
 
@@ -31,7 +32,9 @@ class App {
             }
         }
 
+        this.api = new Api(options.api);
         this.invokeHook('gui_initialize');
+        this.ui.load('home');
     }
 
     parseOptions(options) {

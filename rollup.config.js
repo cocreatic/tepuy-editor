@@ -15,7 +15,7 @@ import cssnext from 'postcss-cssnext';
 import cssnano from 'cssnano';
 
 export default {
-    input: ['./src/js/index.js', './src/plugins/**/component.js'], // entry point //./src/js/index.js //./src/js/plugins/**/component.js
+    input: ['./src/js/app.js', './src/plugins/**/component.js'], // entry point //./src/js/index.js //./src/js/plugins/**/component.js
     output: {
         file: './dist/tepuy-editor.js', // output bundle file
         format: 'umd',

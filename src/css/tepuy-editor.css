@@ -63,3 +63,7 @@ footer {
   display: inline-block;
   padding: 5px;
 }
+
+.ui-menu .ui-menu-item [role='menuitem'] {
+  border: solid 1px transparent;
+}

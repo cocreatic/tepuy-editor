@@ -9,7 +9,7 @@ Gulp cli installed (```npm install -g gulp-cli```)
 From a command line under the root directory run ```npm install```
 
 # Run server
-```gulp``` or ```gulp serve```` or ```npm run dev```
+```gulp``` or ```gulp serve``` or ```npm run dev```
 
 # Build
 

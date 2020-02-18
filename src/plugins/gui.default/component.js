@@ -1,4 +1,4 @@
-import { App } from '../../js/index';
+import { App } from '../../js/app';
 
 export class GuiDefault {
 
@@ -12,11 +12,17 @@ export class GuiDefault {
 
     initialize() {
         const template = $.templates("script#gui-default");
-        template.link(App.container, {
+        template.link(App.container, {}); /*{
             menuItems: this.menu
+        }
         }, {
             menuAction: this.menuClick
-        });
+        });*/
+        App.ui = {
+            $sidebar: $('#tpe-sidebar'),
+            $content: $('#tpe-content'),
+            load: this.load.bind(this)
+        };
     }
 
     menuClick(ev, ui) {
@@ -26,4 +32,9 @@ export class GuiDefault {
           alert(ui.item.text());
         }
     }
+
+    load(page) {
+        App.invokeHook('gui_templatechooser');
+    }
+
 }

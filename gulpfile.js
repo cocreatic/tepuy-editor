@@ -54,7 +54,7 @@ gulp.task("vendorcss", gulp.parallel(joinVendorCss, copyVendorAssets));
 
 gulp.task("js", function () {
     return rollup({
-        input: ['./src/js/index.js', './src/plugins/**/component.js'], // entry point //./src/js/index.js //./src/js/plugins/**/component.js
+        input: ['./src/js/app.js', './src/plugins/**/component.js'], // entry point //./src/js/index.js //./src/js/plugins/**/component.js
         external: ['jquery'],
         plugins: [
             multiEntry(),
