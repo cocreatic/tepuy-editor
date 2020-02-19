@@ -31,7 +31,7 @@ const vendorjs = [
 
 const vendorcss = [
     'node_modules/jquery-ui-dist/jquery-ui.min.css',
-    //'node_modules/jquery-ui-dist/jquery-ui.theme.min.css',
+    'node_modules/jquery-ui-dist/jquery-ui.theme.min.css',
     './vendor/css/*.css'
 ];
 
