@@ -26,12 +26,14 @@ const vendorjs = [
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-ui-dist/jquery-ui.min.js',
     'node_modules/jsviews/jsviews.min.js',
-    'vendor/js/jsviews-jqueryui-widgets.min.js'
+    'vendor/js/jsviews-jqueryui-widgets.min.js',
+    './fakeApi.js'
 ];
 
 const vendorcss = [
     'node_modules/jquery-ui-dist/jquery-ui.min.css',
     'node_modules/jquery-ui-dist/jquery-ui.theme.min.css',
+    //'node_modules/@fortawesome/fontawesome-free/css/solid.min.css',
     './vendor/css/*.css'
 ];
 
@@ -45,6 +47,10 @@ function copyVendorAssets() {
     return gulp.src(['node_modules/jquery-ui-dist/images/*'])
         .pipe(gulp.dest(destFolder + '/images'));
 }
+function copyIcons() {
+    return gulp.src('node_modules/@fortawesome/fontawesome-free/webfonts/*')
+        .pipe(gulp.dest(destFolder+'/webfonts/'));
+}
 
 gulp.task("vendorjs", function() {
     return gulp.src(vendorjs)
@@ -52,7 +58,7 @@ gulp.task("vendorjs", function() {
         .pipe(gulp.dest(destFolder))
 });
 
-gulp.task("vendorcss", gulp.parallel(joinVendorCss, copyVendorAssets));
+gulp.task("vendorcss", gulp.parallel(joinVendorCss, copyVendorAssets, copyIcons));
 
 gulp.task("js", function () {
     return rollup({
@@ -131,6 +137,7 @@ gulp.task('serve', gulp.series('compile', function () {
 
     gulp.watch(["./src/scss/*.scss", "./src/plugins/**/*.scss"], gulp.series('sass'));
     gulp.watch(["./src/js/*.js", "./src/plugins/**/*.js"], gulp.series('js'));
+    gulp.watch(["./src/fakeApi.js"], gulp.series('vendorjs'));
     gulp.watch(["./index.html", "./src/plugins/**/*.html"], gulp.series('html'));
 }));
 

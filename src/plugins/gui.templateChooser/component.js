@@ -15,6 +15,8 @@ export class GuiTemplateChooser {
         sidebarTpl.link(App.ui.$sidebar, {});
         const contentTpl = $.templates("script#gui-tplchooser-content");
         contentTpl.link(App.ui.$content, {});
+
+        console.log(App.api.call('getTemplates', { keyword: 'Lorem' }));
     }
 
 }
