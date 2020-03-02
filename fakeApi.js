@@ -41,7 +41,8 @@
 
               var matchKeyword = null;
               if (filter.keyword && filter.keyword != '') {
-                  matchKeyword = item.description.indexOf(filter.keyword) >= 0;
+                  var re = new RegExp(filter.keyword, 'i');
+                  matchKeyword = re.test(item.description);
               }
 
               return (matchKeyword == null || matchKeyword) && (matchCat == null || matchCat);
