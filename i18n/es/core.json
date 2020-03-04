@@ -1,0 +1,14 @@
+{
+  "sidebar": {
+    "look": "Apariencia",
+    "content": "Contenidos",
+    "resources": "Recursos",
+    "activityLog": "Log de actividades",
+    "share": "Compartir",
+    "share2": "",
+    "share3": ""
+  },
+  "editor": {
+    "welcome": "Editor content"
+  }
+}

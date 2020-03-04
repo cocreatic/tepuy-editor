@@ -7,6 +7,7 @@ const sass = require('gulp-sass');
 const concatcss = require('gulp-concat-css');
 const postcss = require("gulp-postcss");
 const file = require('gulp-file');
+const path = require('path');
 const inject = require('gulp-inject');
 const sourcemaps = require("gulp-sourcemaps");
 const autoprefixer = require("autoprefixer");
@@ -19,6 +20,7 @@ const babel = require('rollup-plugin-babel');
 const resolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const multiEntry = require("rollup-plugin-multi-entry");
+const i18nScanner = require('i18next-scanner');
 
 const destFolder = "./dist";
 
@@ -50,6 +52,41 @@ function copyVendorAssets() {
 function copyIcons() {
     return gulp.src('node_modules/@fortawesome/fontawesome-free/webfonts/*')
         .pipe(gulp.dest(destFolder+'/webfonts/'));
+}
+
+//Required to be able to scan i18next keys on text/x-template files
+function customTransform(file, enc, done) {
+    if (/\.(?:html|htm)/.test(path.extname(file.path))) {
+        var content = file.contents.toString('utf-8');
+        var re = /^<script.*type="text\/(?:x-template|x-jsrender)".*>$/im;
+        var match;
+        while(match = re.exec(content)) {
+            content = content.replace(re, '').replace(/^<\/script>$/im, '');
+        }
+
+        this.parser.parseAttrFromString(content, {
+            transformOptions: { filepath: file.path }
+        });
+    }
+    done();
+}
+
+function translations() {
+    return gulp.src(["./src/**/*.{js,html}"]) //'./src/**.{js,html}'
+        .pipe(i18nScanner({
+            lngs: ['es', 'en'], // supported languages
+            trans: false,
+            defaultLng: 'es',
+            defaultNs: 'core',
+            ns: ['core'],
+            //removeUnusedKeys: false,
+            resource: {
+                loadPath: 'i18n/{{lng}}/{{ns}}.json',
+                savePath: 'i18n/{{lng}}/{{ns}}.json'
+            }
+        }, customTransform))
+        .pipe(gulp.dest('./'))
+        .pipe(gulp.dest(destFolder));
 }
 
 gulp.task("vendorjs", function() {
@@ -116,7 +153,7 @@ gulp.task('html', function () {
             transform: (filePath, file) => {
                 return minify(file.contents.toString('utf8'), { 
                     collapseWhitespace: true,
-                    processScripts: ['text/html', 'text/x-template']
+                    processScripts: ['text/html', 'text/x-template', 'text/x-jsrender']
                 });
             }
         }))
@@ -124,7 +161,7 @@ gulp.task('html', function () {
         .pipe(browserSync.stream());
 });
 
-gulp.task('compile', gulp.parallel('html', 'sass', 'vendorcss', 'vendorjs', 'js'));
+gulp.task('compile', gulp.parallel('html', 'sass', 'vendorcss', 'vendorjs', 'js', translations));
 
 // Static Server + watching scss/html files
 gulp.task('serve', gulp.series('compile', function () {
@@ -136,9 +173,9 @@ gulp.task('serve', gulp.series('compile', function () {
     });
 
     gulp.watch(["./src/scss/*.scss", "./src/plugins/**/*.scss"], gulp.series('sass'));
-    gulp.watch(["./src/js/*.js", "./src/plugins/**/*.js"], gulp.series('js'));
+    gulp.watch(["./src/js/*.js", "./src/plugins/**/*.js"], gulp.parallel('js', translations));
     gulp.watch(["./src/fakeApi.js"], gulp.series('vendorjs'));
-    gulp.watch(["./index.html", "./src/plugins/**/*.html"], gulp.series('html'));
+    gulp.watch(["./index.html", "./src/plugins/**/*.html"], gulp.parallel('html', translations));
 }));
 
 gulp.task('build-js', gulp.series('js', function () {
@@ -155,6 +192,6 @@ gulp.task('build-css', gulp.series('sass', function () {
         .pipe(gulp.dest(destFolder))
 }));
 
-gulp.task("build", gulp.parallel('html', 'vendorjs', 'vendorcss', 'build-js', 'build-css'));
+gulp.task("build", gulp.parallel('html', 'vendorjs', 'vendorcss', 'build-js', 'build-css', translations));
 
 gulp.task("default", gulp.series("serve"));

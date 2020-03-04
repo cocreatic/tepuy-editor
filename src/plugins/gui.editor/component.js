@@ -1,4 +1,5 @@
 import { App } from '../../js/app';
+import i18next from 'i18next';
 
 export class GuiEditor {
 
@@ -16,7 +17,6 @@ export class GuiEditor {
         const contentTpl = $.templates("script#gui-editor-content");
         contentTpl.link(App.ui.$content, {});
 
-        $('#tabs').tabs();
+        $('#tabs').localize().tabs();
     }
-
 }

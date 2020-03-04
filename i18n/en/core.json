@@ -1,0 +1,14 @@
+{
+  "sidebar": {
+    "look": "Look and Feel",
+    "content": "Contents",
+    "resources": "Resources",
+    "activityLog": "Activity Log",
+    "share": "Share",
+    "share2": "",
+    "share3": ""
+  },
+  "editor": {
+    "welcome": "Welcome"
+  }
+}
