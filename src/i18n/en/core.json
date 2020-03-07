@@ -1,0 +1,35 @@
+{
+  "sidebar": {
+    "content": "",
+    "look": "",
+    "resources": "",
+    "activityLog": "",
+    "share": "",
+    "new": "",
+    "edit": ""
+  },
+  "tree": {
+    "root": ""
+  },
+  "editor": {
+    "content": {
+      "objecttree": "",
+      "othersections": ""
+    }
+  },
+  "label": {
+    "keyword": "",
+    "categories": ""
+  },
+  "button": {
+    "filter": ""
+  },
+  "template": {
+    "lastMod": "",
+    "license": ""
+  },
+  "general": {
+    "create": "",
+    "close": ""
+  }
+}

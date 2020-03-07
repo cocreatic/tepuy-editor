@@ -1,0 +1,51 @@
+{
+  "sidebar": {
+    "look": "Apariencia",
+    "content": "Contenidos",
+    "resources": "Recursos",
+    "activityLog": "Log de actividades",
+    "share": "Compartir",
+    "new": "Nuevo",
+    "edit": "Editar"
+  },
+  "editor": {
+    "content": {
+      "objecttree": "Arbol de contenidos",
+      "othersections": "Secciones independientes"
+    }
+  },
+  "menu": {
+    "file": "Archivo",
+    "file_properties": "Propiedades",
+    "file_metadata": "Metadatos",
+    "file_download": "Descargar",
+    "file_exit": "Volver al inicio",
+    "view": "Vista",
+    "view_preview": "Vista previa",
+    "view_responsive": "Diseño adaptable",
+    "help": "Ayuda",
+    "help_manual": "Guía de usuario",
+    "help_about": "Acerca de"
+  },
+  "tree": {
+    "root": "Inicio"
+  },
+  "label": {
+    "keyword": "Palabra clave",
+    "categories": "Categorías"
+  },
+  "button": {
+    "filter": "Filtrar"
+  },
+  "template": {
+    "lastMod": "Ultima modificación: ",
+    "license": "Tipo de licencia: "
+  },
+  "detailT": {
+    "title": "Detalle plantilla"
+  },
+  "general": {
+    "create": "Crear",
+    "close": "Cerrar"
+  }
+}

@@ -1,5 +1,24 @@
 <script id="gui-tplchooser-sidebar" type="text/x-template">
-    will show<br/>
-    sidebar options<br/>
-    here
+    {^{tabs}}
+    <ul id="tabs" >
+        <li><a href="#tab_new" data-i18n="sidebar.new" ></a></li>
+        <li><a href="#tab_edit" data-i18n="sidebar.edit"></a></li>
+    </ul>
+    <div id="tab_new">
+        <label data-i18n="label.keyword" ></label> 
+        <input type="text" id="keyword" required/> <br>
+
+        <div id="categories" >
+            <h4 data-i18n="label.categories"></h4>
+            {^{for model.categories}}
+                <label><input type="checkbox" value="{{:}}">{{:}}</label>
+            {{/for}}
+        </div>
+
+        <button class="ui-button ui-corner-all btn_filter" id="filter" data-i18n="button.filter" data-link="{on applyFilter}" ></button>
+    </div>
+    <div id="tab_edit">
+        //Editar y busqueda
+    </div>
+    {{/tabs}}
 </script>

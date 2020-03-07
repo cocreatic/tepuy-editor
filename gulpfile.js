@@ -67,6 +67,10 @@ function customTransform(file, enc, done) {
         this.parser.parseAttrFromString(content, {
             transformOptions: { filepath: file.path }
         });
+
+        this.parser.parseFuncFromString(content, {
+            transformOptions: { filepath: file.path }
+        });
     }
     done();
 }
@@ -79,13 +83,17 @@ function translations() {
             defaultLng: 'es',
             defaultNs: 'core',
             ns: ['core'],
+            func: {
+                list: ['i18next.t', 'i18n.t', 'translate'],
+                extensions: ['.js', '.jsx']
+            },
             //removeUnusedKeys: false,
             resource: {
-                loadPath: 'i18n/{{lng}}/{{ns}}.json',
+                loadPath: './src/i18n/{{lng}}/{{ns}}.json',
                 savePath: 'i18n/{{lng}}/{{ns}}.json'
             }
         }, customTransform))
-        .pipe(gulp.dest('./'))
+        .pipe(gulp.dest('./src'))
         .pipe(gulp.dest(destFolder));
 }
 

@@ -1,14 +1,8 @@
 <script id="gui-default" type="text/x-template">
     <header>
-        {^{menu ~menuAction}}
-            {^{for menuItems}}
-              <li><div>
-                <span class="ui-icon {{:icon}}"></span>
-                {{:text}}
-              </div></li>
-            {{/for}}
-        {{/menu}}
-
+        <ul id="tpe-menubar" data-link="{menu menuAction}">
+            {^{for menu tmpl="#gui-default-menu" ~idPrefix="menu." /}}
+        </ul>
     </header>
     <section>
         <div id="tpe-sidebar">
@@ -20,6 +14,51 @@
         </div>
     </section>
     <footer>
-        I am the footer
+        I am the footer.
     </footer>
+</script>
+
+<script id="gui-default-menu" type="text/x-template">
+    <li data-id="{{:id}}">
+        <div>{{:~icon(id)}}{{:~translate(~idPrefix+id)}}</div>
+        {{if menuItems && menuItems.length}}
+        <ul>
+            {^{for menuItems tmpl="#gui-default-menu" /}}
+        </ul>
+        {{/if}}
+    </li>
+</script>
+
+<script id="gui-default-editable-tree" type="text/x-template">
+<li>
+  {^{if children && children.length}}
+    {{!-- If there are child items, show a toggle button to expand/collapse children --}}
+    <span data-link="{on ~tag.toggle}" class="toggle">{^{:expanded ? '-' : '+'}}</span>
+    {^{if !~tag.parent}}{{:~tagCtx.props.rootLabel}}{{/if}}
+  {{else}}
+    {{!-- If no child items, show just the item --}}
+    <span class="spacer">&bull;</span>
+  {{/if}}
+  {^{if ~tagCtx.props.editable}}
+    {{!-- If editable, show a textbox to edit, and add/remove buttons --}}
+    <input data-link="title" />
+    <span data-link="{on ~tag.addItem}" class="add">add</span>
+    {^{if ~tag.parent && ~tag.parent.tagName==='editableTree'}}
+      {{!-- Don't allow removing the top-level tree control --}}
+      <span data-link="{on ~tag.remove}" class="remove"></span>
+    {{/if}}
+  {{else}}
+    {{!-- Not editable --}}
+    {^{>title}}
+  {{/if}}
+  {^{if expanded}}
+    {{!-- If expanded, show the child items --}}
+    <ul>
+      {^{for children}}
+        {{!-- Recursive {{editableTree}} call to display subtree --}}
+        {^{editableTree editable=~tagCtx.props.editable/}}
+      {{/for}}
+    </ul>
+  {{/if}}
+</li>
 </script>

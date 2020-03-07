@@ -1,3 +1,28 @@
 <script id="gui-tplchooser-content" type="text/x-template">
-    Will load the templates or objects here
+    <div id="tpe-object-container" data-link="{on 'click' '.template-result' showDetail}">
+        {^{for model.templates}}
+        <div class="template-result" data-id="{{:id}}">
+            <img src="{{:preview}}" />
+            <br>
+            <h3>{{:name}} </h3>
+            <br>
+            <p>{{:description}}</p>
+            <spam data-i18n="template.lastMod"></spam><em>{{:createdBy}}</em>
+        </div>
+        {{/for}}
+    </div>
+
+    <div id="templateDetail" style="display:none;" data-link="title{:model^activeTemplate.name onerror=''}">
+        {^{include model.activeTemplate}}
+        <div class="template-card">
+            <p>{^{:description}}</p>
+            <img src="{{>preview}}" /><br>
+            <strong><em data-i18n="template.lastMod"></em></strong><span>{^{:createdBy}}</span><br>
+            <strong><span data-i18n="template.license" ></span></strong><em>{^{:license}}</em>
+        </div>
+        {{/include}}
+        <button class="ui-button ui-widget ui-corner-all" data-i18n="general.create" data-link="{on createObject}"></button>
+        <button class="ui-button ui-widget ui-corner-all" data-i18n="general.close" data-link="{on closeDetail}"></button>
+    </div>
 </script>
+

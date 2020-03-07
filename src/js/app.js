@@ -4,7 +4,13 @@ import jqueryI18next from 'jquery-i18next';
 import properties from './properties';
 import { sortInsert } from './utils';
 import { Api } from './api';
+import { Dco } from './dco';
 
+
+const defaultOptions = {
+    container: "#tepuy-editor",
+    defaultView: 'home'
+}
 
 class App {
 
@@ -37,22 +43,24 @@ class App {
         }
 
         this.initLanguage().then(() => {
-            this.api = new Api(options.api);
+            this.api = new Api(this.options.api);
+            this.data = {
+                dco: new Dco(),
+                theme: {}
+            };
             this.invokeHook('gui_initialize');
-            this.ui.load('home');
+            this.ui.load(this.options.defaultView);
         });
     }
 
     parseOptions(options) {
-        var options = Object.assign({
-            container: "#tepuy-editor"
-        }, options);
+        this.options = Object.assign(defaultOptions, options);
 
-        if (typeof(options.container) === 'string') {
-            this.container = document.querySelector(options.container);
+        if (typeof(this.options.container) === 'string') {
+            this.$container = $(this.options.container);
         }
         else {
-            this.container = options.container;
+            this.$container = this.options.container;
         }
     }
 
