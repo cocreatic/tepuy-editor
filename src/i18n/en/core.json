@@ -30,6 +30,24 @@
   },
   "general": {
     "create": "",
-    "close": ""
+    "close": "",
+    "description": "",
+    "creator": "",
+    "license": "",
+    "category": ""
+  },
+  "menu": {
+    "profile_logout": ""
+  },
+  "detail": {
+    "description": ""
+  },
+  "about": {
+    "description": "",
+    "version": "",
+    "creators": "",
+    "financedBy": "",
+    "license": "",
+    "title": ""
   }
 }

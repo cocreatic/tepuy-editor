@@ -15,14 +15,22 @@
     <div id="templateDetail" style="display:none;" data-link="title{:model^activeTemplate.name onerror=''}">
         {^{include model.activeTemplate}}
         <div class="template-card">
-            <p>{^{:description}}</p>
-            <img src="{{>preview}}" /><br>
-            <strong><em data-i18n="template.lastMod"></em></strong><span>{^{:createdBy}}</span><br>
-            <strong><span data-i18n="template.license" ></span></strong><em>{^{:license}}</em>
+            <div class="template-content" >
+                <h4 data-i18n="general.description"></h4><p>{^{:description}}</p>
+                <h4 data-i18n="general.creator"></h4><p>{^{:creatorBy}}</p>
+                <h4 data-i18n="general.license"></h4><strong><span data-i18n="template.license" ></span></strong><em>{^{:license}}</em>
+                <h4 data-i18n="general.category"></h4><strong><em data-i18n="template.lastMod"></em></strong><span>{^{:category}}</span><br>
+            </div>
+            <div class="template-image" >
+                 <img src="{{>preview}}" /><br>
+            </div>              
         </div>
         {{/include}}
-        <button class="ui-button ui-widget ui-corner-all" data-i18n="general.create" data-link="{on createObject}"></button>
-        <button class="ui-button ui-widget ui-corner-all" data-i18n="general.close" data-link="{on closeDetail}"></button>
+        <div class="template-buttons">
+            <button class="ui-button ui-widget ui-corner-all" data-i18n="general.create" data-link="{on createObject}"></button>
+            <button class="ui-button ui-widget ui-corner-all" data-i18n="general.close" data-link="{on closeDetail}"></button>
+        </div>
+  
     </div>
 </script>
 

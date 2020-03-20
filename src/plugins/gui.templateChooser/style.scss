@@ -17,8 +17,10 @@
     }
     img{
         margin-top: 12px;
-        width: 100%
+        width: 100%;
+      
     }
+
 }
 
 #categories {
@@ -66,4 +68,23 @@ a.ui-button:active,
     border: 0;
     background: #e6e6e6;
     color: #000000;
+}
+
+.template-content{
+    float: left;
+   width: 50%;
+   text-align: justify;
+   margin: 10px;
+}
+
+.template-image{
+    text-align: center;
+
+    img{
+        width: 300px;
+        height: 260px;
+    }
+}
+.template-buttons{
+    float: right;
 }
