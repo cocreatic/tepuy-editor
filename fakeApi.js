@@ -6,7 +6,8 @@
         createdBy:'12/02/2020',
         name:'Lorem 1',
         category:'Category 1',
-        license:'GPL'
+        license:'GPL',
+        creatorBy:"David Rios"
     }, {
         id:'2',
         preview:'https://picsum.photos/400/100?t=2',
@@ -14,7 +15,8 @@
         createdBy:'12/02/2020',
         name:'Lorem 2',
         category:'Category 2',
-        license:'GPL'
+        license:'GPL',
+        creatorBy:"Jesús Otero"
     }, {
         id:'4',
         preview:'https://picsum.photos/400/100?t=3',
@@ -22,7 +24,8 @@
         createdBy:'13/08/2019',
         name:'Lorem 4',
         category:'Category 3',
-        license:'GPL'
+        license:'GPL',
+        creatorBy:"David Rios"
     }, {
         id:'5',
         preview:'https://picsum.photos/400/100?t=4',
@@ -30,8 +33,17 @@
         createdBy:'15/12/2007',
         name:'Lorem 5',
         category:'Category 3',
-        license:'GPL'
+        license:'GPL',
+        creatorBy:"Jesús Otero"
     }];
+
+    var userData ={
+        id:'1',
+        userName:'David.Rios',
+        password:'123456',
+        name:'David Rios',
+        profile_image:'https://picsum.photos/50/50?t=4'
+    };
 
     var fakeApi = {
         getTemplates: function (filter) {
@@ -52,6 +64,10 @@
         },
         getTemplateCategories: function() {
           return ['Category 1', 'Category 2', 'Category 3'];
+        },
+
+        getUserData: function(){
+            return userData;
         }
     };
     window.fakeApi = fakeApi;

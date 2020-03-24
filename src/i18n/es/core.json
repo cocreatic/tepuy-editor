@@ -25,7 +25,8 @@
     "view_responsive": "Diseño adaptable",
     "help": "Ayuda",
     "help_manual": "Guía de usuario",
-    "help_about": "Acerca de"
+    "help_about": "Acerca de",
+    "profile_logout": "Salir"
   },
   "tree": {
     "root": "Inicio"
@@ -46,6 +47,21 @@
   },
   "general": {
     "create": "Crear",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "description": "Descripción",
+    "creator": "Creador",
+    "license": "Licencia",
+    "category": "Categoría"
+  },
+  "detail": {
+    "description": "Descripción"
+  },
+  "about": {
+    "description": "Tepuy Editor es un software para la creación de recursos educativos digitales, enfocado a la reutilización y a los conceptos inherentes a los REA.",
+    "version": "Versión: 1.0.0",
+    "creators": "Creado por: Universidad de Medellín  y BambuCo",
+    "financedBy": "Financiado por  el Fondo de Ctel del Sistema General de Regalías",
+    "license": "Licencia GNU/GPL v3",
+    "title": "Acerca de"
   }
 }
