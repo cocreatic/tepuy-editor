@@ -64,7 +64,7 @@ class App {
         }
     }
 
-    invokeHook(id, params = null) {
+    invokeHook(id, ...params) {
         if (!this.hooks[id]) return;
 
         var hooks = this.hooks[id];

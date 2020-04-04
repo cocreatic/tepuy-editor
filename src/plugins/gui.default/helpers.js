@@ -17,6 +17,8 @@ const iconMap = {
     "log": "clipboard",
     "share": "share",
     "profile_logout": "sign-out-alt",
+    "filter": "filter",
+    "search": "search",
 };
 
 export const helpers = {

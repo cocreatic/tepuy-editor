@@ -38,9 +38,15 @@ export class GuiTemplateChooser {
         let id = $target.data().id;
         let template = this.model.templates.find(it => it.id == id);
         $.observable(this.model).setProperty('activeTemplate', template);
-        $( "#templateDetail" ).dialog({
+        App.ui.$content.localize();
+        $("#templateDetail").dialog({
             modal: true,
             width:'60%',
+            position: {
+                my: 'center center',
+                at: 'center center',
+                of: App.ui.$content
+            }
        });
     }
 
@@ -50,6 +56,6 @@ export class GuiTemplateChooser {
 
     createObject(e, args) {
         this.closeDetail(true);
-        App.ui.load('editor', this.activeTemplate);
+        App.ui.load('editor', this.model.activeTemplate);
     }
 }

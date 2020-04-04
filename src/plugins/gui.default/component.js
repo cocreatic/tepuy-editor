@@ -18,7 +18,6 @@ export class GuiDefault {
         };
         App.invokeHook('gui_menu_initialize');
         this.user = App.api.call('getUserData');
-        console.log(this.user);
         template.link(App.$container, this);
         App.ui.$menu = $('#tpe-menubar');
         App.ui.$sidebar = $('#tpe-sidebar');
@@ -35,14 +34,13 @@ export class GuiDefault {
                 }
             },
         });
-        $(App.container).find('header').localize();
-       $('#profile').localize();     
+        $(App.$container).addClass("tpe-editor-default").find('header').localize(); //ToDo: Change default to the theme name
     }
 
     menuAction(ev, ui) {
         if (ui.item.children("ul").length) return; //Not a leaf
         var hook = `gui_menu_${ui.item.data().id}`;
-        App.invokeHook(hook);
+        setTimeout(() => App.invokeHook(hook), 500);
     }
 
     load(view, params) {

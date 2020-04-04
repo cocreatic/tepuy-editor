@@ -1,0 +1,51 @@
+#tpe-menubar {
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--tepuy-header-background);
+
+    &> li { /* Menubar buttons */
+        display: inline-block;
+        div {
+            display: flex;
+            align-items: center;
+        }
+        i {
+            text-align: center;
+        }
+    }
+    
+    &> li > ul > li { /* Menubar buttons inside dropdown */
+        display: block;
+    }
+
+    /* Change dropdown carets to correct direction */
+    &> li > div > span.ui-icon-caret-1-e {
+        /* Caret on menubar */
+        background:url(https://www.drupal.org/files/issues/ui-icons-222222-256x240.png) no-repeat -64px -16px !important;
+    }
+
+    ul li div span.ui-icon-caret-1-e {
+        /* Caret on dropdowns */
+        background:url(https://www.drupal.org/files/issues/ui-icons-222222-256x240.png) no-repeat -32px -16px !important;
+    }
+
+    .ui-menu-item-wrapper i {
+        min-width: 15px;
+        font-size: 80%;
+    }
+
+    .tpe-menu-right {
+        float: right;
+        & > div {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &.ui-menu {
+        .ui-state-active, .ui-state-focus {
+            margin: 0;
+        }
+    }
+}

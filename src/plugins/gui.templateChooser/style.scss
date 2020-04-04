@@ -1,3 +1,18 @@
+.tpe-template-card {
+
+}
+
+#tpe-object-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    .card {
+        width: 18rem;
+        margin: 0.5rem;
+    }
+}
+
 .template-result{
     background: #fff;
     color: #000 ;
@@ -29,16 +44,6 @@
     }
 }
 
-#keyword {
-    width: 155px;
-    height: 32px;
-    border-radius: 0;
-    margin-left:-8px;
-    background: #4d4d4d;
-    color: #878787;
-    text-align: center;
-}
-
 #detailText{
     float: left;
     width: 60%;
@@ -47,44 +52,24 @@
     
 }
 
-.btn_filter{
-    width: 60%;
-    top:5px;
-    border:0;
-
-    &:hover{
-        background:#424242;
-        color: #FFFFFF;
-        border:0;
+.template-card {
+    display:flex;
+    .template-content{
+        text-align: justify;
+        margin: 0.7rem;
+        flex: 1;
+    }
+    .template-image{
+        align-self: center;
+        text-align: center;
+        flex: 1;
+        img{
+            max-width: 100%;
+            height: auto;
+        }
     }
 }
 
-.ui-state-active, 
-.ui-widget-content .ui-state-active, 
-.ui-widget-header .ui-state-active, 
-a.ui-button:active, 
-.ui-button:active, 
-.ui-button.ui-state-active:hover{
-    border: 0;
-    background: #e6e6e6;
-    color: #000000;
-}
-
-.template-content{
-    float: left;
-   width: 50%;
-   text-align: justify;
-   margin: 10px;
-}
-
-.template-image{
-    text-align: center;
-
-    img{
-        width: 300px;
-        height: 260px;
-    }
-}
 .template-buttons{
     float: right;
 }

@@ -1,9 +1,9 @@
-@import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
-//@import "../../../node_modules/@fortawesome/fontawesome-free/scss/brands";
-//@import "../../node_modules/@fortawesome/fontawesome-free/scss/regular";
-@import "../../node_modules/@fortawesome/fontawesome-free/scss/solid";
-@import "../../node_modules/@fortawesome/fontawesome-free/scss/v4-shims";
-
-html {
-    background-color: #ddcccc;
+.tpe-editor-default {
+    .tpe-content-wrapper {
+        height: 100%;
+        overflow: auto;
+        flex: 1;
+    }
+    @import 'layout/index';
+    @import 'components/index';
 }

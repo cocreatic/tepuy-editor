@@ -1,0 +1,96 @@
+/// Removes all null key-value pairs from the map
+/// @param {Map} $map - The target map to be cleaned.
+/// @returns {Map} - Returns a clean map.
+@function map-clean($map) {
+  $result: ();
+  
+  @each $key, $value in $map {
+      @if($value) != null {
+          $result: map-merge($result, (
+              #{$key}: $value
+          ));
+      }
+  }
+  
+  @return $result;
+}
+
+/// Extends a Map object with the properties of another Map object.
+/// @param {Map...} $maps - The source map to get extended.
+/// @returns {Map} - Returns the merged maps.
+@function extend($maps...) {
+  $result: ();
+
+  @each $map in $maps {
+      $result: map-merge($result, map-clean($map));
+  }
+
+  @return $result;
+}
+
+/// Returns a value for a given instruction map, where the
+/// keys of the map are the names of the functions to be called,
+/// and the value for a given key is the arguments the function
+/// should be called with.
+/// The instruction set is executed left-to-right. The output of
+/// the first instruction is then passed as input to the next, and so on.
+/// @param {Map} $ctx - The instruction map to be used.
+/// @param {List | Map} $extra [null] - Additional arguments to be passed during function calls.
+/// Will only be applied for `igx-color` and `igx-contrast-color` functions.
+/// @example scss Resolve `igx-color` and apply 80% opacity
+/// $instructions: (
+///   igx-color: ('primary', 500),
+///   rgba: .2
+/// );
+/// // $some-palette is a palette we pass as extra arguments
+/// $resolved-color: resolve-value($instructions, $some-palette);
+///
+@function resolve-value($ctx, $extra: null) {
+  $result: null;
+  @each $fn, $args in $ctx {
+      @if function-exists($fn) {
+          @if $result == null {
+              @if($extra) {
+                $result: call(get-function($fn), $extra, $args...);
+              } @else {
+                $result: call(get-function($fn), $args...);
+              }
+          } @else {
+              $result: call(get-function($fn), $result, $args...)
+          } 
+      }
+  }
+  @return $result;
+}
+
+/// Resolves a `palette` to a given theme schema.
+/// @param {Map} $schema - A theme schema.
+/// @param {Map} $palette - An palette map.
+/// @requires {function} extend
+/// @requires {function} resolve-value
+/// @example scss Apply an `palette` to theme schema
+///   $custom-palette: palette($primary: red, $secondary: blue);
+///   $custom-schema: (
+///     my-color: (
+///        igx-color: ('primary', 800),
+///        rgba: .5
+///     ),
+///     roundness: 5px
+///   );
+///   $theme: apply-palette($custom-schema, $custom-palette); // A map with palette values resolved.
+/// @returns {Map} - A map with the resolved palette values.
+@function resolve-schema($schema, $palette) {
+  $result: ();
+
+  @each $key, $value in $schema {
+    @if type-of($value) == 'map' {
+      $result: map-merge($result, (
+          #{$key}: resolve-value($value, $palette)
+          )
+      );
+    } @else {
+      $result: map-merge($result, (#{$key}: #{$value}));
+    }
+  }
+  @return $result;
+}

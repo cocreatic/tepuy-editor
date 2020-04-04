@@ -1,0 +1,174 @@
+@import '../misc/index';
+
+/// Returns a contrast color for a passed color.
+/// @param {Color} $color - The color used to return a contrast color for.
+/// @returns {Color} - Returns either white or black depending on the luminance of the input color.
+@function text-contrast($color) {
+  @if type-of($color) == 'color' {
+      $lightContrast: contrast($color, white);
+      $darkContrast: contrast($color, black);
+      
+      @if ($lightContrast > $darkContrast) {
+          @return white;
+      } @else {
+          @return black;
+      }
+  }
+  @return $color;
+}
+
+/// Calculates the contrast ratio between two colors.
+/// See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
+///
+/// @param {Color} $background - The background color.
+/// @param {Color} $foreground - The foreground color.
+/// @returns {Number} - The contrast ratio between the background and foreground colors.
+@function contrast($background, $foreground) {
+  $backLum: luminance($background) + .05;
+  $foreLum: luminance($foreground) + .05;
+
+  @return max($backLum, $foreLum) / min($backLum, $foreLum);
+}
+
+/// Calculates the luminance for a given color.
+/// See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests.
+///
+/// @param {Color} $color - The color to calculate luminance for.
+@function luminance($color) {
+  @if type-of($color) == 'color' {
+      $red: nth($linear-channel-values, red($color) + 1);
+      $green: nth($linear-channel-values, green($color) + 1);
+      $blue: nth($linear-channel-values, blue($color) + 1);
+
+      @return .2126 * $red + .7152 * $green + .0722 * $blue;
+  }
+  @return $color;
+}
+
+/// Converts a rgba color to a hexidecimal color.
+/// @access public
+/// @requires {function} to-string
+/// @param {Color} $rgba - The rgba color to convert.
+/// @param {Color} $background - The background color to convert against.
+/// @return {Color} - The hexidecimal representation of the rgba value.
+@function hexrgba($rgba, $background: #fff) {
+  @if type-of($rgba) == color {
+      $red: red($rgba);
+      $green: green($rgba);
+      $blue: blue($rgba);
+      $a: alpha($rgba);
+      $r: floor($a * $red + (1 - $a) * red($background));
+      $g: floor($a * $green + (1 - $a) * green($background));
+      $b: floor($a * $blue + (1 - $a) * blue($background));
+      @return rgb($r, $g, $b);
+  }
+  @return $rgba;
+}
+
+/// Retrieves a contrast text color for a given color from a color palette.
+/// @param {Map} $palette - The source palette map.
+/// @param {string} $color - The target color from the color palette.
+/// @param {number|variant} $variant - The target color shade from the color palette.
+/// @requires igx-color
+/// @requires text-contrast
+/// @requires hexrgba
+/// @returns {Color} [#fff] - Returns white if now palette, color and/or variant matches found.
+@function contrast-color($palette, $color, $variant: 500) {
+  $_color: color($palette, $color, $variant);
+  @if $_color {
+      @return text-contrast(hexrgba($_color));
+  }
+  @return #fff;
+}
+
+/// Returns a color shade for a given color and variant.
+/// @param {Color} $color - The base color.
+/// @param {Number} $variant - The variant number, ranging from 50 - 900.
+/// @returns {Color} - The calculated color value for the base color and variant.
+@function color-shade($color, $variant) {
+  @return map-get((
+    50: lighten(saturate($color, 10.4), 37.7),
+    100: lighten(desaturate($color, 10.4), 31.8),
+    200: lighten(desaturate($color, 17), 18.7),
+    300: lighten(desaturate($color, 12.9), 9.1),
+    400: lighten(desaturate($color, 6.6), 4.1),
+    500: $color,
+    600: darken(saturate($color, 12.4), 5.1),
+    700: darken(saturate($color, 24.5), 8.8),
+    800: darken(saturate($color, 23.2), 12.7),
+    900: darken(saturate($color, 16.1), 17)
+  ), $variant);
+}
+
+/// Returns a set of color shades with varying opacity.
+/// Used to generate shades of gray.
+/// @param {Color} $color - The base color used for generating the shades.
+/// @param {Map} $shades - A map of <variant-name>:<alpha> key-value pairs to be used for generating the shades.
+/// @returns {Map} - The resulting map of color shades, based on the base color and shades map. 
+@function gray-colors($color, $shades) {
+  $result: ();
+  @each $saturation, $opacity in $shades {
+      $shade: rgba(grayscale($color), $opacity);
+      $result: map-merge($result, ($saturation: $shade));
+  }
+  @return $result;
+}
+
+/// Generates a color palette.
+/// @param {Color} $primary - The primary color used to generate the primary color palette.
+/// @param {Color} $secondary - The secondary color used to generate the secondary color palette.
+/// @param {Color} $gray [#000] - The color used for generating the grayscale palette.
+/// @returns {Map} - A map consisting the `primary`, `secondary`, and `gray` colors.
+@function palette($primary, $secondary, $gray: #000) {
+  $variants: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900;
+  $shades: (50: .02, 100: .04, 200: .08, 300: .12, 400: .26, 500: .38, 600: .54, 700: .62, 800: .74, 900: .87);
+  
+  $primary-colors: ();
+  $secondary-colors: ();
+  $gray-colors: gray-colors($gray, $shades);
+
+  @each $variant in $variants {
+      $primary-shade: color-shade($primary, $variant);
+      $secondary-shade: color-shade($secondary, $variant);
+
+      $primary-colors: map-merge($primary-colors, (
+          $variant: $primary-shade
+      ));
+
+      $secondary-colors: map-merge($secondary-colors, (
+          $variant: $secondary-shade
+      ));
+  }
+
+  @return (
+      'primary': $primary-colors,
+      'secondary': $secondary-colors,
+      'gray': $gray-colors
+  );
+}
+
+/// Retrieves a color from a color palette.
+/// @param {Map} $palette - The source palette map.
+/// @param {String} $color - The target color from the color palette.
+/// @param {Number|String} $variant [500] - The target color shade from the color palette.
+/// @returns {Color} White if no palette, color, and variant matches found.
+@function color($args...) {
+  $arguments: ();
+
+  @each $arg in $args {
+      $arguments: map-merge($arguments, map-get(
+          (
+              'map': (palette: $arg),
+              'string': (color: $arg),
+              'number': (variant: $arg)
+          ),
+          type-of($arg)
+      ));
+  }
+
+  $palette: map-get($arguments, 'palette');
+  $color: map-get($arguments, 'color');
+  $variant: map-get($arguments, 'variant');
+
+  @return map-get(map-get($palette, $color), $variant);
+}

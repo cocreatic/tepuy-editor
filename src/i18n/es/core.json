@@ -33,7 +33,7 @@
   },
   "label": {
     "keyword": "Palabra clave",
-    "categories": "Categorías"
+    "category": "Categoría"
   },
   "button": {
     "filter": "Filtrar"

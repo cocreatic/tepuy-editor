@@ -1,0 +1,12 @@
+.ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    background-color: var(--tepuy-state-active-bg);
+    color: var(--tepuy-state-active-color);
+    border: none; //solid 1px var(--tepuy-state-active-bg);
+    &:focus {
+        outline: none;
+    }
+}
+
+:focus {
+    outline: none;
+}

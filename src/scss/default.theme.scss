@@ -1,0 +1,79 @@
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
+//@import "../../../node_modules/@fortawesome/fontawesome-free/scss/brands";
+//@import "../../node_modules/@fortawesome/fontawesome-free/scss/regular";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/solid";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/v4-shims";
+@import "mixins/utils";
+@import "mixins/colors";
+
+//Theme basic colors
+$primary-color: rgb(230, 230, 230);
+$secondary-color: rgb(222, 222, 222);
+$gray: rgb(49, 49, 49);
+//Build palette
+$my-palette: palette($primary: $primary-color, $secondary: $secondary-color, $gray: $gray);
+
+//Widget and site colors
+$resting-bg: color($my-palette, 'gray', 900);
+$resting-color: contrast-color($my-palette, 'gray', 900);
+$hover-bg: color($my-palette, 'gray', 700);
+$hover-color: contrast-color($my-palette, 'gray', 700);
+$disabled-bg: color($my-palette, 'gray', 100);
+$disabled-color: color($my-palette, 'gray', 400);
+$active-state-bg: color($my-palette, 'gray', 600);
+$active-state-color: text-contrast(hexrgba($active-state-bg));
+$widget-content-bg: #fff;
+
+:root {
+    /* Widget Common Varibles */
+    --tepuy-widget-color: #{contrast-color($my-palette, 'gray', 200)};
+    --tepuy-header-bg: #{color($my-palette, 'gray', 200)};
+    --tepuy-header-border-color: #{color($my-palette, 'gray', 400)};
+    --tepuy-content-bg: #{color($my-palette, 'gray', 300)};
+    --tepuy-active-bg: #{color($my-palette, 'gray', 800)};
+    --tepuy-active-border-color: #{color($my-palette, 'gray', 900)};
+    --tepuy-state-active-bg: #{$active-state-bg};
+    --tepuy-state-active-color: #{$active-state-color};
+    --tepuy-component-area-bg: #{color($my-palette, 'gray', 50)};
+    --tepuy-panel-border: solid 1px #{color($my-palette, 'gray', 400)};
+    --tepuy-panel-content-bg: #{$widget-content-bg};
+    --tepuy-button-resting-bg: #{$resting-bg};
+    --tepuy-button-resting-color: #{$resting-color};
+    --tepuy-button-hover-bg: #{$hover-bg};
+    --tepuy-button-hover-color: #{$hover-color};
+    --tepuy-button-focus-bg: #{$hover-bg};
+    --tepuy-button-focus-color: #{$hover-color};
+    --tepuy-button-disabled-bg: #{$disabled-bg};
+    --tepuy-button-disabled-color: #{$disabled-color};
+}
+
+html {
+    height: 100%;
+    background-color: var(--tepuy-content-bg);
+}
+
+body {
+    font-size: 14px;
+}
+
+.tpe-editor-default {
+    background-color: var(--tepuy-content-bg);
+    display: flex;
+}
+
+
+.palette-viewer {
+    display: flex;
+    width: 100%;
+    flex-flow: row;
+    justify-content: space-evenly;
+
+    @each $variant in 50, 100, 200, 300, 400, 500, 600, 700, 800, 900 {
+        .primary-#{$variant} {
+            background-color: color($my-palette, 'gray', $variant);
+            text-align: center;
+            flex: 1;
+            color: #000;
+        }
+    }
+}

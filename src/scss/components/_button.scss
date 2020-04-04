@@ -1,0 +1,24 @@
+.ui-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--tepuy-button-resting-bg);
+    color: var(--tepuy-button-resting-color);
+    transition: background-color .25s ease-out;
+
+    &:hover {
+        background-color: var(--tepuy-button-hover-bg);
+        color: var(--tepuy-button-hover-color);
+    }
+
+    &:focus {
+        background-color: var(--tepuy-button-focus-bg, var(--tepuy-button-hover-bg));
+        color: var(--tepuy-button-focus-color, var(--tepuy-button-hover-color));
+    }
+
+    &[disabled] {
+        background-color: var(--tepuy-button-disabled-bg);
+        color: var(--tepuy-button-disabled-color);
+        pointer-events: none;
+    }
+}

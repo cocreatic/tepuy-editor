@@ -1,13 +1,25 @@
 <script id="gui-tplchooser-content" type="text/x-template">
-    <div id="tpe-object-container" data-link="{on 'click' '.template-result' showDetail}">
+    <div class="palette-viewer">
+        <div class="primary-50">50</div>
+        <div class="primary-100">100</div>
+        <div class="primary-200">200</div>
+        <div class="primary-300">300</div>
+        <div class="primary-400">400</div>
+        <div class="primary-500">500</div>
+        <div class="primary-600">600</div>
+        <div class="primary-700">700</div>
+        <div class="primary-800">800</div>
+        <div class="primary-900">900</div>
+    </div>
+    <div id="tpe-object-container" data-link="{on 'click' '.card' showDetail}">
         {^{for model.templates}}
-        <div class="template-result" data-id="{{:id}}">
-            <img src="{{:preview}}" />
-            <br>
-            <h3>{{:name}} </h3>
-            <br>
-            <p>{{:description}}</p>
-            <spam data-i18n="template.lastMod"></spam><em>{{:createdBy}}</em>
+        <div class="card" data-id="{{:id}}">
+            <img class="card-img-top" src="{{:preview}}" />
+            <div class="card-title">{{:name}}</div>
+            <div class="card-body">
+                <p>{{:description}}</p>
+                <spam data-i18n="template.lastMod"></spam><em>{{:createdAt}}</em>
+            </div>
         </div>
         {{/for}}
     </div>
@@ -15,15 +27,15 @@
     <div id="templateDetail" style="display:none;" data-link="title{:model^activeTemplate.name onerror=''}">
         {^{include model.activeTemplate}}
         <div class="template-card">
-            <div class="template-content" >
-                <h4 data-i18n="general.description"></h4><p>{^{:description}}</p>
-                <h4 data-i18n="general.creator"></h4><p>{^{:creatorBy}}</p>
-                <h4 data-i18n="general.license"></h4><strong><span data-i18n="template.license" ></span></strong><em>{^{:license}}</em>
-                <h4 data-i18n="general.category"></h4><strong><em data-i18n="template.lastMod"></em></strong><span>{^{:category}}</span><br>
+            <div class="template-content">
+                <h4 data-i18n="general.description"></h4><p><em>{^{:description}}</em></p>
+                <h4 data-i18n="general.creator"></h4><em>{^{:createdBy}}</em>
+                <h4 data-i18n="general.license"></h4><em>{^{:license}}</em>
+                <h4 data-i18n="general.category"></h4><em>{^{:category}}</em>
             </div>
             <div class="template-image" >
                  <img src="{{>preview}}" /><br>
-            </div>              
+            </div>
         </div>
         {{/include}}
         <div class="template-buttons">

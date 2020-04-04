@@ -142,7 +142,7 @@ gulp.task("js", function () {
 });
 
 gulp.task('sass', function() {
-    return gulp.src(["./src/scss/*.scss", "./src/plugins/**/*.scss"])
+    return gulp.src(["./src/scss/**/*.scss", "./src/plugins/**/*.scss"])
         .pipe(sourcemaps.init())
         .pipe(sass({includePaths: ['scss']}))
         .on("error", sass.logError)
@@ -180,7 +180,7 @@ gulp.task('serve', gulp.series('compile', function () {
         }
     });
 
-    gulp.watch(["./src/scss/*.scss", "./src/plugins/**/*.scss"], gulp.series('sass'));
+    gulp.watch(["./src/scss/**/*.scss", "./src/plugins/**/*.scss"], gulp.series('sass'));
     gulp.watch(["./src/js/*.js", "./src/plugins/**/*.js"], gulp.parallel('js', translations));
     gulp.watch(["./src/fakeApi.js"], gulp.series('vendorjs'));
     gulp.watch(["./index.html", "./src/plugins/**/*.html"], gulp.parallel('html', translations));

@@ -12,7 +12,8 @@ export class GuiEditor {
         ];
     }
 
-    initialize() {
+    initialize(template) {
+        console.log(template);
         const sidebarTpl = $.templates("script#gui-editor-sidebar");
         sidebarTpl.link(App.ui.$sidebar, this.getSidebarData());
         const contentTpl = $.templates("script#gui-editor-content");
@@ -65,11 +66,12 @@ export class GuiEditor {
         App.ui.load('home');
     }
     about() {
-        $("#dialog").dialog({ modal: true});
+        if (!this.aboutTpl) this.aboutTpl = $.templates("script#gui-editor-about");
+        $(this.aboutTpl.render({})).dialog({ modal: true});
     }
     logout(){
-        console.log("Salir");
         App.exit();
     }
 
+    
 }

@@ -1,0 +1,40 @@
+.tpe-sidebar {
+    flex: 0 0 200px;
+    border-right: var(--tepuy-panel-border);
+    background: var(--tepuy-panel-content-bg);
+    overflow-x: hidden;
+
+    .ui-tabs {
+        padding: 0px;
+        border: none;
+
+        .ui-tabs-nav {
+            padding: 0;
+            border-radius: 0;
+            display: flex;
+
+            li {
+                flex: 1;
+                margin: 0;
+                border: 0;
+                display: flex;
+                border-radius: 0;
+                text-align: center;
+            }
+
+            .ui-tabs-anchor {
+                flex: 1;
+                outline: none;
+            }
+        }
+
+        > .ui-widget-content {
+            border: none;
+        }
+    }
+
+    .ui-widget-header {
+        border-left: 0;
+        border-right: 0;
+    }
+}
