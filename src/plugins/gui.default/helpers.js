@@ -17,6 +17,9 @@ const iconMap = {
     "log": "clipboard",
     "share": "share",
     "profile_logout": "sign-out-alt",
+    "folders": "fas fa-folder",
+    "png":"far fa-images",
+    "pdf": "fa fa-file-pdf"
 };
 
 export const helpers = {

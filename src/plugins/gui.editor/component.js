@@ -1,6 +1,7 @@
 import { App } from '../../js/app';
 import i18next from 'i18next';
 
+
 export class GuiEditor {
 
     constructor() {
@@ -16,8 +17,25 @@ export class GuiEditor {
         const sidebarTpl = $.templates("script#gui-editor-sidebar");
         sidebarTpl.link(App.ui.$sidebar, this.getSidebarData());
         const contentTpl = $.templates("script#gui-editor-content");
-        contentTpl.link(App.ui.$content, {});
-        $('#tabs').localize().tabs();
+        contentTpl.link(App.ui.$content, this.showResources());
+        $('#tabs').localize().tabs(); 
+
+        $('.container_resource').tooltip();
+                
+        $('.filter').click(function(e){
+            e.preventDefault();
+           var resources = App.api.call('getResources', {path:this.text}); 
+           console.log(App.api.call('getResources',this.text));           
+        });
+    }
+
+    showResources(){
+        var resources = App.api.call('getResources');
+        return {
+            showResource:{
+                responseResources:resources
+            }
+        };
     }
 
     registerMenu() {
@@ -37,6 +55,8 @@ export class GuiEditor {
         App.registerHook('gui_menu_file_exit', this.close.bind(this));
         App.registerHook('gui_menu_help_about', this.about.bind(this));
         App.registerHook('gui_menu_profile_logout', this.logout.bind(this));
+ 
+
     }
 
     getSidebarData() {
@@ -52,10 +72,12 @@ export class GuiEditor {
             }
         }
         let extras = App.data.dco.extras().slice(0);
+        var resources = App.api.call('getResources');
         return { 
             content: {
                 tree: tree,
-                extras: extras
+                extras: extras,
+                resources: resources
             }
         };
     }
@@ -68,8 +90,8 @@ export class GuiEditor {
         $("#dialog").dialog({ modal: true});
     }
     logout(){
-        console.log("Salir");
         App.exit();
     }
+
 
 }

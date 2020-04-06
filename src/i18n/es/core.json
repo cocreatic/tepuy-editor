@@ -63,5 +63,9 @@
     "financedBy": "Financiado por  el Fondo de Ctel del Sistema General de Regalías",
     "license": "Licencia GNU/GPL v3",
     "title": "Acerca de"
+  },
+  "resources": {
+    "folders": "",
+    "loads": ""
   }
 }

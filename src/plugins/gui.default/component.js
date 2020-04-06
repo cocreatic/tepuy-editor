@@ -18,7 +18,6 @@ export class GuiDefault {
         };
         App.invokeHook('gui_menu_initialize');
         this.user = App.api.call('getUserData');
-        console.log(this.user);
         template.link(App.$container, this);
         App.ui.$menu = $('#tpe-menubar');
         App.ui.$sidebar = $('#tpe-sidebar');

@@ -27,7 +27,25 @@
             {{/accordion}}
         </div>
         <div id="tabs-2" data-i18n="sidebar.look"></div>
-        <div id="tabs-3" data-i18n="sidebar.resources"></div>
+        <div id="tabs-3"  class="tpe-object-tree">
+            <h3 class="ui-widget ui-widget-header" data-i18n="sidebar.resources"></h3>
+            {^{accordion}}
+            <div>
+                <h4 data-i18n="resources.folders" ></h4>
+                <div>
+                    {^{for  content.resources}}
+                        <li><a href="#" class="filter"  data-link="{on filter}" >{{:~icon('folders')}} {{:path}}</a></li>
+                    {{/for}}
+                </div>
+                <h4 data-i18n="resources.loads" ></h4>               
+                <div>
+                    <ul>
+                        <li><input type="file" name="loadArchive" id="loadArchive"></li>
+                    </ul>
+                </div>
+            </div>
+            {{/accordion}}
+        </div>
         <div id="tabs-4" data-i18n="sidebar.activityLog"></div>
         <div id="tabs-5" data-i18n="sidebar.share"></div>
     </div>
