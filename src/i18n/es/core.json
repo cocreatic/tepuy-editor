@@ -65,10 +65,10 @@
     "title": "Acerca de"
   },
   "position": {
-    "after": "",
-    "before": "",
-    "start": "",
-    "end": ""
+    "after": "Después de",
+    "before": "Antes de",
+    "start": "Al principio",
+    "end": "Al final"
   },
   "editPage": {
     "editTitle": "Editar página",
@@ -86,5 +86,9 @@
     "cancel": "Cancelar",
     "edit": "Actualizar",
     "addComponent": "Agregar componente"
+  },
+  "resources": {
+    "folders": "",
+    "loads": ""
   }
 }

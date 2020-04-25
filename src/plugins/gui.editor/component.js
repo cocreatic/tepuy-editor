@@ -12,6 +12,7 @@ const templateMap = {
 
 let active = true;
 
+
 export class GuiEditor {
 
     constructor() {
@@ -27,9 +28,30 @@ export class GuiEditor {
         const sidebarTpl = TemplateManager.get('sidebar');
         sidebarTpl.link(App.ui.$sidebar, this.getSidebarData());
         const contentTpl = TemplateManager.get('content');
-        contentTpl.link(App.ui.$content, {});
-        $('#tabs').localize().tabs();
+        let viewModel = { template: '#gui-editor-tab-1-content', data: {} };
+        contentTpl.link(App.ui.$content, { viewModel });
+        $('#tabs').localize().tabs({
+            activate: (event, ui) => {
+                this.activateTab(ui.newTab, ui.oldTab);
+            }
+        });
+        $('.container_resource').tooltip();
+
         this.renderFirst();
+
+        $('.filter').click(function(e){
+            e.preventDefault();
+            var resources = App.api.call('getResources', {path:this.text}); 
+        });
+    }
+
+    activateTab(tab, oldTab) {
+        let id = tab.data().tabId;
+        $.observable(viewModel).setProperty('template', ['#gui-editor-', id, '-content'].join(''));
+    }
+
+    showResources(){
+        var resources = App.api.call('getResources');
     }
 
     registerMenu() {
@@ -57,6 +79,8 @@ export class GuiEditor {
         App.registerHook('gui_menu_help_manual', this.notimplemented.bind(this));
         App.registerHook('gui_menu_help_about', this.about.bind(this));
         App.registerHook('gui_menu_profile_logout', this.logout.bind(this));
+ 
+
     }
 
     getSidebarData() {
@@ -70,11 +94,13 @@ export class GuiEditor {
             }
         }
         let extras = App.data.dco.extras().slice(0);
+        var resources = App.api.call('getResources');
         return { 
             content: {
                 tree: tree,
                 extras: extras,
-                treeCommand: this.onTreeCommand.bind(this)
+                treeCommand: this.onTreeCommand.bind(this),
+                resources: resources
             }
         };
     }
@@ -108,52 +134,12 @@ export class GuiEditor {
         });
     }
 
-    appendTreeItem(data, resolve, reject) {
-        let item = {}
-        if (data.type == 'page') {
-            item.title = "Sección ";
-            item.type = 'section';
-        }
-        else {
-            this.editPage(null, data).then(newPage => {
-                item.title = newPage.title;
-                item.type = 'page';
-                item.parent = data;
-                item.appendAt = newPage.appendAt;
-                item.refPage = parseInt(newPage.refPage);
-                item.children = [];
-                let index = data.children.length;
-                if (item.appendAt == 'before' || item.appendAt == 'after') {
-                    index = item.refPage + (item.appendAt == 'before' ? -1 : 1);
-                }
-                else {
-                    index = item.appendAt == 'first' ? 0 : data.children.length;
-                }
-                if (index < 0) index = 0;
-                if (index > data.children.length) index = data.children.length;
-                $.observable(data.children).insert(index, item);
-                resolve({action: 'add', item });
-            });
-        }
-        //item.title +=  (data.children.length + 1);
-        //item.parent = data;
-    }
-
-    removeTreeItem(data, resolve, reject) {
-        let parent = data.parent;
-        let index = parent.children.indexOf(data);
-        $.observable(parent.children).remove(index);
-        resolve({action: 'remove', item: data});
-    }
-
-
     renderFirst() {
         let $head = $('#editor-container-frame').contents().find('head');
         let template = TemplateManager.get('pageViewStyles');
         $head.append(template.render());
         this.render();
     }
-
 
     render() {
         let $viewer = $('#editor-container-frame')

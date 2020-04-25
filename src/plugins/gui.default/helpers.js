@@ -25,7 +25,10 @@ const iconMap = {
     "remove": "minus-circle",
     "move-up": "chevron-circle-up",
     "move-down": "chevron-circle-down",
-    "edit": "pen"
+    "edit": "pen",
+    "folders": "fas fa-folder",
+    "png":"far fa-images",
+    "pdf": "fa fa-file-pdf"
 };
 
 export const helpers = {

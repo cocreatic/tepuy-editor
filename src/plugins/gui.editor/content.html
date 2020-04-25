@@ -1,5 +1,35 @@
 <script id="gui-editor-content" type="text/x-template">
+  {^{include viewModel ^tmpl=viewModel^template /}}
+</script>
+
+<script id="gui-editor-tab-1-content" type="text/x-template">
     <iframe id="editor-container-frame"></iframe>
+</script>
+
+<script id="gui-editor-tab-2-content" type="text/x-template">
+    <p>Apariencia - Pendiente de implementar</p>
+</script>
+
+<script id="gui-editor-tab-3-content" type="text/x-template">
+    <div id="tpe-object-container">
+    {^{for data.resources}}
+            <div  class="container_resource" title="{{:size}} || {{:createdAt}}">
+                <div class="container_info">
+                    {{:~icon('')}}
+                    <br>
+                      {{:name}} 
+               </div>
+            </div>
+    {{/for}}
+    </div>
+</script>
+
+<script id="gui-editor-tab-4-content" type="text/x-template">
+    <p>Log - Pendiente de implementar</p>
+</script>
+
+<script id="gui-editor-tab-5-content" type="text/x-template">
+    <p>Compartir - Pendiente de implementar</p>
 </script>
 
 <script id="gui-editor-about" type="text/x-template">
