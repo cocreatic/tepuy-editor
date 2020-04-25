@@ -34,7 +34,7 @@ const vendorjs = [
 
 const vendorcss = [
     'node_modules/jquery-ui-dist/jquery-ui.min.css',
-    'node_modules/jquery-ui-dist/jquery-ui.theme.min.css',
+    //'node_modules/jquery-ui-dist/jquery-ui.theme.min.css',
     //'node_modules/@fortawesome/fontawesome-free/css/solid.min.css',
     './vendor/css/*.css'
 ];
@@ -200,6 +200,6 @@ gulp.task('build-css', gulp.series('sass', function () {
         .pipe(gulp.dest(destFolder))
 }));
 
-gulp.task("build", gulp.parallel('html', 'vendorjs', 'vendorcss', 'build-js', 'build-css', translations));
+gulp.task("build", gulp.series('compile', 'build-js', 'build-css'));
 
 gulp.task("default", gulp.series("serve"));

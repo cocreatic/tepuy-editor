@@ -9,29 +9,6 @@
         }
     }
 
-    .tpe-object-tree {
-        padding: 5px;
-        label {
-            display: block;
-            font-size: 12px;
-            text-align: center;
-        }
-        ul {
-            padding: 0;
-            margin: 0;
-        }
-
-        li {
-            list-style-type: none;
-            padding: 2px;
-
-            li {
-                list-style-type: none;
-                margin-left: 10px;
-            }
-        }
-    }
-
     .ui-accordion {
         .ui-accordion-content {
             padding: 2px;
@@ -39,54 +16,11 @@
     }
 }
 
-.toggle {
-  cursor: pointer;
-  vertical-align: middle;
-  display: inline-block;
-  border: 1px solid #555;
-  text-align: center;
-  height: 12px;
-  width: 12px;
-  line-height: 11px;
-  padding-top: 1px;
-  font-size: 13px;
-  margin: 0 6px 2px 0;
-  background-color: #f8f8f8;
-  color: Blue;
-}
+#tpe-content {
+    display: flex;
 
-.remove {
-  cursor: pointer;
-  margin-left: -8px;
-}
-
-.remove:after {
-  color: #be614c;
-  padding: 0 6px 2px;
-  font-weight: bold;
-  content: 'x';
-}
-
-.remove:hover:after {
-  color: red;
-  background-color: #dbffe0;
-}
-
-.spacer {
-  display: inline-block;
-  width: 14px;
-}
-
-.add {
-  cursor: pointer;
-  vertical-align: middle;
-  margin-right: 7px;
-  display: inline-block;
-  border: 1px solid #555;
-  text-align: center;
-  height: 12px;
-  width: auto;
-  line-height: 11px;
-  background-color: #f8f8f8;
-  color: Blue;
+    iframe{
+        border:none;
+        flex: 1;
+    }
 }

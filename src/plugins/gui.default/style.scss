@@ -1,3 +1,8 @@
+.tpe-editor-default {
+    display: flex;
+    flex-flow: column;
+}
+
 header, section, footer {
     position: fixed;
     left: 0;
@@ -5,21 +10,17 @@ header, section, footer {
     color: #fff;
 }
 
-header {
-    top: 0;
-    z-index: 10;
-}
-
 section {
     color: inherit;
-    top: 25px;
+    top: 35px;
     bottom: 20px;
     display: flex;
     flex-flow: row;
+    flex: 1;
 }
 
 .tpe-avatar {
-    height: 18px;
+    height: 16px;
     border-radius: 50%;
     margin: 0 2px;
 }

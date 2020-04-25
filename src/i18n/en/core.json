@@ -49,5 +49,24 @@
     "financedBy": "",
     "license": "",
     "title": ""
+  },
+  "position": {
+    "after": "",
+    "before": "",
+    "start": "",
+    "end": ""
+  },
+  "editPage": {
+    "title": "",
+    "id": "",
+    "append": ""
+  },
+  "commands": {
+    "add": "",
+    "cancel": "",
+    "addComponent": ""
+  },
+  "command": {
+    "addComponent": ""
   }
 }

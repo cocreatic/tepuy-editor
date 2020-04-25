@@ -9,7 +9,7 @@ import { Dco } from './dco';
 
 const defaultOptions = {
     container: "#tepuy-editor",
-    defaultView: 'home'
+    defaultView: 'editor' //home|editor
 }
 
 class App {
@@ -84,17 +84,19 @@ class App {
             backend: {
                 loadPath: 'i18n/{{lng}}/{{ns}}.json'
             }
-        }, function(err, t) {
+        }, (err, t) => {
             jqueryI18next.init(i18next, $);
             i18next.on('languageChanged', () => {
                 $('body').localize();
             });
-
-            App.i18n = i18next; //Give the App object access to the while translation system
+            this.i18n = i18next; //Give the App object access to the while translation system
         });
     }
+
     exit(){
-        window.location.href = 'https://moodle.org/';
+        if (confirm('¿Esta seguro que desea salir?')) {
+            window.location.href = 'https://cocreatic.org/';
+        }
      }
 }
 

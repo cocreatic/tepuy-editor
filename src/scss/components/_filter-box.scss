@@ -8,7 +8,7 @@
     .search-box {
         display: flex;
         align-items: center;
-        border: solid 1px var(--tepuy-header-border-color);
+        border: solid 1px var(--tpe-header-border-color);
         padding: .2em;
         
         i {
@@ -26,14 +26,14 @@
 
     .tpe-check-list {
         margin: 1em 0;
-        border-bottom: solid 1px var(--tepuy-header-border-color);
+        border-bottom: solid 1px var(--tpe-header-border-color);
 
         h2 {
             font-size: 0.9rem;
             padding: .2em;
             font-weight: normal;
             text-align: center;
-            border-bottom: solid 1px var(--tepuy-header-border-color);
+            border-bottom: solid 1px var(--tpe-header-border-color);
             margin: 0 0 .5em 0;
         }
         label {

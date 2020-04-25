@@ -1,12 +1,18 @@
 .tpe-sidebar {
     flex: 0 0 200px;
-    border-right: var(--tepuy-panel-border);
-    background: var(--tepuy-panel-content-bg);
+    border-right: var(--tpe-panel-border);
+    background: var(--tpe-panel-content-bg);
     overflow-x: hidden;
+    display: flex;
+    flex-flow: column;
 
     .ui-tabs {
         padding: 0px;
         border: none;
+
+        display: flex;
+        flex-flow: column;
+        flex: 1;
 
         .ui-tabs-nav {
             padding: 0;
@@ -36,5 +42,19 @@
     .ui-widget-header {
         border-left: 0;
         border-right: 0;
+    }
+
+    .tpe-toolset {
+        display: flex;
+        flex-flow: column;
+        flex: 1;
+
+        &>h3 {
+            flex: 0;
+        }
+
+        .tpe-toolset-content {
+            flex: 1;
+        }
     }
 }

@@ -17,14 +17,15 @@ export class Dco {
 
         this.config = Object.assign(defaultConfig);
 
-        this.addPage({id: 'page1', title: 'Página 1'});
-        this.addSection({id: 'section1', title: 'Sección 1'}, 'page1');
-        this.addSection({id: 'section2', title: 'Sección 2'}, 'page1');
-        this.addPage({id: 'page2', title: 'Página 2'});
-        this.addSection({id: 'section1', title: 'Sección 1'}, 'page2');
-        this.addSection({id: 'section2', title: 'Sección 2'}, 'page2');
-        this.addPage({id: 'page3', title: 'Página 3'});
-        this.addSection({id: 'section1', title: 'Sección 1'}, 'page3');
+        this.home = new Page({id: 'home', title: 'Inicio' });
+        //let page = this.addPage({id: 'page1', title: 'Página 1'});
+        //page.addSection({id: 'section11', title: 'Sección 1'});
+        //page.addSection({id: 'section12', title: 'Sección 2'});
+        //page = this.addPage({id: 'page2', title: 'Página 2'});
+        //page.addSection({id: 'section21', title: 'Sección 1'});
+        //page.addSection({id: 'section22', title: 'Sección 2'});
+        //page = this.addPage({id: 'page3', title: 'Página 3'});
+        //page.addSection({id: 'section31', title: 'Sección 1'});
         
         this.addExtra({id: 'extra1', title: 'Extra 1'});
         this.addExtra({id: 'extra2', title: 'Extra 2'});
@@ -40,20 +41,80 @@ export class Dco {
         return this.tree.extras;
     }
 
-    addPage(page) {
-        this.tree.pages.push(page);
+    getHome() {
+        return this.home;
     }
 
-    addSection(section, pageId) {
-        var page = this.tree.pages.find(p => p.id == pageId);
-        (page.sections || (page.sections = [])).push(section);
+    addPage(page, index) {
+        let oPage = new Page(page);
+        if (index == undefined) {
+            this.tree.pages.push(oPage);
+        }
+        else {
+            this.tree.pages.splice(index, 0, page);
+        }
+        return oPage;
     }
 
-    addExtra(section) {
-        this.tree.extras.push(section);
+    getPage(id) {
+        return this.tree.pages.find(p => p.id == id);
+    }
+
+    getPages() {
+        return this.tree.pages;
+    }
+
+    movePage(id, toIndex) {
+        let index = this.tree.pages.findIndex(p => p.id == id);
+        if (toIndex > index) {
+            toIndex--;
+        }
+        let oPage = this.tree.pages.splice(index, 1)[0];
+        this.tree.pages.splice(toIndex, 0, oPage);
+    }
+
+    addExtra(item) {
+        this.tree.extras.push(item);
     }
 
     updateConfig(config) {
         this.config= Object.assign(this.config, config);
+    }
+}
+
+export class Page {
+    constructor({id, title}) {
+        this.id = id;
+        this.title = title;
+        this.sections = [];
+    }
+
+    getSection(id) {
+        return this.sections.find(s => s.id == id);
+    }
+
+    addSection(section, index) {
+        section.parent = this;
+        if (index == undefined || index < 0 || index >= this.sections.length) {
+            this.sections.push(section);
+        }
+        else {
+            this.sections.splice(index, 0, section);
+        }
+        return section;
+    }
+
+    removeSection(id) {
+        let idx = this.sections.findIndex(s => s.id == id);
+        return this.sections.splice(idx, 1)[0];
+    }
+
+    moveSection(id, toIndex) {
+        let index = this.sections.findIndex(s => s.id == id);
+        if (toIndex > index) {
+            toIndex--;
+        }
+        let section = this.sections.splice(index, 1)[0];
+        this.sections.splice(toIndex, 0, section);
     }
 }

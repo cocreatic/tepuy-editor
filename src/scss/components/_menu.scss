@@ -2,17 +2,30 @@
     top: 0;
     left: 0;
     width: 100%;
-    background-color: var(--tepuy-header-background);
+    background-color: var(--tpe-header-bg);
+    display: flex;
 
     &> li { /* Menubar buttons */
         display: inline-block;
-        div {
+        &> div {
             display: flex;
             align-items: center;
+            margin: 5px 2px;
+            border: none;
+            border-bottom: solid 2px transparent;
+
+            &:hover, &:focus {
+                border-bottom: solid 2px var(--tpe-active-border-color);
+            }
+            &.ui-state-active, &.ui-state-focus {
+                background-color: transparent;
+                color: var(--tpe-active-state-color);
+            }
         }
         i {
             text-align: center;
         }
+
     }
     
     &> li > ul > li { /* Menubar buttons inside dropdown */
@@ -22,22 +35,22 @@
     /* Change dropdown carets to correct direction */
     &> li > div > span.ui-icon-caret-1-e {
         /* Caret on menubar */
-        background:url(https://www.drupal.org/files/issues/ui-icons-222222-256x240.png) no-repeat -64px -16px !important;
+        background-position: -65px -16px;
     }
 
     ul li div span.ui-icon-caret-1-e {
         /* Caret on dropdowns */
-        background:url(https://www.drupal.org/files/issues/ui-icons-222222-256x240.png) no-repeat -32px -16px !important;
+        background-position: -32px -16px;
     }
 
     .ui-menu-item-wrapper i {
         min-width: 15px;
-        font-size: 80%;
+        font-size: .8em;
     }
 
     .tpe-menu-right {
-        float: right;
-        & > div {
+        margin-left: auto;
+        &> div {
             display: flex;
             align-items: center;
         }
@@ -45,7 +58,9 @@
 
     &.ui-menu {
         .ui-state-active, .ui-state-focus {
-            margin: 0;
+            //background-color: transparent;
+            //color: var(--tpe-active-state-color);
+            //margin: 0;
         }
     }
 }

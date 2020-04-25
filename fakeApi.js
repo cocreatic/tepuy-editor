@@ -7,7 +7,7 @@
         name:'Lorem 1',
         category:'Category 1',
         license:'GPL',
-        createdBy:"David Rios",
+        createdBy:"Fulanito",
         url: "http://localhost/rutatic_salud/plantilla/"
     }, {
         id:'2',
@@ -27,7 +27,7 @@
         name:'Lorem 4',
         category:'Category 3',
         license:'GPL',
-        createdBy:"David Rios",
+        createdBy:"Fulanito",
         url: "http://localhost/rutatic_salud/plantilla/"
     }, {
         id:'5',
@@ -43,9 +43,9 @@
 
     var userData ={
         id:'1',
-        userName:'David.Rios',
+        userName:'guest',
         password:'123456',
-        name:'David Rios',
+        name:'Invitado',
         profile_image:'https://picsum.photos/50/50?t=4'
     };
 

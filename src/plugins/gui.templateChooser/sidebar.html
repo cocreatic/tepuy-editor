@@ -12,7 +12,8 @@
         <div id="categories" class="tpe-check-list" >
             <h2 data-i18n="label.category"></h2>
             {^{for model.categories}}
-                <label><input type="checkbox" value="{{:}}">{{:}}</label>
+                <input type="checkbox" value="{{:}}" id="c_{{:#index}}" />
+                <label for="c_{{:#index}}">{{:}}</label>
             {{/for}}
         </div>
 
@@ -21,7 +22,7 @@
         </button>
     </div>
     <div id="tab_edit">
-        //Editar y busqueda
+        //Pendiente de implementar
     </div>
     {{/tabs}}
 </script>

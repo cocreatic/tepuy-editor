@@ -17,9 +17,7 @@
   <section>
       <div id="tpe-sidebar" class="tpe-sidebar"></div>
       <div id="tpe-content-wrapper" class="tpe-content-wrapper">
-        <div id="tpe-content" class="tpe-content">
-            <iframe src="about:blank"></iframe>
-        </div>
+        <div id="tpe-content" class="tpe-content"></div>
       </div>
   </section>
   <footer>
@@ -38,35 +36,32 @@
 </script>
 
 <script id="gui-default-editable-tree" type="text/x-template">
+  <ul>
     <li>
-    {^{if children && children.length}}
-        {{!-- If there are child items, show a toggle button to expand/collapse children --}}
-        <span data-link="{on ~tag.toggle}" class="toggle">{^{:expanded ? '-' : '+'}}</span>
-        {^{if !~tag.parent}}{{:~tagCtx.props.rootLabel}}{{/if}}
-    {{else}}
-        {{!-- If no child items, show just the item --}}
-        <span class="spacer">&bull;</span>
-    {{/if}}
-    {^{if ~tagCtx.props.editable}}
-        {{!-- If editable, show a textbox to edit, and add/remove buttons --}}
-        <input data-link="title" />
-        <span data-link="{on ~tag.addItem}" class="add">add</span>
-            {^{if ~tag.parent && ~tag.parent.tagName==='editableTree'}}
-            {{!-- Don't allow removing the top-level tree control --}}
-        <span data-link="{on ~tag.remove}" class="remove"></span>
+      <div class="tpe-tree-node">
+        {^{if children && children.length}}
+            {{!-- If there are child items, show a toggle button to expand/collapse children --}}
+              <span data-link="{on ~tag.toggle}" class="toggle">
+                {^{:~icon(expanded ? 'tree-expanded' : 'tree-collapsed')}}
+              </span>
+        {{else}}
+            {{!-- If no child items, show just the item --}}
+            <span class="spacer">&bull;</span>
         {{/if}}
-    {{else}}
-        {{!-- Not editable --}}
-        {^{>title}}
-    {{/if}}
-    {^{if expanded}}
-        {{!-- If expanded, show the child items --}}
-        <ul>
-        {^{for children}}
-            {{!-- Recursive {{editableTree}} call to display subtree --}}
-            {^{editableTree editable=~tagCtx.props.editable/}}
-        {{/for}}
-        </ul>
-    {{/if}}
+        {^{>(root ? ~tagCtx.props.rootLabel : title)}}
+        {{if ~tagCtx.props.toolbarTpl}}
+        <div class="tpe-action-bar ui-widget-content" data-link="{on 'click' 'span' ~tag.doAction}">
+          {{include tmpl=~tagCtx.props.toolbarTpl /}}
+        </div>
+        {{/if}}
+      </div>
+      {^{if expanded}}
+          {{!-- If expanded, show the child items --}}
+          {^{for children}}
+              {{!-- Recursive {{editableTree}} call to display subtree --}}
+              {^{editableTree #data root=false editable=~tagCtx.props.editable toolbarTpl=~tagCtx.props.toolbarTpl doAction=~tagCtx.props.doAction /}}
+          {{/for}}
+      {{/if}}
     </li>
+  </ul>
 </script>
