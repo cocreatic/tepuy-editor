@@ -1,4 +1,20 @@
 {
+  "menu": {
+    "profile_logout": ""
+  },
+  "about": {
+    "title": "",
+    "description": "",
+    "version": "",
+    "creators": "",
+    "financedBy": "",
+    "license": ""
+  },
+  "commands": {
+    "addComponent": "",
+    "uploadFile": "",
+    "newFolder": ""
+  },
   "sidebar": {
     "content": "",
     "look": "",
@@ -8,65 +24,52 @@
     "new": "",
     "edit": ""
   },
-  "tree": {
-    "root": ""
-  },
   "editor": {
     "content": {
       "objecttree": "",
       "othersections": ""
+    },
+    "resources": {
+      "folders": "",
+      "actions": ""
     }
   },
-  "label": {
-    "keyword": "",
-    "category": ""
+  "resources": {
+    "folders": "",
+    "loads": "",
+    "root": "",
+    "dropzone": ""
   },
-  "button": {
-    "filter": ""
+  "editPage": {
+    "id": "",
+    "title": "",
+    "append": ""
+  },
+  "position": {
+    "start": "",
+    "end": "",
+    "after": "",
+    "before": ""
+  },
+  "tree": {
+    "root": ""
   },
   "template": {
-    "lastMod": "",
-    "license": ""
+    "lastMod": ""
   },
   "general": {
-    "create": "",
-    "close": "",
     "description": "",
     "creator": "",
     "license": "",
-    "category": ""
+    "category": "",
+    "create": "",
+    "close": ""
   },
-  "menu": {
-    "profile_logout": ""
+  "label": {
+    "category": "",
+    "keyword": ""
   },
-  "detail": {
-    "description": ""
-  },
-  "about": {
-    "description": "",
-    "version": "",
-    "creators": "",
-    "financedBy": "",
-    "license": "",
-    "title": ""
-  },
-  "position": {
-    "after": "",
-    "before": "",
-    "start": "",
-    "end": ""
-  },
-  "editPage": {
-    "title": "",
-    "id": "",
-    "append": ""
-  },
-  "commands": {
-    "add": "",
-    "cancel": "",
-    "addComponent": ""
-  },
-  "command": {
-    "addComponent": ""
+  "button": {
+    "filter": ""
   }
 }

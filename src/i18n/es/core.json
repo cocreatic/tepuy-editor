@@ -12,6 +12,10 @@
     "content": {
       "objecttree": "Arbol de contenidos",
       "othersections": "Secciones independientes"
+    },
+    "resources": {
+      "folders": "Gestión de recursos",
+      "actions": "Acciones"
     }
   },
   "menu": {
@@ -65,10 +69,10 @@
     "title": "Acerca de"
   },
   "position": {
-    "after": "",
-    "before": "",
-    "start": "",
-    "end": ""
+    "after": "Después de",
+    "before": "Antes de",
+    "start": "Al principio",
+    "end": "Al final"
   },
   "editPage": {
     "editTitle": "Editar página",
@@ -85,6 +89,12 @@
     "add": "Agregar",
     "cancel": "Cancelar",
     "edit": "Actualizar",
-    "addComponent": "Agregar componente"
+    "addComponent": "Agregar componente",
+    "uploadFile": "Subir archivo",
+    "newFolder": "Nueva carpeta"
+  },
+  "resources": {
+    "root": "Carpeta principal",
+    "dropzone": "Arrastrar archivos aquí"
   }
 }

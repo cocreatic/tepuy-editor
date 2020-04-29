@@ -8,12 +8,6 @@
             }
         }
     }
-
-    .ui-accordion {
-        .ui-accordion-content {
-            padding: 2px;
-        }
-    }
 }
 
 #tpe-content {
@@ -24,3 +18,95 @@
         flex: 1;
     }
 }
+
+.tpe-object-tree {
+    .tpe-toolset-content {
+        .ui-button {
+            width: 100px;
+            margin: 2px auto;
+        }
+    }
+}
+
+.resource-list {
+    display: flex;
+    flex-flow: column;
+    padding: 5px;
+    flex: 1;
+    
+    .title {
+        padding: 5px;
+        border: solid 1px #ccc;
+    }
+    .container {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-start;
+
+        .resource.thumbnail {
+            display: flex;
+            flex-flow: row;
+            padding: 5px;
+            margin: 5px;
+            justify-content: flex-start;
+            align-items: center;
+            //border: solid 1px var(--tpe-panel-border);
+            border-radius: 5px;
+            //background: var(--tpe-panel-content-bg);
+            font-size: .8em;
+            //color: var(--tpe-state-active-bg);
+            flex: 0 0 150px;
+            height: 60px;
+            cursor: pointer;
+            width: 150px;
+
+            &:first-child {
+                margin-top: 0;
+                margin-left: 0;
+            }
+
+            &>div {
+                display: flex;
+                padding: 5px;
+                flex-flow: column;
+
+                &>i,&>img {
+                    width: 32px;
+                    height: auto;
+                    font-size: 3em;
+                }
+
+                &>div {
+                    margin-left: 5px;
+                    display:flex;
+                    flex-flow:column;
+                }
+                &>label {
+                    //margin: 2px auto;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    max-height: 2em;
+                    display: block;
+                }
+            }
+            &>.thumb {
+                align-items: flex-center;
+                flex: 0 0 20px;
+            }
+            &>.info {
+                align-items: flex-start;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+    .dropzone {
+        //margin: 10px;
+        font-size: 1.5em;
+        padding: 10px;
+        border: dashed 1px #ccc;
+        color: var(--tpe-active-border-color);
+        text-align: center;
+    }
+}
+

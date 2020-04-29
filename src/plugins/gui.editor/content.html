@@ -1,85 +1,136 @@
 <script id="gui-editor-content" type="text/x-template">
+    {^{include ^tmpl=template /}}
+</script>
+
+<script id="gui-editor-tab-1-content" type="text/x-template">
     <iframe id="editor-container-frame"></iframe>
 </script>
 
+<script id="gui-editor-tab-2-content" type="text/x-template">
+        <p>Apariencia - Pendiente de implementar</p>
+</script>
+
+<script id="gui-editor-tab-3-content" type="text/x-template">
+    <div class="resource-list">
+        <div class="title">
+            {{:resourcesPath}}
+        </div>
+        <div class="container">
+            {^{for resources }}
+            <div class="resource thumbnail ui-state-default" data-link="
+            {on 'click' #parent.parent.data.resourceClick #data}
+            {on 'dblclick' #parent.parent.data.resourceDblClick #data}
+            ">
+                <div class="thumb">
+                    {{if thumb}}
+                        <img src="{{:thumb}}" alt=""/>
+                    {{else}}
+                        {{:~icon(icon)}}
+                    {{/if}}
+                </div>
+                <div class="info">
+                    <label title="{{:name}}">{{:name}}</label>
+                    <span>{{:size}}</span>
+                    <span>{{:createdAt}}</span>
+                </div>
+            </div>
+            {{/for}}
+        </div>
+        <div class="dropzone" data-link="
+        {on 'dragenter dragover' resourceDragEnter}
+        {on 'dragleave drop' resourceDragLeave}
+        {on 'drop' resourceDrop}
+        ">
+            {{:~translate('resources.dropzone')}}
+        </div>
+    </div>
+</script>
+
+<script id="gui-editor-tab-4-content" type="text/x-template">
+    <p>Log - Pendiente de implementar</p>
+</script>
+
+<script id="gui-editor-tab-5-content" type="text/x-template">
+    <p>Compartir - Pendiente de implementar</p>
+</script>
+
 <script id="gui-editor-about" type="text/x-template">
-  <div title="{{:~translate('about.title')}}">
-    <p >
-      {{:~translate('about.description')}}
-    </p>
-    <p >
-      {{:~translate('about.version')}}
-    </p>
-    <p >
-      {{:~translate('about.creators')}}
-    </p>
-    <p >
-      {{:~translate('about.financedBy')}}
-    </p>
-    <p >
-      {{:~translate('about.license')}}
-    </p>
-  </div>
+    <div title="{{:~translate('about.title')}}">
+        <p >
+            {{:~translate('about.description')}}
+        </p>
+        <p >
+            {{:~translate('about.version')}}
+        </p>
+        <p >
+            {{:~translate('about.creators')}}
+        </p>
+        <p >
+            {{:~translate('about.financedBy')}}
+        </p>
+        <p >
+            {{:~translate('about.license')}}
+        </p>
+    </div>
 </script>
 
 <script id="gui-editor-page" type="text/x-template">
-  <div class="ui-component page" id="{{:id}}">
-    <h1 class="title">{{:title}}</h1>
-    <button class="ui-widget ui-button">{{:~translate('commands.addComponent')}}&nbsp;<i>+</i></button>
-    {{if !sections || !sections.length}}
-    <p>--&gt;Usar el boton agregar componente para agregar contenido&lt;--<p>
-    {{/if}}
-    {{for sections}}
-    <div class="ui-component section" id="{{:id}}">
-      <h2 class="title">{{:title}}</h2>
-      <button class="ui-widget ui-button">{{:~translate('commands.addComponent')}}<i>+</i></button>
-      <p>--&gt;Usar el boton agregar componente para agregar contenido&lt;--<p>
+    <div class="ui-component page" id="{{:id}}">
+        <h1 class="title">{{:title}}</h1>
+        <button class="ui-widget ui-button">{{:~translate('commands.addComponent')}}&nbsp;<i>+</i></button>
+        {{if !sections || !sections.length}}
+        <p>--&gt;Usar el boton agregar componente para agregar contenido&lt;--<p>
+        {{/if}}
+        {{for sections}}
+        <div class="ui-component section" id="{{:id}}">
+            <h2 class="title">{{:title}}</h2>
+            <button class="ui-widget ui-button">{{:~translate('commands.addComponent')}}<i>+</i></button>
+            <p>--&gt;Usar el boton agregar componente para agregar contenido&lt;--<p>
+        </div>
+        {{/for}}
     </div>
-    {{/for}}
-  </div>
 </script>
 
 <script id="gui-editor-page-styles" type="text/x-template">
-  <style>
-    body {
-      font-size: 14px;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+    <style>
+        body {
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-    .ui-component {
-      border: 1px dashed #ccc;
-      margin: 0 4px 10px 4px;
-      display: flex;
-      flex-flow: column;
-    }
-    .ui-component .title {
-      border: solid 1px #666;
-      margin: .2em;
-      padding: .2em;
-    }
+        .ui-component {
+            border: 1px dashed #ccc;
+            margin: 0 4px 10px 4px;
+            display: flex;
+            flex-flow: column;
+        }
+        .ui-component .title {
+            border: solid 1px #666;
+            margin: .2em;
+            padding: .2em;
+        }
 
-    .ui-button {
-      width: 150px;
-      margin: 0 auto;
-      padding: .5em;
-      border: solid 1px #ccc;
-      margin-bottom: 10px;
-      display: inline-block;
-    }
+        .ui-button {
+            width: 150px;
+            margin: 0 auto;
+            padding: .5em;
+            border: solid 1px #ccc;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
 
-    p {
-      text-align: center;
-      margin: .2em;
-    }
+        p {
+            text-align: center;
+            margin: .2em;
+        }
 
-    i {
-      border: solid 1px #ccc;
-      border-radius: 50%;
-      font-size: 1.4em;
-      height: 20px;
-      width: 20px;
-      display: inline-block;
-    }
-
-  </style>
+        i {
+            border: solid 1px #ccc;
+            border-radius: 50%;
+            font-size: 1.4em;
+            height: 20px;
+            width: 20px;
+            display: inline-block;
+        }
+    </style>
 </script>

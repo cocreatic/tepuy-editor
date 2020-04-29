@@ -1,6 +1,11 @@
 import i18next from 'i18next';
 const iconMap = {
     "file": "file",
+    "folder": "folder",
+    "file-image": "file-image",
+    "file-pdf": "file-pdf",
+    "file-audio": "file-audio",
+    "file-video": "file-video",
     "file_properties": "list",
     "file_metadata": "tags",
     "file_download": "download",
@@ -22,10 +27,13 @@ const iconMap = {
     "tree-expanded": "chevron-down",
     "tree-collapsed": "chevron-right",
     "add": "plus-circle",
-    "remove": "minus-circle",
+    "remove": "trash-alt",
     "move-up": "chevron-circle-up",
     "move-down": "chevron-circle-down",
-    "edit": "pen"
+    "edit": "pen",
+    "folders": "fas fa-folder",
+    "png":"far fa-images",
+    "pdf": "fa fa-file-pdf"
 };
 
 export const helpers = {

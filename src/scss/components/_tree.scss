@@ -49,6 +49,12 @@
                 display: flex;
             }
         }
+
+        &>i {
+          align-self: start;
+          flex: 0 0 16px;
+          margin: 0 2px;
+        }
     }
 
 

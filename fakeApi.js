@@ -49,6 +49,59 @@
         profile_image:'https://picsum.photos/50/50?t=4'
     };
 
+    var resoucesData = [    
+        {
+            name: "Content",
+            type: "D", //F|D
+            path: "/Content", //Relative to the object root
+            createdAt: "2019-12-31 15:21", //Date
+            isDro: false, //true|false Is a Digital Resource object
+            size: '', //Size only if it is file
+            extension: '', //
+            thumbnail: '' //
+        },
+        {
+            name: "Small pet.png",
+            type: "F", //F|D
+            path: "/Images", //Relative to the object root
+            createdAt: "2019-12-30 14:22", //Date
+            isDro: false, //true|false Is a Digital Resource object
+            size: '100 KB', //Size only if it is file
+            extension: 'png', //
+            thumbnail: 'https://picsum.photos/24/24?t=4' //
+        },
+        {
+            name: "export.pdf",
+            type: "F", //F|D
+            path: "/Content", //Relative to the object root
+            createdAt: "2019-11-21 10:40", //Date
+            isDro: true, //true|false Is a Digital Resource object
+            size: '45 KB', //Size only if it is file
+            extension: 'pdf', //
+            thumbnail: '' //
+        },
+        {
+            name: "plantilla.doc",
+            type: "F", //F|D
+            path: "/Content", //Relative to the object root
+            createdAt: "2019-02-12 08:30", //Date
+            isDro: true, //true|false Is a Digital Resource object
+            size: '620 KB', //Size only if it is file
+            extension: 'pdf', //
+            thumbnail: '' //
+        },
+        {
+            name: "export.xls",
+            type: "F", //F|D
+            path: "/Content", //Relative to the object root
+            createdAt: "2019-11-21", //Date
+            isDro: true, //true|false Is a Digital Resource object
+            size: '65 KB', //Size only if it is file
+            extension: 'xls', //
+            thumbnail: '' //
+        }
+    ];
+
     var fakeApi = {
         getTemplates: function (filter) {
           return templates.filter(item => {
@@ -72,7 +125,46 @@
 
         getUserData: function(){
             return userData;
-        }
+        },
+        /*
+        Object resources methods
+        */
+        /*
+        List all resouces (files and folder) at an specified path of the object e.g (/, /content)
+        returns: Array with the list of objects in the given path. 
+        */
+        getResources: function(path){
+            return resoucesData.filter(item=>{
+            var matchPath = null;
+            if(path && path != ''){
+                var res = new RegExp(path,'i');
+                matchPath = res.test(item.path);
+            }
+            return(matchPath == null|| matchPath);
+           });     
+        },
+        /*
+        Will rename a file in the object directory structure
+        returns: { succeed: true | false, message: string };
+        */
+        renameResource: function(resource, newpath){
+            return { succeed: true | false, message: '' };
+        },
+        /*
+        Will delete a file in the object directory structure
+        returns: { succeed: true | false, message: string };
+        */
+        deleteResource: function(resource){
+            return { succeed: true | false, message: '' };
+        },
+        /*
+        Will create a new resource in the directory structure at the given path
+        resouce: { type: F|D, name: string, file: Blob | null }
+        returns: { succeed: true | false, message: string };
+        */
+        createResource: function(resource, path){
+
+        },
     };
     window.fakeApi = fakeApi;
 })()
