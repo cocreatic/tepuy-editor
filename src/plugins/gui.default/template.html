@@ -65,7 +65,7 @@
             {{!-- If no child items, show just the item --}}
             <span class="spacer">&bull;</span>
         {{/if}}
-        {^{>(root ? ~tagCtx.props.rootLabel : title)}}
+        {^{if icon}}{{:~icon(icon)}}{{/if}}{^{>(root ? ~tagCtx.props.rootLabel : title)}}
         {{if ~tagCtx.props.toolbarTpl}}
         <div class="tpe-action-bar ui-widget-content" data-link="{on 'click' 'span' ~tag.doAction}">
           {{include tmpl=~tagCtx.props.toolbarTpl /}}

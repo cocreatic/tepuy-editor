@@ -12,6 +12,10 @@
     "content": {
       "objecttree": "Arbol de contenidos",
       "othersections": "Secciones independientes"
+    },
+    "resources": {
+      "folders": "Gestión de recursos",
+      "actions": "Acciones"
     }
   },
   "menu": {
@@ -85,10 +89,12 @@
     "add": "Agregar",
     "cancel": "Cancelar",
     "edit": "Actualizar",
-    "addComponent": "Agregar componente"
+    "addComponent": "Agregar componente",
+    "uploadFile": "Subir archivo",
+    "newFolder": "Nueva carpeta"
   },
   "resources": {
-    "folders": "",
-    "loads": ""
+    "root": "Carpeta principal",
+    "dropzone": "Arrastrar archivos aquí"
   }
 }

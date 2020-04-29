@@ -11,7 +11,9 @@
     "license": ""
   },
   "commands": {
-    "addComponent": ""
+    "addComponent": "",
+    "uploadFile": "",
+    "newFolder": ""
   },
   "sidebar": {
     "content": "",
@@ -26,11 +28,17 @@
     "content": {
       "objecttree": "",
       "othersections": ""
+    },
+    "resources": {
+      "folders": "",
+      "actions": ""
     }
   },
   "resources": {
     "folders": "",
-    "loads": ""
+    "loads": "",
+    "root": "",
+    "dropzone": ""
   },
   "editPage": {
     "id": "",

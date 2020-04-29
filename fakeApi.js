@@ -54,19 +54,19 @@
             name: "Content",
             type: "D", //F|D
             path: "/Content", //Relative to the object root
-            createdAt: "2019-12-31", //Date
+            createdAt: "2019-12-31 15:21", //Date
             isDro: false, //true|false Is a Digital Resource object
-            size: 0, //Size only if it is file
+            size: '', //Size only if it is file
             extension: '', //
             thumbnail: '' //
         },
         {
-            name: "File.png",
+            name: "Small pet.png",
             type: "F", //F|D
             path: "/Images", //Relative to the object root
-            createdAt: "2019-12-30", //Date
+            createdAt: "2019-12-30 14:22", //Date
             isDro: false, //true|false Is a Digital Resource object
-            size: 100000, //Size only if it is file
+            size: '100 KB', //Size only if it is file
             extension: 'png', //
             thumbnail: 'https://picsum.photos/24/24?t=4' //
         },
@@ -74,9 +74,9 @@
             name: "export.pdf",
             type: "F", //F|D
             path: "/Content", //Relative to the object root
-            createdAt: "2019-11-21", //Date
+            createdAt: "2019-11-21 10:40", //Date
             isDro: true, //true|false Is a Digital Resource object
-            size: 45300, //Size only if it is file
+            size: '45 KB', //Size only if it is file
             extension: 'pdf', //
             thumbnail: '' //
         },
@@ -84,9 +84,9 @@
             name: "plantilla.doc",
             type: "F", //F|D
             path: "/Content", //Relative to the object root
-            createdAt: "2019-02-12", //Date
+            createdAt: "2019-02-12 08:30", //Date
             isDro: true, //true|false Is a Digital Resource object
-            size: 4000, //Size only if it is file
+            size: '620 KB', //Size only if it is file
             extension: 'pdf', //
             thumbnail: '' //
         },
@@ -96,7 +96,7 @@
             path: "/Content", //Relative to the object root
             createdAt: "2019-11-21", //Date
             isDro: true, //true|false Is a Digital Resource object
-            size: 45300, //Size only if it is file
+            size: '65 KB', //Size only if it is file
             extension: 'xls', //
             thumbnail: '' //
         }

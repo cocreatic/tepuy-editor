@@ -3,6 +3,7 @@ import i18next from 'i18next';
 import { Page } from '../../js/dco';
 import { TemplateManager } from './templateManager';
 import { TreeItemEditor } from './treeItemEditor';
+import moment from 'moment';
 
 const templateMap = {
     sidebar: 'script#gui-editor-sidebar',
@@ -26,32 +27,37 @@ export class GuiEditor {
 
     initialize(template) {
         const sidebarTpl = TemplateManager.get('sidebar');
-        sidebarTpl.link(App.ui.$sidebar, this.getSidebarData());
         const contentTpl = TemplateManager.get('content');
-        let viewModel = { template: '#gui-editor-tab-1-content', data: {} };
-        contentTpl.link(App.ui.$content, { viewModel });
+        this.sidebarModel = {};
+        this.contentModel = {};
+
+        contentTpl.link(App.ui.$content, this.contentModel, { print: (value) => {
+            console.log(value);
+        }});
+        sidebarTpl.link(App.ui.$sidebar, this.sidebarModel);
+
         $('#tabs').localize().tabs({
             activate: (event, ui) => {
                 this.activateTab(ui.newTab, ui.oldTab);
             }
         });
-        $('.container_resource').tooltip();
 
-        this.renderFirst();
-
-        $('.filter').click(function(e){
-            e.preventDefault();
-            var resources = App.api.call('getResources', {path:this.text}); 
-        });
+        this.activateTab(App.ui.$sidebar.find('li[data-tab-id="tab-1"]'));
     }
 
     activateTab(tab, oldTab) {
         let id = tab.data().tabId;
-        $.observable(viewModel).setProperty('template', ['#gui-editor-', id, '-content'].join(''));
-    }
-
-    showResources(){
-        var resources = App.api.call('getResources');
+        switch(id) {
+            case 'tab-1':
+                this.loadContentTab();
+                break;
+            case 'tab-3':
+                this.loadResourceTab();
+                break;
+            default:
+                $.observable(this.contentModel).setProperty('template', ['#gui-editor-', id, '-content'].join(''));
+                break;
+        }
     }
 
     registerMenu() {
@@ -83,26 +89,174 @@ export class GuiEditor {
 
     }
 
-    getSidebarData() {
-        const oTree = App.data.dco.objectTree();
-        let tree = { children: [], expanded: true, root: true };
-        for(var page of oTree.pages) {
-            var node = {id: page.id, title: page.title, children: [], type: 'page', parent: tree };
-            tree.children.push(node);
-            if (page.sections && page.sections.length) {
-                node.children = page.sections.map(section => { return {id: section.id, title: section.title, type: 'section', parent: node }});
+    loadContentTab() {
+        if (!this.sidebarModel.content){
+            const oTree = App.data.dco.objectTree();
+            let tree = { children: [], expanded: true, root: true };
+            for(var page of oTree.pages) {
+                var node = {id: page.id, title: page.title, children: [], type: 'page', parent: tree };
+                tree.children.push(node);
+                if (page.sections && page.sections.length) {
+                    node.children = page.sections.map(section => { return {id: section.id, title: section.title, type: 'section', parent: node }});
+                }
             }
-        }
-        let extras = App.data.dco.extras().slice(0);
-        var resources = App.api.call('getResources');
-        return { 
-            content: {
+            let extras = App.data.dco.extras().slice(0);
+            $.observable(this.sidebarModel).setProperty('content', {
                 tree: tree,
                 extras: extras,
-                treeCommand: this.onTreeCommand.bind(this),
-                resources: resources
+                treeCommand: this.onTreeCommand.bind(this)
+            });
+            setTimeout(() => App.ui.$sidebar.localize(), 100);
+        }
+        $.observable(this.contentModel).setProperty('template', ['#gui-editor-', 'tab-1', '-content'].join(''));
+        this.renderFirst();
+    }
+
+    loadResourceTab() {
+        if (!this.sidebarModel.resources) {
+            if (!this.contentModel.resources){
+                this.loadResources('/');
             }
-        };
+            setTimeout(() => App.ui.$sidebar.localize(), 100);
+        }
+        $.observable(this.contentModel).setProperty('template', ['#gui-editor-', 'tab-3', '-content'].join(''));
+    }
+
+    loadResources(path){
+        var resources = App.api.call('getResources', path);
+        let children = [];
+        if (!this.sidebarModel.resources) {
+            let tree = { children: [], expanded: true, root: true, id: '/' };
+            $.observable(this.sidebarModel).setProperty('resources', {
+                tree: tree,
+                treeCommand: this.onTreeCommand.bind(this),
+                onAction: this.onResourceAction.bind(this)
+            });
+        }
+        let parent = this.getNodeWithPath(path, this.sidebarModel.resources.tree);
+        for(var resource of resources) {
+            resource.icon = this.getIcon(resource);
+            if (resource.thumbnail && resource.thumbnail != '') {
+                resource.thumb = resource.thumbnail;
+            }
+            let child = {id: resource.path, title: resource.name, parent: parent, icon: resource.icon };
+            if (resource.type == 'D') {
+                child.loaded = false;
+                child.children = [];
+            }
+            children.push(child);
+        }
+        $.observable(this.contentModel).setProperty("resourceClick", this.resourceClick.bind(this));
+        $.observable(this.contentModel).setProperty("resourceDblClick", this.resourceDblClick.bind(this));
+        $.observable(this.contentModel).setProperty("resourceDragEnter", this.resourceDragEnter.bind(this));
+        $.observable(this.contentModel).setProperty("resourceDragLeave", this.resourceDragLeave.bind(this));
+        $.observable(this.contentModel).setProperty("resourceDrop", this.resourceDrop.bind(this));
+        $.observable(this.contentModel).setProperty("resources", resources);
+        $.observable(this.contentModel).setProperty("resourcesPath", path);
+        $.observable(parent.children).refresh(children);
+    }
+
+    resourceClick(resource, ev, args) {
+        let $el = $(ev.target);
+        $el
+            .closest('.container')
+            .find('.resource.thumbnail')
+            .addClass('ui-state-default')
+            .removeClass('ui-state-highlight');
+        $el
+            .closest('.resource.thumbnail')
+            .addClass('ui-state-highlight');
+    }
+
+    resourceDblClick(resource, ev, args) {
+    }
+
+    resourceDragEnter(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        $('.dropzone').addClass('ui-state-highlight');
+    }
+
+    resourceDragLeave(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        $('.dropzone').removeClass('ui-state-highlight');
+    }
+
+    resourceDrop(ev) {
+        let dt = ev.dataTransfer || ev.originalEvent.dataTransfer;
+        let files = dt.files;
+        this.uploadFiles([...files]);
+    }
+
+    onResourceAction(ev, args) {
+        let $el = $(ev.target).closest('.ui-button');
+        let action = $el.data().action;
+
+        let method = this['resource'+action].bind(this);
+        method($el);
+    }
+
+    resourceupload(target) {
+        let $uploader = $('<input type="file" multiple="true"/>').css({display:'none'}).appendTo('body')
+            .on('change', (ev) => {
+                this.uploadFiles(ev.target.files);
+                $uploader.remove();
+            })
+        $uploader.trigger('click');
+    }
+
+    uploadFiles(files) {
+        for(let file of files) {
+            let resource = {
+                type: 'F',
+                name: file.name,
+                size: Math.round(file.size / 1024) + ' KB',
+                createdAt: moment(file.lastModifiedDate).format('YYYY-MM-DD HH:mm'),
+                extension: file.name.substring(file.name.lastIndexOf('.'))
+            }
+            resource.icon = this.getIcon(resource);
+
+            let child = {id: this.contentModel.resourcesPath + file.name, title: file.name, parent: this.sidebarModel.resources.tree, icon: resource.icon };
+            $.observable(this.sidebarModel.resources.tree.children).insert(child);
+            $.observable(this.contentModel.resources).insert(resource);
+        }
+    }
+
+    resourcenewfolder() {
+        this.notimplemented();
+    }
+
+    getNodeWithPath(path, root) {
+        if (path == root.id) {
+            return root;
+        }
+        for(child of root.children) {
+            if (child.path.indexOf(path)) {
+                return this.getNodeWithPath(path, child)
+            }
+        }
+        return null;
+    }
+
+    getIcon(resource) {
+        if (resource.type == 'D') return 'folder';
+        if (/^(png|jpg|gif|jpeg|)$/.test(resource.extension)) {
+            return 'file-image';
+        }
+        if (/^(png|jpg|gif|jpeg|)$/.test(resource.extension)) {
+            return 'file-doc';
+        }
+        if (/^(mp3|wav)$/.test(resource.extension)) {
+            return 'file-audio';
+        }
+        if (/^(mp4|mpeg)$/.test(resource.extension)) {
+            return 'file-video';
+        }
+        if (/^(pdf)$/.test(resource.extension)) {
+            return 'file-pdf';
+        }
+        return 'file';
     }
 
     //Menu handlers
