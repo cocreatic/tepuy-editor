@@ -1,4 +1,4 @@
-export class links {
+export class Links {
     #properties;
     #host;
 

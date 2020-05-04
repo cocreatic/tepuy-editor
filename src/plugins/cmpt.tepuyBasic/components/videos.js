@@ -1,4 +1,4 @@
-export class videos {
+export class Videos {
     #properties;
     #host;
 

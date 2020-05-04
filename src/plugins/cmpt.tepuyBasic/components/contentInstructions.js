@@ -1,4 +1,4 @@
-export class contentInstructions {
+export class ContentInstructions {
     #properties;
     #host;
 

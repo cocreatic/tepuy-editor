@@ -1,4 +1,4 @@
-export class cites {
+export class Cites {
     #properties;
     #host;
 

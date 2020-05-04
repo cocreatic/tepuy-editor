@@ -1,4 +1,4 @@
-export class mouseover {
+export class MouseOver {
     #properties;
     #host;
 

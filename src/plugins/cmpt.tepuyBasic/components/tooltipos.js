@@ -1,4 +1,4 @@
-export class tooltips {
+export class ToolTips {
     #properties;
     #host;
 

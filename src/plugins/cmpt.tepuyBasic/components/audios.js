@@ -1,4 +1,4 @@
-export class audios {
+export class Audios {
     #properties;
     #host;
 

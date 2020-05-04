@@ -1,4 +1,4 @@
-export class modals {
+export class Modals {
     #properties;
     #host;
 
