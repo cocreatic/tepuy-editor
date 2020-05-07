@@ -11,7 +11,7 @@ export class GuiTemplateChooser {
         const contentTpl = $.templates("script#gui-tplchooser-content");
 
         var categories = App.api.call('getTemplateCategories');
-        var templates = App.api.call('getTemplates', {});
+        var templates = App.storage.getTemplates({});
         this.model = {
             templates: templates,
             activeTemplate: {},
@@ -29,7 +29,7 @@ export class GuiTemplateChooser {
         var $keyword = App.ui.$sidebar.find('#keyword');
         var $categories = App.ui.$sidebar.find("#categories input[type=checkbox]:checked");
         var cats = $categories.map((i, cat) => cat.value);
-        var templates = App.api.call('getTemplates',{keyword: $keyword.val(), categories: cats.get()});
+        var templates = App.storage.getTemplates({keyword: $keyword.val(), categories: cats.get()});
         $.observable(this.model.templates).refresh(templates);
     }
 

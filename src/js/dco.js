@@ -7,26 +7,16 @@ const defaultConfig = {
     height: 'auto' //or number
 }
 export class Dco {
-    constructor(dco) {
+    constructor(dco, storage) {
         this.dco = dco;
+        this.storage = storage;
         this.tree = {
             pages: [],
             extras: []
         };
 
-
         this.config = Object.assign(defaultConfig);
-
         this.home = new Page({id: 'home', title: 'Inicio' });
-        //let page = this.addPage({id: 'page1', title: 'Página 1'});
-        //page.addSection({id: 'section11', title: 'Sección 1'});
-        //page.addSection({id: 'section12', title: 'Sección 2'});
-        //page = this.addPage({id: 'page2', title: 'Página 2'});
-        //page.addSection({id: 'section21', title: 'Sección 1'});
-        //page.addSection({id: 'section22', title: 'Sección 2'});
-        //page = this.addPage({id: 'page3', title: 'Página 3'});
-        //page.addSection({id: 'section31', title: 'Sección 1'});
-        
         this.addExtra({id: 'extra1', title: 'Extra 1'});
         this.addExtra({id: 'extra2', title: 'Extra 2'});
         this.addExtra({id: 'extra3', title: 'Extra 3'});
@@ -79,6 +69,10 @@ export class Dco {
 
     updateConfig(config) {
         this.config= Object.assign(this.config, config);
+    }
+
+    getResources(path) {
+        return this.storage.getResources(this.dco, path);
     }
 }
 

@@ -3,8 +3,9 @@ import Backend from 'i18next-xhr-backend';
 import jqueryI18next from 'jquery-i18next';
 import properties from './properties';
 import { sortInsert } from './utils';
-import { Api } from './api';
 import { Dco } from './dco';
+import { Auth } from './auth';
+import { Storage } from './storage';
 
 
 const defaultOptions = {
@@ -31,23 +32,26 @@ class App {
         //Load active plugins
         for(let plugin of properties.plugins) {
             if (!plugin.active) continue;
-            var objectName = plugin.id.split('.').map(p => p[0].toUpperCase() + p.substr(1)).join('');
+            let [type, name] = plugin.id.split('.');
+            let objectName = [type, name].map(p => p[0].toUpperCase() + p.substr(1)).join('');
             if (objectName in tepuyEditor) {
                 this.plugins[plugin.id] = new tepuyEditor[objectName];
             }
             else {
-                import(`../plugins/${plugin.id}/component.js`).then(function (pClass) {
+                import(`../plugins/${plugin.id}/plugin.js`).then((pClass) => {
                     this.plugins[plugin.id] = new pClass(this); //pass a reference to the App
-                })
+                });
             }
         }
 
         this.initLanguage().then(() => {
-            this.api = new Api(this.options.api);
+            this.resolveAuth();
+            this.resolveStorage();
+            //this.api = new Api(this.options.api);
             this.data = {
-                dco: new Dco(),
                 theme: {}
             };
+            this.auth.authenticate();
             this.invokeHook('gui_initialize');
             this.ui.load(this.options.defaultView);
         });
@@ -71,6 +75,15 @@ class App {
         for(let hook of hooks) {
             hook.callback.apply(null, params);
         }
+    }
+
+    resolveAuth() {
+        let auth = this.options.authentication || 'local';
+        this.auth = new Auth(this.plugins['auth.'+auth]);
+    }
+    resolveStorage() {
+        let storage = this.options.storage || 'local';
+        this.storage = new Storage(this.plugins['storage.'+storage]);
     }
 
     initLanguage() {

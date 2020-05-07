@@ -17,7 +17,7 @@ export class GuiDefault {
             registerMenuItem: this.registerMenuItem.bind(this)
         };
         App.invokeHook('gui_menu_initialize');
-        this.user = App.api.call('getUserData');
+        this.user = App.auth.getUserInfo();
         template.link(App.$container, this);
         App.ui.$menu = $('#tpe-menubar');
         App.ui.$sidebar = $('#tpe-sidebar');

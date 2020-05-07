@@ -1,6 +1,6 @@
 import { App } from '../../js/app';
 import i18next from 'i18next';
-import { Page } from '../../js/dco';
+import { Dco, Page } from '../../js/dco';
 import { TemplateManager } from './templateManager';
 import { TreeItemEditor } from './treeItemEditor';
 import moment from 'moment';
@@ -30,6 +30,7 @@ export class GuiEditor {
         const contentTpl = TemplateManager.get('content');
         this.sidebarModel = {};
         this.contentModel = {};
+        App.data.dco = this.dco = new Dco(template, App.storage);
 
         contentTpl.link(App.ui.$content, this.contentModel, { print: (value) => {
             console.log(value);
@@ -123,7 +124,7 @@ export class GuiEditor {
     }
 
     loadResources(path){
-        var resources = App.api.call('getResources', path);
+        var resources = this.dco.getResources(path);
         let children = [];
         if (!this.sidebarModel.resources) {
             let tree = { children: [], expanded: true, root: true, id: '/' };

@@ -28,8 +28,7 @@ const vendorjs = [
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-ui-dist/jquery-ui.min.js',
     'node_modules/jsviews/jsviews.min.js',
-    'vendor/js/jsviews-jqueryui-widgets.min.js',
-    './fakeApi.js'
+    'vendor/js/jsviews-jqueryui-widgets.min.js'
 ];
 
 const vendorcss = [
@@ -107,7 +106,7 @@ gulp.task("vendorcss", gulp.parallel(joinVendorCss, copyVendorAssets, copyIcons)
 
 gulp.task("js", function () {
     return rollup({
-        input: ['./src/js/app.js', './src/plugins/**/component.js'], // entry point //./src/js/index.js //./src/js/plugins/**/component.js
+        input: ['./src/js/app.js', './src/plugins/**/plugin.js'], // entry point //./src/js/index.js //./src/js/plugins/**/component.js
         external: ['jquery'],
         plugins: [
             multiEntry(),
@@ -182,7 +181,7 @@ gulp.task('serve', gulp.series('compile', function () {
 
     gulp.watch(["./src/scss/**/*.scss", "./src/plugins/**/*.scss"], gulp.series('sass'));
     gulp.watch(["./src/js/*.js", "./src/plugins/**/*.js"], gulp.parallel('js', translations));
-    gulp.watch(["./src/fakeApi.js"], gulp.series('vendorjs'));
+    //gulp.watch(["./src/fakeApi.js"], gulp.series('vendorjs'));
     gulp.watch(["./index.html", "./src/plugins/**/*.html"], gulp.parallel('html', translations));
 }));
 
