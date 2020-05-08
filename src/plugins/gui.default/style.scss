@@ -125,3 +125,21 @@ footer {
    z-index: 99;
 }
 
+#dialog-properties{
+    
+    .container-properties{
+        float:left;
+        
+    }
+
+    .container-image{
+        float: right;
+        height: 300px;
+    }
+
+    .properties-footer{
+        float: right;
+        margin-top: 20px;
+    }
+}
+

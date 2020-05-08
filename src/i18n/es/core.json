@@ -67,5 +67,18 @@
   "resources": {
     "folders": "",
     "loads": ""
+  },
+  "properties": {
+    "title": "Propiedades",
+    "config": "Configuración general",
+    "screen": "Compartir pantalla",
+    "image": "Imagen de previsualización",
+    "mode": "Modo de interacción",
+    "delete": "Eliminar",
+    "display": "Opciones de visualización",
+    "page-star": "Saltar página de inicio",
+    "mode-screen": "Modo de visualización",
+    "width": "Ancho de la ventana",
+    "height": "Alto de la ventana"
   }
 }

@@ -53,5 +53,19 @@
   "resources": {
     "folders": "",
     "loads": ""
+  },
+  "properties": {
+    "title": "",
+    "config": "",
+    "screen": "",
+    "image": "",
+    "mode": "",
+    "delete": "",
+    "visual": "",
+    "display": "",
+    "page-star": "",
+    "mode-screen": "",
+    "width": "",
+    "height": ""
   }
 }

@@ -55,6 +55,7 @@ export class GuiEditor {
         App.registerHook('gui_menu_file_exit', this.close.bind(this));
         App.registerHook('gui_menu_help_about', this.about.bind(this));
         App.registerHook('gui_menu_profile_logout', this.logout.bind(this));
+        App.registerHook('gui_menu_file_properties', this.properties.bind(this));
  
 
     }
@@ -91,6 +92,13 @@ export class GuiEditor {
     }
     logout(){
         App.exit();
+    }
+    properties(){
+        $("#dialog-properties").dialog({ 
+            modal: true, 
+            width: 600,
+            top: 14.0469
+        });
     }
 
 
