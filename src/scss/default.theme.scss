@@ -24,6 +24,11 @@ $active-state-bg: color($my-palette, 'gray', 800);
 $active-state-color: contrast-color($my-palette, 'gray', 800);
 $widget-content-bg: #fff;
 $font-family: Arial, Helvetica, sans-serif;
+$xs-screen: 512px;
+$sm-screen: 640px;
+$md-screen: 720px;
+$lg-screen: 960px;
+$xl-screen: 1140px;
 
 :root {
     /* Widget Common Varibles */

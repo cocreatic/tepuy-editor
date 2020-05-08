@@ -1,6 +1,19 @@
 import { templates } from './templates';
 import { resources } from './resources';
 
+const empty = {
+    id:'0',
+    preview:'',
+    description: "Plantilla en blanco",
+    createdAt: '',
+    name:'En blanco',
+    category:'',
+    license:'GPL',
+    createdBy:"",
+    url: ""
+};
+
+
 export class StorageLocal {
     constructor() {
         this.name = 'LocalStorage';
@@ -11,7 +24,7 @@ export class StorageLocal {
     }
 
     getTemplates(filter) {
-        return templates.filter(item => {
+        return [empty, ...templates.filter(item => {
             var matchCat = null;
             if (filter.categories && filter.categories.length) {
                 matchCat = filter.categories.indexOf(item.category) >= 0;
@@ -24,7 +37,7 @@ export class StorageLocal {
             }
 
             return (matchKeyword == null || matchKeyword) && (matchCat == null || matchCat);
-        });
+        })];
     }
 
     save(dco) {

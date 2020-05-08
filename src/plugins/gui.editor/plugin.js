@@ -11,18 +11,11 @@ const templateMap = {
     editPage: 'script#gui-editor-edit-page'
 }
 
-let active = true;
-
-
 export class GuiEditor {
 
     constructor() {
         App.registerHook('gui_view_editor', this.initialize.bind(this));
         App.registerHook('gui_menu_initialize', this.registerMenu.bind(this));
-        this.menu = [
-            { text: 'Save', icon: 'ui-icon-disk'},
-            { text: 'Zoom In', icon: 'ui-icon-zoomin'}
-        ];
     }
 
     initialize(template) {
@@ -32,9 +25,7 @@ export class GuiEditor {
         this.contentModel = {};
         App.data.dco = this.dco = new Dco(template, App.storage);
 
-        contentTpl.link(App.ui.$content, this.contentModel, { print: (value) => {
-            console.log(value);
-        }});
+        contentTpl.link(App.ui.$content, this.contentModel);
         sidebarTpl.link(App.ui.$sidebar, this.sidebarModel);
 
         $('#tabs').localize().tabs({
@@ -62,16 +53,14 @@ export class GuiEditor {
     }
 
     registerMenu() {
-        if (active) {
-            App.ui.registerMenuItem({ id: 'file'});
-            App.ui.registerMenuItem({ id: 'file_properties'}, 'file');
-            App.ui.registerMenuItem({ id: 'file_metadata'}, 'file');
-            App.ui.registerMenuItem({ id: 'file_download'}, 'file');
-            App.ui.registerMenuItem({ id: 'file_exit'}, 'file');
-            App.ui.registerMenuItem({ id: 'view'});
-            App.ui.registerMenuItem({ id: 'view_preview'}, 'view');
-            App.ui.registerMenuItem({ id: 'view_responsive'}, 'view');
-        }
+        App.ui.registerMenuItem({ id: 'file'});
+        App.ui.registerMenuItem({ id: 'file_properties', show: ['editor']}, 'file');
+        App.ui.registerMenuItem({ id: 'file_metadata', show: ['editor']}, 'file');
+        App.ui.registerMenuItem({ id: 'file_download', show: ['editor']}, 'file');
+        App.ui.registerMenuItem({ id: 'file_exit', show: ['editor']}, 'file');
+        App.ui.registerMenuItem({ id: 'view'});
+        App.ui.registerMenuItem({ id: 'view_preview', show: ['editor']}, 'view');
+        App.ui.registerMenuItem({ id: 'view_responsive', show: ['editor']}, 'view');
         App.ui.registerMenuItem({ id: 'help'});
         App.ui.registerMenuItem({ id: 'help_manual'}, 'help');
         App.ui.registerMenuItem({ id: 'help_about'}, 'help');
@@ -262,7 +251,6 @@ export class GuiEditor {
 
     //Menu handlers
     close() {
-        active = false;
         App.ui.load('home');
     }
 

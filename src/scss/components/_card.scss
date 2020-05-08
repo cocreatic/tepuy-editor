@@ -24,6 +24,10 @@
         border-bottom-left-radius: 0.25rem;
     }
 
+    &>img {
+        height: 30%;
+    }
+
     .card-body {
         flex: 1 1 auto;
         min-height: 1px;
@@ -37,7 +41,6 @@
     }
 
     .card-title {
-        margin-bottom: 0.5rem;
         padding: .2rem 1rem;
         font-size: 1.2rem;
     }
@@ -90,9 +93,6 @@
 
 }
 
-
-
-
 .card-header-tabs {
     margin-right: -0.625rem;
     margin-bottom: -0.75rem;
@@ -118,7 +118,8 @@
 .card-img-top,
 .card-img-bottom {
     flex-shrink: 0;
-    width: 100%;
+    width: auto;
+    height: 30%;
 }
 
 .card-img,

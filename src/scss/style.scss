@@ -4,12 +4,14 @@
     font-family: var(--tpe-font-family);
 
     @import 'vendor/jquery-ui';
+    @import 'vendor/jquery-ui-overwrites';
 
     .tpe-content-wrapper {
         height: 100%;
         overflow: auto;
         flex: 1;
     }
+    @import 'misc/index';
     @import 'layout/index';
     @import 'components/index';
 

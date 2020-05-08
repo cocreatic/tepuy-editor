@@ -2,10 +2,12 @@
     <div id="tpe-object-container" data-link="{on 'click' '.card' showDetail}">
         {^{for model.templates}}
         <div class="card" data-id="{{:id}}">
-            <img class="card-img-top" src="{{:preview}}" />
+            <img class="card-img-top" src="{{:(preview||'//:0')}}" alt="" />
             <div class="card-title">{{:name}}</div>
             <div class="card-body">
                 <p>{{:description}}</p>
+            </div>
+            <div class="card-footer">
                 <spam data-i18n="template.lastMod"></spam><em>{{:createdAt}}</em>
             </div>
         </div>

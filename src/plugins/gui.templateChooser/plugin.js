@@ -10,7 +10,7 @@ export class GuiTemplateChooser {
         const sidebarTpl = $.templates("script#gui-tplchooser-sidebar");
         const contentTpl = $.templates("script#gui-tplchooser-content");
 
-        var categories = App.api.call('getTemplateCategories');
+        var categories = App.storage.getTemplateCategories();
         var templates = App.storage.getTemplates({});
         this.model = {
             templates: templates,

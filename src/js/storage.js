@@ -6,7 +6,7 @@ export class Storage {
 
     getTemplateCategories() {
         this._checkImplementation('getTemplateCategories');
-        return this._impl.getTemplateCategories(filter);
+        return this._impl.getTemplateCategories();
     }
     
     getTemplates(filter) {
