@@ -1,16 +1,67 @@
+.tpe-form-group {
+    border: var(--tpe-panel-border);
+    background: #ff0000;
+}
+
+.tpe-form-list {
+    min-height: 8em;
+    max-height: 12em;
+    overflow-y: auto;
+    flex: 1;
+    border: var(--tpe-panel-border);
+    padding-left: 0;
+
+    .tpe-form-list-item {
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        .item-command {
+            position: absolute;
+            right: .5em;
+        }
+
+        &>i{
+            flex: 0 0 1em;
+            margin: .5em;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        &.item-alt {
+            background-color: var(--tpe-list-alt-bg);
+        }
+    }
+
+}
+
 .tpe-form-control {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin: .2em 0;
+    margin: .5em 0;
     
     & > label {
         flex: 1 0 120px;
         max-width: 220px;
         margin: .2em 0;
+        align-self: flex-start;
 
         & + * {
             flex: 1 0 220px;
+        }
+        & + input[type=checkbox] {
+            flex: 0 0 40px;
+            visibility: visible;
+            float: auto;
+        }
+    }
+
+    .tpe-radiogroup {
+        & > label {
+            display: block;
         }
     }
 
@@ -24,5 +75,19 @@
 
     [readonly] {
         opacity: .5;
+    }
+}
+
+.tpe-form-sharelist {
+    .editionbar {
+        display: flex;
+        flex-wrap: wrap;
+
+        input {
+            flex: 1 0 150px;
+        }
+        select, button {
+            flex: 0 0 100px;
+        }
     }
 }

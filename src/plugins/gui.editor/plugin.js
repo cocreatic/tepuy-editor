@@ -23,7 +23,8 @@ export class GuiEditor {
         const contentTpl = TemplateManager.get('content');
         this.sidebarModel = {};
         this.contentModel = {};
-        App.data.dco = this.dco = new Dco(template, App.storage);
+        this.dco = App.data.dco;
+        //App.data.dco = this.dco = new Dco(template, App.storage);
 
         contentTpl.link(App.ui.$content, this.contentModel);
         sidebarTpl.link(App.ui.$sidebar, this.sidebarModel);
@@ -66,7 +67,7 @@ export class GuiEditor {
         App.ui.registerMenuItem({ id: 'help_about'}, 'help');
 
         //Register callbacks
-        App.registerHook('gui_menu_file_properties', this.notimplemented.bind(this));
+        App.registerHook('gui_menu_file_properties', this.editProperties.bind(this));
         App.registerHook('gui_menu_file_metadata', this.notimplemented.bind(this));
         App.registerHook('gui_menu_file_download', this.notimplemented.bind(this));
         App.registerHook('gui_menu_file_exit', this.close.bind(this));
@@ -261,6 +262,45 @@ export class GuiEditor {
 
     logout(){
         App.exit();
+    }
+
+    editProperties() {
+        const builder = App.ui.components.FormBuilder;
+        const validators = App.validation.validators;
+
+        const interactionModes = [
+            { value: 'web', label: 'Página web' },
+            { value: 'scorm', label: 'SCORM 1.2' }
+        ];
+        const displayModes = [
+            { value: 'inline', label: 'displayMode.inline' },
+            { value: 'floating', label: 'displayMode.floating' },
+            { value: 'modal', label: 'displayMode.modal' }
+        ];
+        const config = this.dco.config;
+        const formConfig = builder.array([
+            builder.group({
+                shareAsTemplate: ['boolean', config.shareAsTemplate, { label: 'dco.shareAsTemplate' }],
+                interactionMode: ['radio', config.interactionMode, { label: 'dco.interactionMode', validators: [ validators.required ], options: interactionModes }],
+            }, { label: 'dco.generalconfig'}),
+            builder.group({
+                skipHome: ['radio', config.skipHome, { label: 'dco.skipHome', template: '#gui-default-form-yesornot' }],
+                displayMode: ['optionList', config.displayMode, { label: 'dco.displayMode', options: displayModes }],
+                width: ['text', config.width, { label: 'dco.width' }],
+                height: ['text', config.height, { label: 'dco.height' }],
+            }, { label: 'dco.viewOptions' })
+        ]);
+        const titleText = 'dco.propertiesTitle';
+        let manager = new App.ui.components.FormManager({formConfig, titleText});
+        setTimeout(() => {
+            manager.openDialog().then(updatedProperties => {
+                let properties = Object.assign({}, updatedProperties[0]);
+                properties = Object.assign(properties, updatedProperties[1]);
+                this.dco.update(properties);
+            }).catch((err) => {
+                console.log(err);
+            });
+        }, 200);
     }
 
     notimplemented(){

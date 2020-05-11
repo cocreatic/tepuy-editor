@@ -14,6 +14,11 @@ export class Storage {
         return this._impl.getTemplates(filter);
     }
 
+    getObjects(filter) {
+        this._checkImplementation('getObjects');
+        return this._impl.getObjects(filter);
+    }
+
     save(dco) {
         this._checkImplementation('save');
         return this._impl.save(dco);

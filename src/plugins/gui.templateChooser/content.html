@@ -1,4 +1,8 @@
 <script id="gui-tplchooser-content" type="text/x-template">
+    {^{include ^tmpl=template /}}
+</script>
+
+<script id="gui-tplchooser-new-content" type="text/x-template">
     <div id="tpe-object-container" data-link="{on 'click' '.card' showDetail}">
         {^{for model.templates}}
         <div class="card" data-id="{{:id}}">
@@ -8,7 +12,10 @@
                 <p>{{:description}}</p>
             </div>
             <div class="card-footer">
+                {{if createdAt}}
                 <spam data-i18n="template.lastMod"></spam><em>{{:createdAt}}</em>
+                {{else}}<span>&nbsp;</span>
+                {{/if}}
             </div>
         </div>
         {{/for}}
@@ -36,4 +43,23 @@
     </div>
 </script>
 
--
+<script id="gui-tplchooser-edit-content" type="text/x-template">
+    <div id="tpe-object-container"> <!-- data-link="{on 'click' '.card' showDetail}"-->
+        {^{for model.objects ~open=openForEdition}}
+        <div class="card" data-id="{{:id}}">
+            <img class="card-img-top" src="{{:(preview||'//:0')}}" alt="" />
+            <div class="card-title">{{:name}}</div>
+            <div class="card-body">
+                <p>{{:~translate('type.'+type)}}</p>
+            </div>
+            <div class="card-footer">
+                {{if createdAt}}
+                <spam data-i18n="template.lastMod"></spam><em>{{:createdAt}}</em>
+                {{else}}<span>&nbsp;</span>
+                {{/if}}
+                <button data-i18n="commands.open" data-link="{on ~open #data}">{{:~translate("commands.open")}}</button>
+            </div>
+        </div>
+        {{/for}}
+    </div>
+</script>

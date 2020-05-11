@@ -1,7 +1,8 @@
 <script id="gui-default" type="text/x-template">
   <header>
-      <ul id="tpe-menubar" data-link="{menu menuAction}">
+      <ul id="tpe-menubar" data-link="{menu menuAction}" class="ui-menu-icons">
           {^{for menu tmpl="#gui-default-menu" ~idPrefix="menu." /}}
+          {^{if user}}
           <li data-id="profile" class="tpe-menu-right">
             <div>
               <img class="tpe-avatar" src="{{:user.profile_image}}" alt="">{{:user.name}}
@@ -11,7 +12,8 @@
                 <div>{{:~icon('profile_logout')}}{{:~translate('menu.profile_logout')}}</div>
               </li>
             </ul>
-          </li> 
+          </li>
+          {{/if}}
       </ul>
   </header>
   <section>
@@ -83,4 +85,112 @@
       {{/if}}
     </li>
   </ul>
+</script>
+
+<script id="gui-default-sharelist" type="text/x-template">
+  <div class="tpe-form-sharelist">
+    {^{if ~canEdit && ~tag.model}}
+      <div class="editionbar">
+        <input type="text" data-link="~tag.model.email" />
+        <select data-link="~tag.model.role">
+          <option value="edit" data-i18n="permissions.edit"></option>
+          <option value="read" data-i18n="permissions.read"></option>
+        </select>
+        <button class="ui-button" data-link="
+          {on ~tag.add}
+          disabled{:~tag.invalidContact()}
+          " data-i18n="commands.add"></button>
+      </div>
+    {{/if}}
+    <ul class="tpe-form-list">
+      {^{for #data canEdit=~canEdit}}
+        <li class="tpe-form-list-item" data-link="class{merge:!!(#getIndex()%2) toggle='item-alt'}">
+        {{if ~canEdit}}<span class="item-command" data-link="{on ~tag.remove #getIndex()}">{{:~icon('remove')}}</span>{{/if}}
+        {^{include ^tmpl=~tag.itemTemplate /}}
+        </li>
+      {{/for}}
+    </ul>
+  </div>
+</script>
+
+<script id="gui-default-sharelist-item" type="text/x-template">
+  {^{:~icon(role=='edit'?"share-edit":"share-view")}}<span class="item-content">{^{:email}}</span>
+</script>
+
+<script id="gui-default-form-container" type="text/x-template">
+  <div class="tpe-form-container">
+    {^{include formConfig ^tmpl=formConfig^template /}}
+  </div>
+</script>
+
+<script id="gui-default-form-array" type="text/x-template">
+  <div class="tpe-form form-array">
+    {^{for controls}}
+      {^{include ^tmpl=template /}}
+    {{/for}}
+  </div>
+</script>
+
+<script id="gui-default-form-group" type="text/x-template">
+  <div class="tpe-form form-group">
+    {^{if label}}<h2>{^{:~translate(label)}}</h2>{{/if}}
+    {^{props controls}}
+      {^{include prop ^tmpl=prop^template ~ctrlName=key/}}
+    {{/props}}
+  </div>
+</script>
+
+<script id="gui-default-form-text" type="text/x-template">
+  <div class="tpe-form-control">
+      <label data-link="data-i18n{:label}"></label>
+      <input type="text" data-link="value" />
+  </div>
+</script>
+
+<script id="gui-default-form-boolean" type="text/x-template">
+  <div class="tpe-form-control">
+      <label data-link="data-i18n{:label}" for="checkbox1"></label>
+      <input type="checkbox" data-link="value" name="checkbox1" />
+  </div>
+</script>
+
+<script id="gui-default-form-yesornot" type="text/x-template">
+  <div class="tpe-form-control">
+      <label data-link="data-i18n{:label}"></label>
+      {^{controlgroup}}
+        <div data-link="{radiogroup value convert='toYesNo' convertBack='fromYesNo'}">
+          {^{radio label=~translate('general.yes') value="yes"/}}
+          {^{radio label=~translate('general.not') value="not"/}}
+        </div>
+      {{/controlgroup}}
+  </div>
+</script>
+
+<script id="gui-default-form-radio" type="text/x-template">
+  <div class="tpe-form-control">
+      <label data-link="data-i18n{:label}"></label>
+      <div class="tpe-radiogroup" data-link="{radiogroup value}">
+        {^{for settings.options}}
+          <label><input type="radio" value="{{:value}}"/>{{:~translate(label)}}</label>
+        {{/for}}
+      </div>
+  </div>
+</script>
+
+<script id="gui-default-form-optionlist" type="text/x-template">
+  <div class="tpe-form-control">
+      <label data-link="data-i18n{:label}"></label>
+      <select class="tpe-optionlist" data-link="{selectmenu value _appendTo='.tpe-form-container'}">
+        {^{for settings.options}}
+          <option value="{{:value}}">{{:~translate(label)}}</option>
+        {{/for}}
+      </div>
+  </div>
+</script>
+
+<script id="gui-default-form-sharelist" type="text/x-template">
+  <div class="tpe-form-control">
+    <label data-link="data-i18n{:label}"></label>
+    <div data-link="{shareList value editable=true}"></div>
+  </div>
 </script>

@@ -7,10 +7,9 @@ import { Dco } from './dco';
 import { Auth } from './auth';
 import { Storage } from './storage';
 
-
 const defaultOptions = {
     container: "#tepuy-editor",
-    defaultView: 'editor' //home|editor
+    defaultView: 'home' //home|editor
 }
 
 class App {
@@ -47,13 +46,15 @@ class App {
         this.initLanguage().then(() => {
             this.resolveAuth();
             this.resolveStorage();
-            //this.api = new Api(this.options.api);
+            this.resolveDcoManager();
             this.data = {
                 theme: {}
             };
-            this.auth.authenticate();
             this.invokeHook('gui_initialize');
-            this.ui.load(this.options.defaultView);
+            this.auth.authenticate().then(userInfo => {
+                this.data.user = userInfo;
+                this.ui.load(this.options.defaultView);
+            });
         });
     }
 
@@ -66,6 +67,8 @@ class App {
         else {
             this.$container = this.options.container;
         }
+
+        this.$container.data('app', this);
     }
 
     invokeHook(id, ...params) {
@@ -79,11 +82,23 @@ class App {
 
     resolveAuth() {
         let auth = this.options.authentication || 'local';
-        this.auth = new Auth(this.plugins['auth.'+auth]);
+        this.auth = new Auth(this.getPlugin('auth.'+auth));
     }
+
     resolveStorage() {
         let storage = this.options.storage || 'local';
-        this.storage = new Storage(this.plugins['storage.'+storage]);
+        this.storage = new Storage(this.getPlugin('storage.'+storage));
+    }
+
+    resolveDcoManager() {
+        this.dcoManager = Dco;
+    }
+
+    getPlugin(plugName, raiseError = true){
+        if (raiseError && !this.plugins[plugName]) {
+            throw new 'Unable to found plugin ' + plugName;
+        }
+        return this.plugins[plugName];
     }
 
     initLanguage() {

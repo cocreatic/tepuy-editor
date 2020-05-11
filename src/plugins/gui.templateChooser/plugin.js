@@ -1,4 +1,5 @@
 import { App } from '../../js/app';
+import { Dco, Page } from '../../js/dco';
 
 export class GuiTemplateChooser {
 
@@ -10,6 +11,36 @@ export class GuiTemplateChooser {
         const sidebarTpl = $.templates("script#gui-tplchooser-sidebar");
         const contentTpl = $.templates("script#gui-tplchooser-content");
 
+        this.onTabActivate = (event, ui) => {
+            this.activateTab(ui.newTab, ui.oldTab);
+        }
+        this.loadNewTab();
+
+        contentTpl.link(App.ui.$content, this);
+        sidebarTpl.link(App.ui.$sidebar, this);
+        App.ui.$sidebar.localize();
+        App.ui.$content.localize();
+
+        //this.activateTab(App.ui.$sidebar.find('li[data-tab-id="tab_new"]'));
+
+        ////ToDo: Remove this lines
+        //this.model.activeTemplate = templates[0];
+        //this.createNewObject({name: 'Nuevo objeto', type: 'rea', shareWith: []});
+    }
+
+    activateTab(tab, oldTab) {
+        let id = tab.data().tabId;
+        switch(id) {
+            case 'tab_new':
+                this.loadNewTab();
+                break;
+            case 'tab_edit':
+                this.loadEditTab();
+                break;
+        }
+    }
+
+    loadNewTab() {
         var categories = App.storage.getTemplateCategories();
         var templates = App.storage.getTemplates({});
         this.model = {
@@ -17,11 +48,18 @@ export class GuiTemplateChooser {
             activeTemplate: {},
             categories: categories
         };
+        $.observable(this).setProperty('template', '#gui-tplchooser-new-content');
+    }
 
-        contentTpl.link(App.ui.$content, this);
-        sidebarTpl.link(App.ui.$sidebar, this);
-        App.ui.$sidebar.localize();
-        App.ui.$content.localize();
+    loadEditTab() {
+        var categories = App.storage.getTemplateCategories();
+        var objects = App.storage.getObjects({});
+
+        this.model = {
+            objects: objects,
+            activeObject: {}
+        };
+        $.observable(this).setProperty('template', '#gui-tplchooser-edit-content');
     }
 
     applyFilter(e) {
@@ -39,23 +77,59 @@ export class GuiTemplateChooser {
         let template = this.model.templates.find(it => it.id == id);
         $.observable(this.model).setProperty('activeTemplate', template);
         App.ui.$content.localize();
-        $("#templateDetail").dialog({
-            modal: true,
-            width:'60%',
-            position: {
-                my: 'center center',
-                at: 'center center',
-                of: App.ui.$content
-            }
-       });
+
+        this.modal = new App.ui.components.Dialog({
+            host: "#templateDetail",
+            width: '60%',
+            centerOnContent: true
+        });
+        this.modal.setButtons([]);
+        this.modal.showModal();
     }
 
     closeDetail(destroy) {
-        $( "#templateDetail").dialog(destroy?'destroy':'close');
+        if (!this.modal) return;
+        this.modal.close(destroy);
     }
 
     createObject(e, args) {
         this.closeDetail(true);
-        App.ui.load('editor', this.model.activeTemplate);
+        //App.ui.load('editor', this.model.activeTemplate);
+        this.showNewObjectForm();
+    }
+
+    showNewObjectForm() {
+        const builder = App.ui.components.FormBuilder;
+        const validators = App.validation.validators;
+
+        const types = [
+            { value: 'rea', label: 'Recurso educativo abierto' },
+            { value: 'obi', label: 'Objeto informativo' },
+            { value: 'red', label: 'Recurso digital' }
+        ];
+        let formConfig = builder.group({
+            name: ['text', '', { label: 'dco.name', validators: [ validators.required ]}],
+            type: ['radio', 'rea', { label: 'dco.type', validators: [ validators.required ], options: types }],
+            shareWith: ['shareList', [], { label: 'dco.shareList', validators: [] }]
+        });
+        const titleText = 'dco.newTitle';
+        let manager = new App.ui.components.FormManager({formConfig, titleText});
+        manager.openDialog().then(this.createNewObject.bind(this)).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    createNewObject(properties) {
+        App.dcoManager.createNew(this.model.activeTemplate, properties, App.storage).then(dco => {
+            App.data.dco = new Dco(dco, App.storage);
+            App.ui.load('editor', null);
+        }).catch(err => {
+            console.log(err); //ToDo: Error handling
+        });
+    }
+
+    openForEdition(dco) {
+        App.data.dco = new Dco(dco, App.storage);
+        App.ui.load('editor', null);
     }
 }

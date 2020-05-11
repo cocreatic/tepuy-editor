@@ -13,7 +13,11 @@
   "commands": {
     "addComponent": "",
     "uploadFile": "",
-    "newFolder": ""
+    "newFolder": "",
+    "add": "",
+    "accept": "",
+    "cancel": "",
+    "open": ""
   },
   "sidebar": {
     "content": "",
@@ -63,7 +67,9 @@
     "license": "",
     "category": "",
     "create": "",
-    "close": ""
+    "close": "",
+    "yes": "",
+    "not": ""
   },
   "label": {
     "category": "",
@@ -71,5 +77,9 @@
   },
   "button": {
     "filter": ""
+  },
+  "permissions": {
+    "edit": "",
+    "read": ""
   }
 }

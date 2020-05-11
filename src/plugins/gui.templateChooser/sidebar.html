@@ -1,8 +1,8 @@
 <script id="gui-tplchooser-sidebar" type="text/x-template">
-    {^{tabs}}
-    <ul id="tabs" >
-        <li><a href="#tab_new" data-i18n="sidebar.new" ></a></li>
-        <li><a href="#tab_edit" data-i18n="sidebar.edit"></a></li>
+    {^{tabs _activate=onTabActivate}}
+    <ul id="tabs">
+        <li data-tab-id="tab_new"><a href="#tab_new" data-i18n="sidebar.new" ></a></li>
+        <li data-tab-id="tab_edit"><a href="#tab_edit" data-i18n="sidebar.edit"></a></li>
     </ul>
     <div id="tab_new" class="tpe-filter-box">
         <div class="search-box">

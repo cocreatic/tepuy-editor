@@ -52,6 +52,7 @@ $xl-screen: 1140px;
     --tpe-button-focus-color: #{$hover-color};
     --tpe-button-disabled-bg: #{$disabled-bg};
     --tpe-button-disabled-color: #{$disabled-color};
+    --tpe-list-alt-bg: #{color($my-palette, 'gray', 300)};
 
     /* JQuery-UI Common variables theming */
     --tpe-widget-widget-content-clr: #c5c5c5;

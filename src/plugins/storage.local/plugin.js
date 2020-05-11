@@ -13,14 +13,39 @@ const empty = {
     url: ""
 };
 
+const store = window.localStorage;
+const categories = ['Category 1', 'Category 2', 'Category 3'];
+let objects = [];
 
 export class StorageLocal {
     constructor() {
         this.name = 'LocalStorage';
+        //initialize store
+        this.initializeStore();
+    }
+
+    initializeStore() {
+        this.templates = store.getItem('templates');
+        if (!this.templates) {
+            this.templates = templates;
+            store.setItem('templates', JSON.stringify(templates));
+        }
+        else {
+            this.templates = JSON.parse(this.templates);
+        }
+
+        objects = store.getItem('objects');
+        if (!objects) {
+            objects = [];
+            store.setItem('objects', objects);
+        }
+        else {
+            objects = JSON.parse(objects);
+        }
     }
 
     getTemplateCategories() {
-        return ['Category 1', 'Category 2', 'Category 3'];
+        return categories;
     }
 
     getTemplates(filter) {
@@ -40,7 +65,26 @@ export class StorageLocal {
         })];
     }
 
+    getObjects(filter) {
+        //return store.getItem("objects") || [];
+        return objects;
+    }
+
     save(dco) {
+        console.log(dco);
+        if (!dco.id) {
+            dco.id = 'dco_' + (new Date().getTime());
+        }
+
+        let index = objects.findIndex(o => o.id == dco.id);
+        if (index >= 0) {
+            objects[index] = dco;
+        }
+        else {
+            objects.push(dco);
+        }
+        store.setItem('objects', JSON.stringify(objects));
+        return Promise.resolve(dco);
     }
 
     download(dco) {

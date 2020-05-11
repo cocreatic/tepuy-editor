@@ -22,13 +22,6 @@
                 color: var(--tpe-active-state-color);
             }
         }
-        i {
-            text-align: center;
-            position: absolute;
-            left: .2em;
-            margin: auto 0;
-        }
-
     }
     
     &> li > ul > li { /* Menubar buttons inside dropdown */
@@ -46,9 +39,16 @@
         background-position: -32px -16px;
     }
 
-    .ui-menu-item-wrapper i {
-        min-width: 15px;
-        font-size: .8em;
+    .ui-menu-item-wrapper {
+        padding-left: 1.5em;
+        i {
+            min-width: 15px;
+            font-size: .8em;
+            text-align: center;
+            position: absolute;
+            left: .2em;
+            margin: auto 0;
+        }
     }
 
     .tpe-menu-right {

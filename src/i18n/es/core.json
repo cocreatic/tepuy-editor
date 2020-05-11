@@ -55,7 +55,9 @@
     "description": "Descripción",
     "creator": "Creador",
     "license": "Licencia",
-    "category": "Categoría"
+    "category": "Categoría",
+    "yes": "Si",
+    "not": "No"
   },
   "detail": {
     "description": "Descripción"
@@ -91,10 +93,37 @@
     "edit": "Actualizar",
     "addComponent": "Agregar componente",
     "uploadFile": "Subir archivo",
-    "newFolder": "Nueva carpeta"
+    "newFolder": "Nueva carpeta",
+    "accept": "Aceptar",
+    "continue": "Continuar",
+    "open": "Abrir"
   },
   "resources": {
     "root": "Carpeta principal",
     "dropzone": "Arrastrar archivos aquí"
+  },
+  "dco": {
+    "newTitle": "Nuevo objeto - Propiedades iniciales",
+    "name": "Nombre",
+    "type": "Tipo",
+    "propertiesTitle": "Propiedades",
+    "generalconfig": "Configuración general",
+    "shareList": "Invitar a personas",
+    "shareAsTemplate": "Compartir como plantilla",
+    "interactionMode": "Modo de interacción",
+    "viewOptions": "Opciones de visualización",
+    "skipHome": "Saltar página de inicio",
+    "displayMode": "Modo de visualización",
+    "width": "Ancho de la ventana",
+    "height": "Alto de la ventana"
+  },
+  "permissions": {
+    "edit": "Puede editar",
+    "read": "Puede ver"
+  },
+  "displayMode": {
+    "inline": "Misma ventana",
+    "floating": "Ventana flotante",
+    "modal": "Ventana modal"
   }
 }

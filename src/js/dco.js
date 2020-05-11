@@ -2,25 +2,43 @@ const defaultConfig = {
     shareAsTemplate: false,
     interactionMode: 'web', //'web' || 'scorm'
     skipHome: false,
-    displayMode: '', //
+    displayMode: 'inline', //
     width: 'auto', //or number
     height: 'auto' //or number
 }
 export class Dco {
     constructor(dco, storage) {
-        this.dco = dco;
         this.storage = storage;
         this.tree = {
             pages: [],
             extras: []
         };
 
-        this.config = Object.assign(defaultConfig);
+        this.config = Object.assign({}, defaultConfig, dco);
+
         this.home = new Page({id: 'home', title: 'Inicio' });
         this.addExtra({id: 'extra1', title: 'Extra 1'});
         this.addExtra({id: 'extra2', title: 'Extra 2'});
         this.addExtra({id: 'extra3', title: 'Extra 3'});
         this.addExtra({id: 'extra4', title: 'Extra 4'});
+    }
+
+    static createNew(template, properties, storage) {
+        let dco = new Dco(template, storage);
+        dco.update(properties);
+    }
+
+    get id() {
+        return this.config.id;
+    }
+
+    update(properties) {
+        this.config = Object.assign(this.config, properties);
+        return this.save();
+    }
+
+    save() {
+        return this.storage.save(this.config);
     }
 
     objectTree() {
@@ -73,6 +91,10 @@ export class Dco {
 
     getResources(path) {
         return this.storage.getResources(this.dco, path);
+    }
+
+    clearForSave({id, type, name, shareWith, config, home, tree}) {
+        return {id, type, name, shareWith, config, home, tree};
     }
 }
 

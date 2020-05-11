@@ -1,4 +1,6 @@
 import i18next from 'i18next';
+import { Validators } from './components/validators';
+
 const iconMap = {
     "file": "file",
     "folder": "folder",
@@ -33,7 +35,9 @@ const iconMap = {
     "edit": "pen",
     "folders": "fas fa-folder",
     "png":"far fa-images",
-    "pdf": "fa fa-file-pdf"
+    "pdf": "fa fa-file-pdf",
+    "share-edit": "pen",
+    "share-view": "eye"
 };
 
 export const helpers = {
@@ -43,6 +47,19 @@ export const helpers = {
     icon: (icon) => {
         if (!icon || !iconMap[icon]) return '';
         return icon ? ['<i class="fas fa-', iconMap[icon], '"></i>'].join('') : '';
+    },
+    debug: (data) => {
+        console.log(data);
+        return '';
+    }
+}
+
+export const converters = {
+    toYesNo: (value) => {
+        return value ? 'yes' : 'not';
+    },
+    fromYesNo: (value) => {
+        return value === 'yes';
     }
 }
 
@@ -98,3 +115,37 @@ export const tree = {
     },
     dataBoundOnly: true
 };
+
+export const shareList = {
+    template: '#gui-default-sharelist',
+    editable: true,
+    bindTo: ["editable"],
+    linkedCtxParam: ["canEdit"],
+    displayElem: 'div',
+    init: function(tagCtx) {
+        this.itemTemplate = this.tagCtx.props.itemTemplate ||
+            '#gui-default-sharelist-item'; //<div class="tpe-form-list-item"><span>{^{:email}}</span>{^{:~icon(edit?"share-edit":"share-view")}}';
+        this.model = { email: '', role: 'edit' };
+    },
+    onBind: function(tagCtx){
+    },
+    //Methods
+    add: function() {
+        let contact = {...this.model};
+        if (!contact.email || !contact.role) {
+            return;
+        }
+        $.observable(this.tagCtx.contentView.data).insert(contact);
+        $.observable(this.model).setProperty('email', '');
+    },
+    remove: function(index) {
+        $.observable(this.tagCtx.contentView.data).remove(index);
+    },
+    invalidContact: function() {
+        const ctrl = { value: this.model.email };
+        return Validators.required(ctrl) || Validators.email(ctrl);
+    },
+    onUpdate: false,
+    dataBoundOnly: true
+};
+shareList.invalidContact.depends = ["model.email"];

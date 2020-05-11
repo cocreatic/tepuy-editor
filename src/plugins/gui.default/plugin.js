@@ -1,5 +1,10 @@
 import { App } from '../../js/app';
-import { helpers, tree } from './helpers';
+import { helpers, converters, tree, shareList } from './helpers';
+import { FormManager, FormBuilder, FormArray, FormControl, FormGroup } from './components/formManager';
+import { Dialog } from './components/dialog';
+import { Validators } from './components/validators';
+
+let layoutInitialized = false;
 
 export class GuiDefault {
 
@@ -10,41 +15,68 @@ export class GuiDefault {
 
     initialize() {
         $.views.helpers(helpers);
-        $.views.tags({ editableTree: tree });
-        const template = $.templates("script#gui-default");
+        $.views.tags({ editableTree: tree, shareList });
+        $.views.converters(converters);
+        this.initializeGuiApi();
+        App.invokeHook('gui_menu_initialize');
+    }
+
+    initializeGuiApi() {
         App.ui = {
             load: this.load.bind(this),
-            registerMenuItem: this.registerMenuItem.bind(this)
-        };
-        App.invokeHook('gui_menu_initialize');
-        this.user = App.auth.getUserInfo();
-        template.link(App.$container, this);
-        App.ui.$menu = $('#tpe-menubar');
-        App.ui.$sidebar = $('#tpe-sidebar');
-        App.ui.$content = $('#tpe-content');
-
-        App.ui.$menu.menu({
-            position: { my: 'left top', at: 'left bottom' },
-            blur: function() {
-                $(this).menu('option', 'position', { my: 'left top', at: 'left bottom' });
-            },
-            focus: function(e, ui) {
-                if (App.ui.$menu.get(0) !== $(ui).get(0).item.parent().get(0)) {
-                    $(this).menu('option', 'position', { my: 'left top', at: 'right top' });
-                }
+            registerMenuItem: this.registerMenuItem.bind(this),
+            components: {
+                FormManager,
+                FormBuilder,
+                FormArray,
+                FormGroup,
+                FormControl,
+                Dialog: Dialog
             }
-        });
-        $(App.$container).addClass("tpe-editor-default").find('header').localize(); //ToDo: Change default to the theme name
+        };
+
+        App.validation = { validators: {...Validators }};
     }
 
     menuAction(ev, ui) {
         if (ui.item.children("ul").length) return; //Not a leaf
         var hook = `gui_menu_${ui.item.data().id}`;
-        setTimeout(() => App.invokeHook(hook), 500);
+        //setTimeout(() => App.ui.$menu.menu('collapseAll', true), 200);
+        setTimeout(() => {
+            //App.ui.$menu.menu('collapseAll', true);
+            App.invokeHook(hook);
+            setTimeout(() => App.ui.$menu.menu('collapseAll', true), 200);
+        }, 0);
+    }
+
+    buildLayout() {
+        const template = $.templates("script#gui-default");
+        this.user = App.data.user;
+        template.link(App.$container, this);
+        let $menu = App.ui.$menu = $('#tpe-menubar');
+        App.ui.$sidebar = $('#tpe-sidebar');
+        App.ui.$content = $('#tpe-content');
+
+        $menu.menu({
+            position: { my: 'left top', at: 'left bottom' },
+            blur: () => {
+                $menu.menu('option', 'position', { my: 'left top', at: 'left bottom' });
+            },
+            focus: (e, ui) => {
+                if ($menu.get(0) !== $(ui).get(0).item.parent().get(0)) {
+                    $menu.menu('option', 'position', { my: 'left top', at: 'right top' });
+                }
+            }
+        });
+        $(App.$container).addClass("tpe-editor-default").localize(); //ToDo: Change default to the theme name
+        layoutInitialized = true;
     }
 
     load(view, params) {
         this.currentView = view;
+        if (!layoutInitialized) {
+            this.buildLayout();
+        }
         App.invokeHook(`gui_view_${view}`, params);
         this.resolveMenuState(this.menu);
         //$.observable(this.menu).refresh(this.menu);
