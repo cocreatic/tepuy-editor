@@ -24,8 +24,15 @@
         border-bottom-left-radius: 0.25rem;
     }
 
-    &>img {
+    &>.image-wrapper {
         height: 30%;
+        display: flex;
+        background-color: var(--tpe-header-bg);
+        img {
+            margin: auto;
+            max-width: 95%;
+            max-height: 95%;
+        }
     }
 
     .card-body {
@@ -123,8 +130,6 @@
 .card-img-top,
 .card-img-bottom {
     flex-shrink: 0;
-    width: auto;
-    height: 30%;
 }
 
 .card-img,

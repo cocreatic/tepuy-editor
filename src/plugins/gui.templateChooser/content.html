@@ -47,7 +47,9 @@
     <div id="tpe-object-container"> <!-- data-link="{on 'click' '.card' showDetail}"-->
         {^{for model.objects ~open=openForEdition ~delete=delete}}
         <div class="card" data-id="{{:id}}">
-            <img class="card-img-top" src="{{:(preview||'//:0')}}" alt="" />
+            <div class="image-wrapper">
+                <img class="card-img-top" src="{{:(preview||'//:0')}}" alt="" />
+            </div>
             <div class="card-title">{{:name}}</div>
             <div class="card-body">
                 <p>{{:~translate('type.'+type)}}</p>

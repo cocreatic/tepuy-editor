@@ -282,7 +282,7 @@ export class GuiEditor {
             builder.group({
                 shareAsTemplate: ['yesno', config.shareAsTemplate, { label: 'dco.shareAsTemplate', column: 1 }],
                 interactionMode: ['radio', config.interactionMode, { label: 'dco.interactionMode', validators: [ validators.required ], options: interactionModes, column: 1 }],
-                imagePreview: ['imagePreview', config.imagePreview, { label: 'dco.imagePreview', validators: [], column: 2 }]
+                preview: ['imageInput', config.preview, { label: 'dco.imagePreview', validators: [], column: 2 }]
             }, { label: 'dco.generalconfig', template: builder.templates.group.twoColumns }),
             builder.group({
                 skipHome: ['yesno', config.skipHome, { label: 'dco.skipHome' }],

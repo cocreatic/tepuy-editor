@@ -400,8 +400,8 @@ export class FormBuilder {
             shareList: {
                 default: '#gui-default-form-sharelist'
             },
-            imagePreview: {
-                default: '#gui-default-form-imagepreview'
+            imageInput: {
+                default: '#gui-default-form-imageinput'
             },
             group: {
                 default: '#gui-default-form-group',
@@ -443,8 +443,8 @@ export class FormBuilder {
         return FormBuilder.control(FormBuilder.templates.shareList.default, value, settings);
     }
     
-    static imagePreview(value, settings) {
-        return FormBuilder.control(FormBuilder.templates.imagePreview.default, value, settings);
+    static imageInput(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.imageInput.default, value, settings);
     }
     
     static group(controlsConfig, settings){
