@@ -27,6 +27,10 @@ export class GuiEditor {
            var resources = App.api.call('getResources', {path:this.text}); 
            console.log(App.api.call('getResources',this.text));           
         });
+        $('#delete_img').click(function (e){
+            e.preventDefault();
+            alert('new image');
+        });
     }
 
     showResources(){
@@ -37,6 +41,8 @@ export class GuiEditor {
             }
         };
     }
+
+    
 
     registerMenu() {
         App.ui.registerMenuItem({ id: 'file'});

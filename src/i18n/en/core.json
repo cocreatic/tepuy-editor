@@ -66,6 +66,11 @@
     "page-star": "",
     "mode-screen": "",
     "width": "",
-    "height": ""
+    "height": "",
+    "window": "",
+    "float": "",
+    "modal": "",
+    "mode_page": "",
+    "mode_scorm": ""
   }
 }

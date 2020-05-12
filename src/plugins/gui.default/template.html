@@ -48,13 +48,10 @@
             <br>
           <span>{{:~translate('properties.mode')}}</span>
           <br>
-          <input type="radio" name="mode" id="1"> Página web
+          <input type="radio" name="mode" id="1">{{:~translate('properties.mode_page')}} 
           <br>
-          <input type="radio" name="mode" id="2"> SCORM 12 
+          <input type="radio" name="mode" id="2">{{:~translate('properties.mode_scorm')}}  
           <br>
-
-            
-
           <h5>{{:~translate('properties.display')}}</h5>
           <span>{{:~translate('properties.page-star')}}</span>
           <input type="radio" name="page-star" id="1"> Si 
@@ -63,9 +60,9 @@
           <span>{{:~translate('properties.mode-screen')}}</span> 
           <select name="mode-screen" id="">
               <option value="-" disabled selected>Seleccionar</option>
-              <option value="1">La misma ventana</option>
-              <option value="2">Ventana flotante</option>
-              <option value="3">Ventana modal</option>
+              <option value="1">{{:~translate('properties.window')}}</option>
+              <option value="2">{{:~translate('properties.float')}}</option>
+              <option value="3">{{:~translate('properties.modal')}}</option>
           </select> <br>
           <span>{{:~translate('properties.width')}}</span>
             <input type="number" name="properties-width" id="properties-width">
@@ -77,14 +74,13 @@
           <div class="container-image" >
             <span>{{:~translate('properties.image')}}</span> <br>
             <img src="https://i.picsum.photos/id/334/200/100.jpg" alt="prev"> <br>
-            <a href="#">{{:~translate('properties.delete')}}</a> 
+            <a href="#" id="delete_img" >{{:~translate('properties.delete')}}</a> 
           </div>
           <div class="properties-footer">
             <button>Aceptar</button>
             <button>Cancelar</button>
         </div>
       </div>
-
   </section>
   <footer>
       I am the footer.

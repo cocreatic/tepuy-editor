@@ -79,6 +79,11 @@
     "page-star": "Saltar página de inicio",
     "mode-screen": "Modo de visualización",
     "width": "Ancho de la ventana",
-    "height": "Alto de la ventana"
+    "height": "Alto de la ventana",
+    "window": "La misma ventana",
+    "float": "Ventana flotante",
+    "modal": "Ventana modal",
+    "mode_page": "Página web",
+    "mode_scorm": "SCORM 12"
   }
 }
