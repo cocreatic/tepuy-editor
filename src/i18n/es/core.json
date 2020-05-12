@@ -96,7 +96,9 @@
     "newFolder": "Nueva carpeta",
     "accept": "Aceptar",
     "continue": "Continuar",
-    "open": "Abrir"
+    "open": "Abrir",
+    "delete": "Eliminar",
+    "update": "Actualizar"
   },
   "resources": {
     "root": "Carpeta principal",
@@ -115,7 +117,9 @@
     "skipHome": "Saltar página de inicio",
     "displayMode": "Modo de visualización",
     "width": "Ancho de la ventana",
-    "height": "Alto de la ventana"
+    "height": "Alto de la ventana",
+    "imagePreview": "Imagen de previsualización",
+    "nopreview": "Sin asignar"
   },
   "permissions": {
     "edit": "Puede editar",
@@ -125,5 +129,19 @@
     "inline": "Misma ventana",
     "floating": "Ventana flotante",
     "modal": "Ventana modal"
+  },
+  "interactionMode": {
+    "web": "Página web",
+    "scorm": "SCORM 1.2"
+  },
+  "type": {
+    "obi": "Objeto informativo",
+    "rea": "Recurso educativo abierto",
+    "red": "Recurso digital"
+  },
+  "tags": {
+    "imageinput": {
+      "emptySrc": "Sin asignar"
+    }
   }
 }

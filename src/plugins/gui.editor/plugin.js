@@ -269,8 +269,8 @@ export class GuiEditor {
         const validators = App.validation.validators;
 
         const interactionModes = [
-            { value: 'web', label: 'Página web' },
-            { value: 'scorm', label: 'SCORM 1.2' }
+            { value: 'web', label: 'interactionMode.web' },
+            { value: 'scorm', label: 'interactionMode.scorm' }
         ];
         const displayModes = [
             { value: 'inline', label: 'displayMode.inline' },
@@ -280,17 +280,18 @@ export class GuiEditor {
         const config = this.dco.config;
         const formConfig = builder.array([
             builder.group({
-                shareAsTemplate: ['boolean', config.shareAsTemplate, { label: 'dco.shareAsTemplate' }],
-                interactionMode: ['radio', config.interactionMode, { label: 'dco.interactionMode', validators: [ validators.required ], options: interactionModes }],
-            }, { label: 'dco.generalconfig'}),
+                shareAsTemplate: ['yesno', config.shareAsTemplate, { label: 'dco.shareAsTemplate', column: 1 }],
+                interactionMode: ['radio', config.interactionMode, { label: 'dco.interactionMode', validators: [ validators.required ], options: interactionModes, column: 1 }],
+                imagePreview: ['imagePreview', config.imagePreview, { label: 'dco.imagePreview', validators: [], column: 2 }]
+            }, { label: 'dco.generalconfig', template: builder.templates.group.twoColumns }),
             builder.group({
-                skipHome: ['radio', config.skipHome, { label: 'dco.skipHome', template: '#gui-default-form-yesornot' }],
+                skipHome: ['yesno', config.skipHome, { label: 'dco.skipHome' }],
                 displayMode: ['optionList', config.displayMode, { label: 'dco.displayMode', options: displayModes }],
-                width: ['text', config.width, { label: 'dco.width' }],
-                height: ['text', config.height, { label: 'dco.height' }],
+                width: ['text', config.width, { label: 'dco.width', small: true }],
+                height: ['text', config.height, { label: 'dco.height', small: true }],
             }, { label: 'dco.viewOptions' })
         ]);
-        const titleText = 'dco.propertiesTitle';
+        const titleText = this.dco.config.name + ' - ' + i18next.t('dco.propertiesTitle');
         let manager = new App.ui.components.FormManager({formConfig, titleText});
         setTimeout(() => {
             manager.openDialog().then(updatedProperties => {

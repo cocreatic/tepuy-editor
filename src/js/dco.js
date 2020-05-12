@@ -25,7 +25,8 @@ export class Dco {
 
     static createNew(template, properties, storage) {
         let dco = new Dco(template, storage);
-        dco.update(properties);
+        delete dco.config.id;
+        return dco.update(properties);
     }
 
     get id() {

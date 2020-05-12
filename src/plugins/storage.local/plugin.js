@@ -71,7 +71,6 @@ export class StorageLocal {
     }
 
     save(dco) {
-        console.log(dco);
         if (!dco.id) {
             dco.id = 'dco_' + (new Date().getTime());
         }

@@ -6,8 +6,10 @@ export class Dialog {
 
     constructor(settings) {
         this.host = settings.host;
+        this.orphan = false;
         if (!this.host) {
             this.host = $('<div style="display:none"/>').appendTo(App.$container);
+            this.orphan = true;
         }
         privateMap.set(this, {
             settings
@@ -31,11 +33,12 @@ export class Dialog {
             appendTo: App.$container,
             resizable: false
         };
+
         let { settings, buttons } = {..._(this)};
-        if (settings.width) {
-            options.width = settings.width
-        }
-        if (settings.title) options.title = settings.title;
+        const { width, maxWidth, title } = { ...settings };
+        options.width = width;
+        options.maxWidth = maxWidth;
+        options.title = title;
 
         if(!buttons) {
             buttons = [ Dialog.acceptButton ];
@@ -54,13 +57,16 @@ export class Dialog {
                 of: App.ui.$content
             };
         }
-
         this.$dlg = $(this.host).dialog(options);
     }
 
     close(destroy) {
         if (!this.$dlg) return;
         this.$dlg.dialog(destroy?'destroy':'close');
+        if (destroy && this.orphan) {
+            this.$dlg.remove();
+        }
+        this.$dlg = null;
     }
 
     static closeButton(callback=null) {

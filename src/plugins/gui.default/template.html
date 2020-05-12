@@ -22,21 +22,11 @@
         <div id="tpe-content" class="tpe-content"></div>
       </div>
       <div id="dialog" title="{{:~translate('about.title')}}" style="display:none;">
-        <p >
-          {{:~translate('about.description')}}
-        </p>
-        <p >
-            {{:~translate('about.version')}}
-        </p>
-        <p >
-          {{:~translate('about.creators')}}
-        </p>
-        <p >
-          {{:~translate('about.financedBy')}}
-        </p>
-        <p >
-          {{:~translate('about.license')}}
-        </p>
+        <p>{{:~translate('about.description')}}</p>
+        <p>{{:~translate('about.version')}}</p>
+        <p>{{:~translate('about.creators')}}</p>
+        <p>{{:~translate('about.financedBy')}}</p>
+        <p>{{:~translate('about.license')}}</p>
       </div>
   </section>
   <footer>
@@ -117,6 +107,24 @@
   {^{:~icon(role=='edit'?"share-edit":"share-view")}}<span class="item-content">{^{:email}}</span>
 </script>
 
+<script id="gui-default-imageinput" type="text/x-template">
+  <div class="tpe-form-imageinput">
+    <div class="image-wrapper">
+      {^{if ~tag.src}}
+        <img data-link="src{:~tag.src}" alt="" />
+      {{else}}
+        <span>{{:~translate(~tag.emptyText)}}</span>
+      {{/if}}
+    </div>
+    {^{if ~canEdit}}
+      {^{controlgroup ~iitag=~tag}}
+          {^{on ~iitag.delete}}{^{button ^tmpl=~translate('commands.delete') /}}{{/on}}
+          {^{on ~iitag.update}}{^{button ^tmpl=~translate('commands.update') /}}{{/on}}
+      {{/controlgroup}}
+    {{/if}}
+  </div>
+</script>
+
 <script id="gui-default-form-container" type="text/x-template">
   <div class="tpe-form-container">
     {^{include formConfig ^tmpl=formConfig^template /}}
@@ -140,8 +148,27 @@
   </div>
 </script>
 
+<script id="gui-default-form-group-two-columns" type="text/x-template">
+  <div class="tpe-form form-group two-columns">
+    {^{if label}}<h2>{^{:~translate(label)}}</h2>{{/if}}
+    <div class="column-wrapper">
+      <div class="column column-one">
+      {^{props controls filter=~byColumn column=1 }}
+        {^{include prop ^tmpl=prop^template ~ctrlName=key/}}
+      {{/props}}
+      </div>
+      <div class="column column-two">
+      {^{props controls filter=~byColumn column=2 }}
+        {^{include prop ^tmpl=prop^template ~ctrlName=key/}}
+      {{/props}}
+      </div>
+    </div>
+  </div>
+</script>
+
+
 <script id="gui-default-form-text" type="text/x-template">
-  <div class="tpe-form-control">
+  <div class="tpe-form-control" data-link="class{merge:settings.small toggle='text-small'}">
       <label data-link="data-i18n{:label}"></label>
       <input type="text" data-link="value" />
   </div>
@@ -158,10 +185,10 @@
   <div class="tpe-form-control">
       <label data-link="data-i18n{:label}"></label>
       {^{controlgroup}}
-        <div data-link="{radiogroup value convert='toYesNo' convertBack='fromYesNo'}">
+        {^{radiogroup value convert='toYesNo' convertBack='fromYesNo' }}
           {^{radio label=~translate('general.yes') value="yes"/}}
           {^{radio label=~translate('general.not') value="not"/}}
-        </div>
+        {{/radiogroup}}
       {{/controlgroup}}
   </div>
 </script>
@@ -192,5 +219,13 @@
   <div class="tpe-form-control">
     <label data-link="data-i18n{:label}"></label>
     <div data-link="{shareList value editable=true}"></div>
+  </div>
+</script>
+
+
+<script id="gui-default-form-imagepreview" type="text/x-template">
+  <div class="tpe-form-control">
+    <label data-link="data-i18n{:label}"></label>
+    <div data-link="{imageInput value editable=true}"></div>
   </div>
 </script>

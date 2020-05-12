@@ -6,6 +6,10 @@ export const VALID = 'VALID';
 export const INVALID = 'INVALID';
 export const DISABLED = 'DISABLED';
 
+const filterByColumn = function(item, index, items) {
+    return item.prop.settings.column == this.props.column;
+};
+
 export class FormManager {
     constructor({formConfig,
         titleText = '',
@@ -31,9 +35,12 @@ export class FormManager {
         const dlg = new Dialog({
             width: '60vw',
             maxWidth: 650,
-            title: i18next.t(this.titleText)
+            title: i18next.t(this.titleText),
+            centerOnContent: true
         });
-        priv.template.link(dlg.host, this);
+        priv.template.link(dlg.host, this, {
+            byColumn: filterByColumn
+        });
         dlg.host.localize();
         priv.dialog = dlg;
         dlg.setButtons([
@@ -206,7 +213,7 @@ export class FormControl extends AbstractControl {
 
 export class FormGroup extends AbstractControl {
     constructor(controls, settings) {
-        super(getSafe(settings, 'template', '#gui-default-form-group'), settings);
+        super(getSafe(settings, 'template', FormBuilder.templates.group.default), settings);
         _(this).controls = controls;
         Object.keys(controls).forEach(key => {
             controls[key].setParent(this);
@@ -286,7 +293,7 @@ export class FormGroup extends AbstractControl {
 
 export class FormArray extends AbstractControl {
     constructor(controls, settings) {
-        super(getSafe(settings, 'template', '#gui-default-form-array'), settings);
+        super(getSafe(settings, 'template', FormBuilder.templates.array.default), settings);
         _(this).controls = controls;
         controls.forEach(ctrl => {
             this.registerControl(ctrl);
@@ -373,6 +380,39 @@ export class FormArray extends AbstractControl {
 }
 
 export class FormBuilder {
+    static get templates() {
+        return {
+            text: {
+                default: '#gui-default-form-text'
+            },
+            radio: {
+                default: '#gui-default-form-radio'
+            },
+            boolean: {
+                default: '#gui-default-form-boolean'
+            },
+            yesno: {
+                default: '#gui-default-form-yesornot'
+            },
+            optionList: {
+                default: '#gui-default-form-optionlist'
+            },
+            shareList: {
+                default: '#gui-default-form-sharelist'
+            },
+            imagePreview: {
+                default: '#gui-default-form-imagepreview'
+            },
+            group: {
+                default: '#gui-default-form-group',
+                twoColumns: '#gui-default-form-group-two-columns'
+            },
+            array: {
+                default: '#gui-default-form-array'
+            }
+        };
+    }
+
     static control(defTemplate, value, settings) {
         const ctrl = new FormControl(getSafe(settings, 'template', defTemplate), settings);
         ctrl.setValue(value);
@@ -380,23 +420,31 @@ export class FormBuilder {
     }
 
     static text(value, settings) {
-        return FormBuilder.control('#gui-default-form-text', value, settings);
+        return FormBuilder.control(FormBuilder.templates.text.default, value, settings);
     }
 
     static radio(value, settings) {
-        return FormBuilder.control('#gui-default-form-radio', value, settings);
+        return FormBuilder.control(FormBuilder.templates.radio.default, value, settings);
     }
     
     static boolean(value, settings) {
-        return FormBuilder.control('#gui-default-form-boolean', value, settings);
+        return FormBuilder.control(FormBuilder.templates.boolean.default, value, settings);
+    }
+    
+    static yesno(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.yesno.default, value, settings);
     }
     
     static optionList(value, settings) {
-        return FormBuilder.control('#gui-default-form-optionlist', value, settings);
+        return FormBuilder.control(FormBuilder.templates.optionList.default, value, settings);
     }
     
     static shareList(value, settings) {
-        return FormBuilder.control('#gui-default-form-sharelist', value, settings);
+        return FormBuilder.control(FormBuilder.templates.shareList.default, value, settings);
+    }
+    
+    static imagePreview(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.imagePreview.default, value, settings);
     }
     
     static group(controlsConfig, settings){
@@ -404,7 +452,6 @@ export class FormBuilder {
         Object.keys(controlsConfig).forEach(name => {
             controls[name] = FormBuilder._createControl(controlsConfig[name]);
         });
-
         return new FormGroup(controls, settings);
     }
 

@@ -149,3 +149,79 @@ export const shareList = {
     dataBoundOnly: true
 };
 shareList.invalidContact.depends = ["model.email"];
+
+
+
+function Uploader() {
+    let resolveFn;
+    let open = false;
+    const defaultOptions = {
+        multiple: false,
+    }
+    const $uploader = $('<input type="file"/>').css({display:'none'}).appendTo('body')
+        .on('change', (ev) => {
+            open = false;
+            resolveFn(ev.target.files);
+            $uploader.attr(defaultOptions);
+        });
+
+    this.open = (options) => {
+        if (open) return;
+        open = true;
+        const { accept, capture, multiple } = {...options};
+        $uploader.attr({accept, capture, multiple});
+        return new Promise((resolve, reject) => {
+            $uploader.trigger('click');
+            resolveFn = resolve;
+        });
+    };
+
+}
+
+const uploader = new Uploader();
+
+function uploadFile() {
+    let $uploader = $('<input type="file" multiple="true"/>').css({display:'none'}).appendTo('body')
+        .on('change', (ev) => {
+            this.uploadFiles(ev.target.files);
+            $uploader.remove();
+        })
+    $uploader.trigger('click');
+}
+
+export const imageInput = {
+    template: '#gui-default-imageinput',
+    editable: true,
+    bindTo: [0, "editable"],
+    linkedCtxParam: ["src", "canEdit"],
+    init: function(tagCtx) {
+        this.emptyText = tagCtx.props.emptyText ? tagCtx.props.emptyText : 'tags.imageinput.emptySrc';
+    },
+    onBind: function(tagCtx){
+    },
+    //Methods
+    setValue: function(src) {
+        if (src != null && typeof(src) !== 'string') return;
+        $.observable(this).setProperty('src', src);
+    },
+    delete: function() {
+        this.setValue(null);
+        this.updateValue(null);
+    },
+    update: function() {
+        uploader.open({
+            accept: 'image/*'
+        }).then(files => {
+            if (!files.length) return;
+            const file = files[0];
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+                this.setValue(reader.result);
+                this.updateValue(reader.result, true);
+            }, false);
+            reader.readAsDataURL(file);
+        });
+    },
+    onUpdate: false,
+    dataBoundOnly: true
+};

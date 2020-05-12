@@ -14,18 +14,12 @@ export class GuiTemplateChooser {
         this.onTabActivate = (event, ui) => {
             this.activateTab(ui.newTab, ui.oldTab);
         }
+        
         this.loadNewTab();
 
         contentTpl.link(App.ui.$content, this);
         sidebarTpl.link(App.ui.$sidebar, this);
-        App.ui.$sidebar.localize();
-        App.ui.$content.localize();
-
-        //this.activateTab(App.ui.$sidebar.find('li[data-tab-id="tab_new"]'));
-
-        ////ToDo: Remove this lines
-        //this.model.activeTemplate = templates[0];
-        //this.createNewObject({name: 'Nuevo objeto', type: 'rea', shareWith: []});
+        App.$container.localize();
     }
 
     activateTab(tab, oldTab) {
@@ -48,6 +42,7 @@ export class GuiTemplateChooser {
             activeTemplate: {},
             categories: categories
         };
+        setTimeout(() => App.ui.$content.localize(), 100);
         $.observable(this).setProperty('template', '#gui-tplchooser-new-content');
     }
 
@@ -59,6 +54,7 @@ export class GuiTemplateChooser {
             objects: objects,
             activeObject: {}
         };
+        setTimeout(() => App.ui.$content.localize(), 100);
         $.observable(this).setProperty('template', '#gui-tplchooser-edit-content');
     }
 
@@ -94,7 +90,6 @@ export class GuiTemplateChooser {
 
     createObject(e, args) {
         this.closeDetail(true);
-        //App.ui.load('editor', this.model.activeTemplate);
         this.showNewObjectForm();
     }
 
@@ -131,5 +126,9 @@ export class GuiTemplateChooser {
     openForEdition(dco) {
         App.data.dco = new Dco(dco, App.storage);
         App.ui.load('editor', null);
+    }
+
+    delete(dco) {
+        console.log(dco);
     }
 }

@@ -17,7 +17,9 @@
     "add": "",
     "accept": "",
     "cancel": "",
-    "open": ""
+    "open": "",
+    "delete": "",
+    "update": ""
   },
   "sidebar": {
     "content": "",
@@ -81,5 +83,9 @@
   "permissions": {
     "edit": "",
     "read": ""
+  },
+  "dco": {
+    "propertiesTitle": "",
+    "nopreview": ""
   }
 }

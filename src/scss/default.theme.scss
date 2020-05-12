@@ -14,13 +14,13 @@ $gray: rgb(49, 49, 49);
 $my-palette: palette($primary: $primary-color, $secondary: $secondary-color, $gray: $gray);
 
 //Widget and site colors
-$resting-bg: color($my-palette, 'gray', 900);
+$resting-bg: color($my-palette, 'gray', 800);
 $resting-color: contrast-color($my-palette, 'gray', 900);
 $hover-bg: color($my-palette, 'gray', 700);
 $hover-color: contrast-color($my-palette, 'gray', 700);
 $disabled-bg: color($my-palette, 'gray', 100);
 $disabled-color: color($my-palette, 'gray', 400);
-$active-state-bg: color($my-palette, 'gray', 800);
+$active-state-bg: color($my-palette, 'gray', 600);
 $active-state-color: contrast-color($my-palette, 'gray', 800);
 $widget-content-bg: #fff;
 $font-family: Arial, Helvetica, sans-serif;
