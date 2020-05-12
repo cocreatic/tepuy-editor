@@ -10,6 +10,12 @@ header, section, footer {
     color: #fff;
 }
 
+header {
+    .logo {
+        width: 36px;
+    }
+}
+
 section {
     color: inherit;
     top: 35px;

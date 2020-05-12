@@ -257,7 +257,7 @@ export class GuiEditor {
 
     about() {
         if (!this.aboutTpl) this.aboutTpl = $.templates("script#gui-editor-about");
-        $(this.aboutTpl.render({})).dialog({ modal: true});
+        $(this.aboutTpl.render({ theme: App.options.theme })).dialog({ modal: true});
     }
 
     logout(){

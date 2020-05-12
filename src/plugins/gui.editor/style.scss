@@ -28,6 +28,13 @@
     }
 }
 
+.tpe-about-dialog {
+    .image-wrapper {
+        display: flex;
+        img { margin: auto; width: 120px }
+    }
+}
+
 .resource-list {
     display: flex;
     flex-flow: column;

@@ -48,6 +48,12 @@ function copyVendorAssets() {
     return gulp.src(['node_modules/jquery-ui-dist/images/*'])
         .pipe(gulp.dest(destFolder + '/images'));
 }
+
+function copyThemesAssets() {
+    return gulp.src(['./src/assets/themes/**/*'])
+        .pipe(gulp.dest(destFolder + '/themes'));
+}
+
 function copyIcons() {
     return gulp.src('node_modules/@fortawesome/fontawesome-free/webfonts/*')
         .pipe(gulp.dest(destFolder+'/webfonts/'));
@@ -168,7 +174,7 @@ gulp.task('html', function () {
         .pipe(browserSync.stream());
 });
 
-gulp.task('compile', gulp.parallel('html', 'sass', 'vendorcss', 'vendorjs', 'js', translations));
+gulp.task('compile', gulp.parallel('html', 'sass', 'vendorcss', 'vendorjs', 'js', copyThemesAssets, translations));
 
 // Static Server + watching scss/html files
 gulp.task('serve', gulp.series('compile', function () {

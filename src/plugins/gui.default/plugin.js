@@ -52,6 +52,7 @@ export class GuiDefault {
     buildLayout() {
         const template = $.templates("script#gui-default");
         this.user = App.data.user;
+        this.theme = App.options.theme;
         template.link(App.$container, this);
         let $menu = App.ui.$menu = $('#tpe-menubar');
         App.ui.$sidebar = $('#tpe-sidebar');

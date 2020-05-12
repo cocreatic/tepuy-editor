@@ -9,7 +9,8 @@ import { Storage } from './storage';
 
 const defaultOptions = {
     container: "#tepuy-editor",
-    defaultView: 'home' //home|editor
+    defaultView: 'home', //home|editor
+    theme: 'light'
 }
 
 class App {

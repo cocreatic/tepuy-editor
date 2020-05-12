@@ -55,22 +55,15 @@
 </script>
 
 <script id="gui-editor-about" type="text/x-template">
-    <div title="{{:~translate('about.title')}}">
-        <p >
-            {{:~translate('about.description')}}
-        </p>
-        <p >
-            {{:~translate('about.version')}}
-        </p>
-        <p >
-            {{:~translate('about.creators')}}
-        </p>
-        <p >
-            {{:~translate('about.financedBy')}}
-        </p>
-        <p >
-            {{:~translate('about.license')}}
-        </p>
+    <div class="tpe-about-dialog" title="{{:~translate('about.title')}}">
+        <div class="image-wrapper">
+            <img src="themes/{{:theme}}/img/logo_tepuy.png" alt="" />
+        </div>
+        <p>{{:~translate('about.description')}}</p>
+        <p>{{:~translate('about.version')}}</p>
+        <p>{{:~translate('about.creators')}}</p>
+        <p>{{:~translate('about.financedBy')}}</p>
+        <p>{{:~translate('about.license')}}</p>
     </div>
 </script>
 

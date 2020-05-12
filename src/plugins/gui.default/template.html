@@ -1,6 +1,9 @@
 <script id="gui-default" type="text/x-template">
   <header>
       <ul id="tpe-menubar" data-link="{menu menuAction}" class="ui-menu-icons">
+          <li>
+            <img class="logo" data-link="src{:'themes/'+theme+'/img/logo_tepuy.png'}" alt="" />
+          </li>
           {^{for menu tmpl="#gui-default-menu" ~idPrefix="menu." /}}
           {^{if user}}
           <li data-id="profile" class="tpe-menu-right">
@@ -20,13 +23,6 @@
       <div id="tpe-sidebar" class="tpe-sidebar"></div>
       <div id="tpe-content-wrapper" class="tpe-content-wrapper">
         <div id="tpe-content" class="tpe-content"></div>
-      </div>
-      <div id="dialog" title="{{:~translate('about.title')}}" style="display:none;">
-        <p>{{:~translate('about.description')}}</p>
-        <p>{{:~translate('about.version')}}</p>
-        <p>{{:~translate('about.creators')}}</p>
-        <p>{{:~translate('about.financedBy')}}</p>
-        <p>{{:~translate('about.license')}}</p>
       </div>
   </section>
   <footer>
