@@ -6,7 +6,9 @@
     <div id="tpe-object-container" data-link="{on 'click' '.card' showDetail}">
         {^{for model.templates}}
         <div class="card" data-id="{{:id}}">
-            <img class="card-img-top" src="{{:(preview||'//:0')}}" alt="" />
+            <div class="image-wrapper">
+                <img src="{{:(preview||'//:0')}}" alt="" />
+            </div>
             <div class="card-title">{{:name}}</div>
             <div class="card-body">
                 <p>{{:description}}</p>
@@ -48,17 +50,17 @@
         {^{for model.objects ~open=openForEdition ~delete=delete}}
         <div class="card" data-id="{{:id}}">
             <div class="image-wrapper">
-                <img class="card-img-top" src="{{:(preview||'//:0')}}" alt="" />
+                <img src="{{:(preview||'//:0')}}" alt="" />
             </div>
             <div class="card-title">{{:name}}</div>
             <div class="card-body">
                 <p>{{:~translate('type.'+type)}}</p>
-            </div>
-            <div class="card-footer">
                 {{if createdAt}}
-                <spam data-i18n="template.lastMod"></spam><em>{{:createdAt}}</em>
+                <p><spam data-i18n="template.lastMod"></spam><em>{{:createdAt}}</em></p>
                 {{else}}<span>&nbsp;</span>
                 {{/if}}
+            </div>
+            <div class="card-footer">
                 {^{controlgroup}}
                     {^{on ~open #data}}{^{button ^tmpl=~translate('commands.open') /}}{{/on}}
                     {^{on ~delete #data}}{^{button ^tmpl=~translate('commands.delete') /}}{{/on}}
