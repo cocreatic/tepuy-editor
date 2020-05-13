@@ -20,19 +20,15 @@ const maxLength = (maxLength) => {
     }
 }
 
-const validateSize =(ctrl)=>{
-   return (ctrl) =>{
-    ctrl.match(/^((100(\.0{1,2})?)|(\d{1,2}(\.\d{1,2})?))$/) == null ? false:true; 
-    if(isNaN(ctrl)) return false ;
-     if(ctrl=== 'auto') return false;
-   } 
-   
-   
+const PERCENTAGE = /^((100(\.0{1,2})?)|(\d{1,2}(\.\d{1,2})?))$/;
+
+const sizeUnit =(ctrl)=>{
+   return (POCENTAJE.test(ctrl.value)) ? null : {sizeUnit:true}  ||  isNaN(ctrl) ? null: {sizeUnit : true}  || ctrl ? 'auto':  {sizeUnit:true};
 } 
 
 export const Validators = {
     required,
     email,
     maxLength,
-    validateSize
+    sizeUnit
 };

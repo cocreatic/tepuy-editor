@@ -287,8 +287,8 @@ export class GuiEditor {
             builder.group({
                 skipHome: ['yesno', config.skipHome, { label: 'dco.skipHome' }],
                 displayMode: ['optionList', config.displayMode, { label: 'dco.displayMode', options: displayModes }],
-                width: ['text', config.width, { label: 'dco.width', validators:[validators.validateSize] , small: true }],
-                height: ['text', config.height, { label: 'dco.height', validators:[validators.validateSize], small: true }],
+                width: ['text', config.width, { label: 'dco.width', validators:[validators.sizeUnit] , small: true }],
+                height: ['text', config.height, { label: 'dco.height', validators:[validators.sizeUnit], small: true }],
             }, { label: 'dco.viewOptions' })
         ]);
         const titleText = this.dco.config.name + ' - ' + i18next.t('dco.propertiesTitle');
