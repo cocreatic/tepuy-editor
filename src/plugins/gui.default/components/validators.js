@@ -23,7 +23,7 @@ const maxLength = (maxLength) => {
 const PERCENTAGE = /^((100(\.0{1,2})?)|(\d{1,2}(\.\d{1,2})?))$/;
 
 const sizeUnit =(ctrl)=>{
-   return (POCENTAJE.test(ctrl.value)) ? null : {sizeUnit:true}  ||  isNaN(ctrl) ? null: {sizeUnit : true}  || ctrl ? 'auto':  {sizeUnit:true};
+   return (PERCENTAGE.test(ctrl.value)) ? null : {sizeUnit:true}  ||  isNaN(ctrl) ? null: {sizeUnit : true}  || ctrl ? 'auto':  {sizeUnit:true};
 } 
 
 export const Validators = {
