@@ -20,8 +20,19 @@ const maxLength = (maxLength) => {
     }
 }
 
+const validateSize =(ctrl)=>{
+   return (ctrl) =>{
+    ctrl.match(/^((100(\.0{1,2})?)|(\d{1,2}(\.\d{1,2})?))$/) == null ? false:true; 
+    if(isNaN(ctrl)) return false ;
+     if(ctrl=== 'auto') return false;
+   } 
+   
+   
+} 
+
 export const Validators = {
     required,
     email,
-    maxLength
+    maxLength,
+    validateSize
 };
