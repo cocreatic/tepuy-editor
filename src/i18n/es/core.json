@@ -161,5 +161,9 @@
     "height": "",
     "image": "",
     "delete": ""
+  },
+  "device": {
+    "iphone": "",
+    "android": ""
   }
 }

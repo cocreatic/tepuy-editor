@@ -37,7 +37,8 @@ const iconMap = {
     "png":"far fa-images",
     "pdf": "fa fa-file-pdf",
     "share-edit": "pen",
-    "share-view": "eye"
+    "share-view": "eye",
+    "check": "check"
 };
 
 export const helpers = {
@@ -60,6 +61,21 @@ export const converters = {
     },
     fromYesNo: (value) => {
         return value === 'yes';
+    }
+}
+
+export const icon = {
+    init: function(tagCtx) {
+        const iconName = tagCtx.args[0];
+        this.iconClass = (!iconName || !iconMap[iconName]) ? '' : 'fas fa-'+iconMap[iconName];
+        if (tagCtx.props.class) {
+            this.iconClass += ' ' + tagCtx.props.class;
+        }
+    },
+    template: '<i data-link="class{merge:true toggle=~tag.iconClass}"></i>',
+    render: function(iconName) {
+        if (this.iconClass == '') return '';
+        return undefined;
     }
 }
 

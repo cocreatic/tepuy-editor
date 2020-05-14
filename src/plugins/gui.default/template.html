@@ -8,11 +8,11 @@
           {^{if user}}
           <li data-id="profile" class="tpe-menu-right">
             <div>
-              <img class="tpe-avatar" src="{{:user.profile_image}}" alt="">{{:user.name}}
+              <div class="custom-item-wrapper"><img class="tpe-avatar" src="{{:user.profile_image}}" alt="">{{:user.name}}</div>
             </div>
             <ul>
               <li data-id="profile_logout">
-                <div>{{:~icon('profile_logout')}}{{:~translate('menu.profile_logout')}}</div>
+                <div><div class="custom-item-wrapper">{{:~icon('profile_logout')}}{{:~translate('menu.profile_logout')}}</div></div>
               </li>
             </ul>
           </li>
@@ -24,48 +24,6 @@
       <div id="tpe-content-wrapper" class="tpe-content-wrapper">
         <div id="tpe-content" class="tpe-content"></div>
       </div>
-
-      <div id="dialog-properties" title="{{:~translate('properties.title')}}" style="display:none; width:450px;">
-          <h4>{{:~translate('properties.config')}}</h4>
-          <div class="container-properties">
-            <input type="checkbox" name="share-screen" id="share-screen"> {{:~translate('properties.screen')}}
-            <br>
-            <br>
-          <span>{{:~translate('properties.mode')}}</span>
-          <br>
-          <input type="radio" name="mode" id="1">{{:~translate('properties.mode_page')}} 
-          <br>
-          <input type="radio" name="mode" id="2">{{:~translate('properties.mode_scorm')}}  
-          <br>
-          <h5>{{:~translate('properties.display')}}</h5>
-          <span>{{:~translate('properties.page-star')}}</span>
-          <input type="radio" name="page-star" id="1"> Si 
-          <input type="radio" name="page-star" id="2"> No
-          <br>
-          <span>{{:~translate('properties.mode-screen')}}</span> 
-          <select name="mode-screen" id="">
-              <option value="-" disabled selected>Seleccionar</option>
-              <option value="1">{{:~translate('properties.window')}}</option>
-              <option value="2">{{:~translate('properties.float')}}</option>
-              <option value="3">{{:~translate('properties.modal')}}</option>
-          </select> <br>
-          <span>{{:~translate('properties.width')}}</span>
-            <input type="number" name="properties-width" id="properties-width">
-           <br>
-          <span>{{:~translate('properties.height')}}</span>
-          <input type="number" name="properties-height" id="properties-height">
-           <br>
-          </div>  
-          <div class="container-image" >
-            <span>{{:~translate('properties.image')}}</span> <br>
-            <img src="https://i.picsum.photos/id/334/200/100.jpg" alt="prev"> <br>
-            <a href="#" id="delete_img" >{{:~translate('properties.delete')}}</a> 
-          </div>
-          <div class="properties-footer">
-            <button>Aceptar</button>
-            <button>Cancelar</button>
-        </div>
-      </div>
   </section>
   <footer>
   </footer>
@@ -74,7 +32,7 @@
 <script id="gui-default-menu" type="text/x-template">
   {^{if visible}}
   <li data-id="{{:id}}">
-      <div>{{:~icon(id)}}{{:~translate(~idPrefix+id)}}</div>
+      <div><div class="custom-item-wrapper">{{icon id /}}<span>{{:~translate(~idPrefix+id)}}</span>{{icon 'check' class="checkmark"/}}</div></div>
       {{if menuItems && menuItems.length}}
       <ul>
           {^{for menuItems tmpl="#gui-default-menu" /}}

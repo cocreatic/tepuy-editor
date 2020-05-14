@@ -1,5 +1,5 @@
 import { App } from '../../js/app';
-import { helpers, converters, tree, shareList, imageInput } from './helpers';
+import { helpers, converters, tree, shareList, imageInput, icon } from './helpers';
 import { FormManager, FormBuilder, FormArray, FormControl, FormGroup } from './components/formManager';
 import { Dialog } from './components/dialog';
 import { Validators } from './components/validators';
@@ -15,7 +15,7 @@ export class GuiDefault {
 
     initialize() {
         $.views.helpers(helpers);
-        $.views.tags({ editableTree: tree, shareList, imageInput });
+        $.views.tags({ editableTree: tree, shareList, imageInput, icon });
         $.views.converters(converters);
         this.initializeGuiApi();
         App.invokeHook('gui_menu_initialize');
@@ -44,7 +44,7 @@ export class GuiDefault {
         //setTimeout(() => App.ui.$menu.menu('collapseAll', true), 200);
         setTimeout(() => {
             //App.ui.$menu.menu('collapseAll', true);
-            App.invokeHook(hook);
+            App.invokeHook(hook, ui);
             setTimeout(() => App.ui.$menu.menu('collapseAll', true), 200);
         }, 0);
     }
@@ -69,7 +69,7 @@ export class GuiDefault {
                 }
             }
         });
-        $(App.$container).addClass("tpe-editor-default").localize(); //ToDo: Change default to the theme name
+        $(App.$container).addClass("tpe-editor tpe-editor-default").localize(); //ToDo: Change default to the theme name
         layoutInitialized = true;
     }
 

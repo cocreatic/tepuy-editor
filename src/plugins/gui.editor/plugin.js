@@ -11,6 +11,13 @@ const templateMap = {
     editPage: 'script#gui-editor-edit-page'
 }
 
+const CONTENT_TAB ='tab-1';
+const LOOK_TAB ='tab-2';
+const RESOURCES_TAB ='tab-3';
+const LOG_TAB ='tab-4';
+const SHARE_TAB ='tab-5';
+const defaultDevice = 'iphone';
+
 export class GuiEditor {
 
     constructor() {
@@ -21,8 +28,8 @@ export class GuiEditor {
     initialize(template) {
         const sidebarTpl = TemplateManager.get('sidebar');
         const contentTpl = TemplateManager.get('content');
-        this.sidebarModel = {};
-        this.contentModel = {};
+        this.sidebarModel = { };
+        this.contentModel = { responsiveDevice: defaultDevice };
         this.dco = App.data.dco;
         //App.data.dco = this.dco = new Dco(template, App.storage);
 
@@ -40,11 +47,12 @@ export class GuiEditor {
 
     activateTab(tab, oldTab) {
         let id = tab.data().tabId;
+        this.activeTab = id;
         switch(id) {
-            case 'tab-1':
+            case CONTENT_TAB:
                 this.loadContentTab();
                 break;
-            case 'tab-3':
+            case RESOURCES_TAB:
                 this.loadResourceTab();
                 break;
             default:
@@ -72,7 +80,7 @@ export class GuiEditor {
         App.registerHook('gui_menu_file_download', this.notimplemented.bind(this));
         App.registerHook('gui_menu_file_exit', this.close.bind(this));
         App.registerHook('gui_menu_view_preview', this.notimplemented.bind(this));
-        App.registerHook('gui_menu_view_responsive', this.notimplemented.bind(this));
+        App.registerHook('gui_menu_view_responsive', this.responsiveView.bind(this));
         App.registerHook('gui_menu_help_manual', this.notimplemented.bind(this));
         App.registerHook('gui_menu_help_about', this.about.bind(this));
         App.registerHook('gui_menu_profile_logout', this.logout.bind(this));
@@ -99,7 +107,7 @@ export class GuiEditor {
             });
             setTimeout(() => App.ui.$sidebar.localize(), 100);
         }
-        $.observable(this.contentModel).setProperty('template', ['#gui-editor-', 'tab-1', '-content'].join(''));
+        $.observable(this.contentModel).setProperty('template', ['#gui-editor-', CONTENT_TAB, '-content', App.ui.responsive ? '-responsive': ''].join(''));
         this.renderFirst();
     }
 
@@ -110,7 +118,7 @@ export class GuiEditor {
             }
             setTimeout(() => App.ui.$sidebar.localize(), 100);
         }
-        $.observable(this.contentModel).setProperty('template', ['#gui-editor-', 'tab-3', '-content'].join(''));
+        $.observable(this.contentModel).setProperty('template', ['#gui-editor-', RESOURCES_TAB, '-content'].join(''));
     }
 
     loadResources(path){
@@ -302,6 +310,31 @@ export class GuiEditor {
                 console.log(err);
             });
         }, 200);
+    }
+
+    responsiveView(ui) {
+        $(ui.item).toggleClass('checked');
+        $.observable(App.ui).setProperty('responsive', !App.ui.responsive);
+        if (this.activeTab == CONTENT_TAB) {
+            const template = ['#gui-editor-', CONTENT_TAB, '-content', App.ui.responsive ? '-responsive': ''].join('');
+            $.observable(this.contentModel).setProperty('template', template);
+            this.renderFirst();
+        }
+
+        App.ui.$content.toggleClass('responsive-view');
+        if (App.ui.responsive) {
+            $.observe(this.contentModel, 'responsiveDevice', this.onDeviceChanged.bind(this));
+            App.ui.$content.addClass(this.contentModel.responsiveDevice);
+        }
+        else {
+            $.unobserve(this.contentModel, 'responsiveDevice');
+            App.ui.$content.removeClass(this.contentModel.responsiveDevice);
+        }
+    }
+
+    onDeviceChanged(ev, args) {
+        let oldDevice = args.oldValue || defaultDevice;
+        App.ui.$content.removeClass(oldDevice).addClass(this.contentModel.responsiveDevice);
     }
 
     notimplemented(){
