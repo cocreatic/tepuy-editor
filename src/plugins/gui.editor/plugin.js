@@ -352,8 +352,11 @@ export class GuiEditor {
     }
 
     renderFirst() {
-        let $head = $('#editor-container-frame').contents().find('head');
-        let template = TemplateManager.get('pageViewStyles');
+        const $head = $('#editor-container-frame').contents().find('head');
+        if (App.ui.responsive) {
+            $head.append('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
+        }
+        const template = TemplateManager.get('pageViewStyles');
         $head.append(template.render());
         this.render();
     }
