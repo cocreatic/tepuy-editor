@@ -21,6 +21,7 @@ const resolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const multiEntry = require("rollup-plugin-multi-entry");
 const i18nScanner = require('i18next-scanner');
+const fs = require('fs');
 
 const destFolder = "./dist";
 
@@ -37,6 +38,22 @@ const vendorcss = [
     //'node_modules/@fortawesome/fontawesome-free/css/solid.min.css',
     './vendor/css/*.css'
 ];
+
+function getFolders(dir) {
+    return fs.readdirSync(dir)
+      .filter(function(file) {
+        return fs.statSync(path.join(dir, file)).isDirectory();
+      });
+}
+
+function getFiles(dir) {
+    return fs.readdirSync(dir)
+      .filter(function(file) {
+        return fs.statSync(path.join(dir, file)).isFile() && path.extname(file).toLowerCase() === '.js';
+      }).map(file => {
+          return path.resolve(__dirname, path.join(dir, file));
+      });
+}
 
 function joinVendorCss() {
     return gulp.src(vendorcss)
@@ -110,40 +127,100 @@ gulp.task("vendorjs", function() {
 
 gulp.task("vendorcss", gulp.parallel(joinVendorCss, copyVendorAssets, copyIcons));
 
-gulp.task("js", function () {
-    return rollup({
-        input: ['./src/js/app.js', './src/plugins/**/plugin.js'], // entry point //./src/js/index.js //./src/js/plugins/**/component.js
-        external: ['jquery'],
-        plugins: [
-            multiEntry(),
-            resolve({
-                mainFields: ['main', 'jsnext'],
-                browser: true,
-            }),
-            commonjs(),
-            eslint({
-                exclude: [
-                    'src/styles/**',
-                    'src/scss/**'
-                ]
-            }),
-            babel({
-                exclude: 'node_modules/**'
-            }),
-            //(process.env.NODE_ENV === 'production' && uglify())
-        ]
-    })
-    .then(bundle => {
-        return bundle.generate({
-            format: 'umd',
-            name: 'tepuyEditor'
+
+function rollupBuildTask(config) {
+    return () => {
+        return rollup({
+            input: config.src, // entry point //./src/js/index.js //./src/js/plugins/**/component.js
+            external: ['jquery', ...config.globals?Object.keys(config.globals):[]],
+            plugins: [
+                multiEntry(),
+                resolve({
+                    mainFields: ['main', 'jsnext'],
+                    browser: true,
+                }),
+                commonjs(),
+                eslint({
+                    exclude: [
+                        'src/styles/**',
+                        'src/scss/**'
+                    ]
+                }),
+                babel({
+                    exclude: 'node_modules/**'
+                }),
+                //(process.env.NODE_ENV === 'production' && uglify())
+            ]
         })
-    })
-    .then(gen => {
-        return file('tepuy-editor.js', gen.output[0].code, {src: true})
-            .pipe(gulp.dest(destFolder))
-            .pipe(browserSync.stream());
+        .then(bundle => {
+            return bundle.generate({
+                format: config.format || 'umd',
+                name: config.className,
+                globals: config.globals || {}
+            })
+        })
+        .then(gen => {
+            return file(config.filename, gen.output[0].code, {src: true})
+                .pipe(gulp.dest(config.dest));
+        });
+    };
+}
+
+function browserReload(done) {
+    browserSync.reload();
+    done();
+}
+
+function rollupGlobal(file) {
+    let name = path.basename(file); //Get base name
+    name = name.substr(0, name.length - path.extname(file).length); //Get name without extension
+    name = name[0].toUpperCase() + name.substr(1); //Make it Capital case
+    return { [file]: 'tepuyEditor' };
+}
+
+function pluginClassName(folder) {
+    return folder.split('.').map(segment => segment[0].toUpperCase()+segment.substr(1)).join('');
+}
+
+function rollupMain() {
+    return rollupBuildTask({
+        src: ['./src/js/app.js'], 
+        dest: destFolder,
+        filename: 'tepuy-editor.js',
+        className: 'tepuyEditor'
     });
+}
+
+function rollupPlugin(folder, globals) {
+    return rollupBuildTask({
+        src: path.join('./src/plugins', folder, '/plugin.js'),
+        dest: path.join(destFolder, 'plugins', folder),
+        filename: 'plugin.js',
+        className: pluginClassName(folder),
+        globals: globals,
+        format: 'umd'
+    });
+}
+
+function getPluginGlobals() {
+    let pluginsGlobals = {
+        'moment': 'moment'
+    };
+    getFiles('./src/js').forEach(file => Object.assign(pluginsGlobals, rollupGlobal(file)));
+    return pluginsGlobals;
+}
+
+gulp.task("js", function (done) {
+    const pluginsGlobals = getPluginGlobals();
+    const main = rollupMain();
+    const plugins = getFolders('./src/plugins').map((folder) => {
+        return rollupPlugin(folder, pluginsGlobals);
+    });
+
+    return gulp.series(main, gulp.parallel(...plugins), (seriesDone) => {
+        seriesDone();
+        done();
+    })();// gulp.series(main);
 });
 
 gulp.task('sass', function() {
@@ -186,8 +263,13 @@ gulp.task('serve', gulp.series('compile', function () {
     });
 
     gulp.watch(["./src/scss/**/*.scss", "./src/plugins/**/*.scss"], gulp.series('sass'));
-    gulp.watch(["./src/js/*.js", "./src/plugins/**/*.js"], gulp.parallel('js', translations));
-    //gulp.watch(["./src/fakeApi.js"], gulp.series('vendorjs'));
+    gulp.watch(["./src/js/*.js"], gulp.series(rollupMain(), translations, browserReload));
+    gulp.watch(["./src/plugins/**/*.js"]).on("change", (file) => {
+        const folder = path.basename(path.dirname(file));
+        console.log('Rebuilding plugin ' + folder);
+        const pluginsGlobals = getPluginGlobals();
+        return gulp.series(rollupPlugin(folder, pluginsGlobals), translations, browserReload)();
+    });
     gulp.watch(["./index.html", "./src/plugins/**/*.html"], gulp.parallel('html', translations));
 }));
 

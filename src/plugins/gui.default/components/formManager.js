@@ -1,6 +1,5 @@
 import { privateMap, _, getSafe } from '../../../js/utils';
 import { Dialog } from './dialog';
-import i18next from 'i18next';
 
 export const VALID = 'VALID';
 export const INVALID = 'INVALID';
@@ -11,6 +10,12 @@ const filterByColumn = function(item, index, items) {
 };
 
 export class FormManager {
+
+    static register(app) {
+        FormManager._app = app;
+        return FormManager;
+    }
+
     constructor({formConfig,
         titleText = '',
         acceptText = 'commands.accept',
@@ -22,6 +27,7 @@ export class FormManager {
         this.titleText = titleText;
         this.acceptText = acceptText;
         this.cancelText = cancelText;
+        this.i18n = FormManager._app.i18n;
         privateMap.set(this, {});
     }
 
@@ -35,7 +41,7 @@ export class FormManager {
         const dlg = new Dialog({
             width: '60vw',
             maxWidth: 650,
-            title: i18next.t(this.titleText),
+            title: this.i18n.t(this.titleText),
             centerOnContent: true
         });
         priv.template.link(dlg.host, this, {
@@ -44,8 +50,8 @@ export class FormManager {
         dlg.host.localize();
         priv.dialog = dlg;
         dlg.setButtons([
-            { text: i18next.t(this.acceptText), callback: this.submit.bind(this) },
-            { text: i18next.t(this.cancelText), callback: this.cancel.bind(this) }
+            { text: this.i18n.t(this.acceptText), callback: this.submit.bind(this) },
+            { text: this.i18n.t(this.cancelText), callback: this.cancel.bind(this) }
         ]);
         
         return new Promise((resolve, reject) => {
