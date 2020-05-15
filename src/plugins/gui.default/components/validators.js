@@ -20,11 +20,12 @@ const maxLength = (maxLength) => {
     }
 }
 const PERCENTAGE = /^((100(\.0{1,2})?)|(\d{1,2}(\.\d{1,2})?))%/;
-const onlyNumbers = /^([0-9])*$/;
-
+const onlyNumbers =/^[0-9]*(?:\.\d{1,2})?$/;
+ 
 const sizeUnit =(ctrl)=>{
-   return (onlyNumbers.test(ctrl.value)) ? null: {sizeUnit:true} || (PERCENTAGE.test(ctrl.value)) ? null : {sizeUnit:true}||  
-     ctrl.value ? 'auto' : {sizeUnit:true};
+   return (!onlyNumbers.test(ctrl.value)) ? null: { sizeUnit:true }  ||
+            (PERCENTAGE.test(ctrl.value)) ? null : { sizeUnit:true } ||  
+            ctrl.value == 'auto' ? null : { sizeUnit:true };
 }  
 
 export const Validators = {
