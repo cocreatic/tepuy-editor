@@ -1,5 +1,4 @@
 import { App } from '../../js/app';
-import { Page } from '../../js/dco';
 import { TemplateManager } from './templateManager';
 
 export class TreeItemEditor {
@@ -134,7 +133,7 @@ export class TreeItemEditor {
         if (index > end) index = end;
         if (page.isNew) {
             $.observable(data.children).insert(index, item);
-            App.data.dco.addPage(new Page(item), index);
+            App.data.dco.addPage(item, index);
         }
         else {
             let current = data.parent.children.indexOf(data);

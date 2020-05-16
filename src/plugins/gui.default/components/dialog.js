@@ -1,5 +1,4 @@
 import { App } from '../../../js/app';
-
 import { privateMap, _, getSafe } from '../../../js/utils';
 
 export class Dialog {

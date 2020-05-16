@@ -60,7 +60,7 @@ export class Dco {
             this.tree.pages.push(oPage);
         }
         else {
-            this.tree.pages.splice(index, 0, page);
+            this.tree.pages.splice(index, 0, oPage);
         }
         return oPage;
     }

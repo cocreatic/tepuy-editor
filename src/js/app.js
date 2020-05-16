@@ -6,6 +6,7 @@ import { sortInsert } from './utils';
 import { Dco } from './dco';
 import { Auth } from './auth';
 import { Storage } from './storage';
+import { loadFile } from './utils';
 
 const defaultOptions = {
     container: "#tepuy-editor",
@@ -29,6 +30,8 @@ class App {
         //Parse options
         this.parseOptions(options);
 
+
+        let pluginPromises = [];
         //Load active plugins
         for(let plugin of properties.plugins) {
             if (!plugin.active) continue;
@@ -38,12 +41,17 @@ class App {
                 this.plugins[plugin.id] = new tepuyEditor[objectName];
             }
             else {
-                import(`../plugins/${plugin.id}/plugin.js`).then((pClass) => {
-                    this.plugins[plugin.id] = new pClass(this); //pass a reference to the App
-                });
+                pluginPromises.push(loadFile(`../plugins/${plugin.id}/plugin.js`, 'js').then(loaded => {
+                    if (loaded) {
+                        const ns = window[objectName];
+                        this.plugins[plugin.id] = new ns[objectName](this); //pass a reference to the App
+                    }
+                    return loaded;
+                }));
             }
         }
 
+        Promise.all(pluginPromises).then(() =>
         this.initLanguage().then(() => {
             this.resolveAuth();
             this.resolveStorage();
@@ -56,7 +64,7 @@ class App {
                 this.data.user = userInfo;
                 this.ui.load(this.options.defaultView);
             });
-        });
+        }));
     }
 
     parseOptions(options) {
@@ -92,12 +100,12 @@ class App {
     }
 
     resolveDcoManager() {
-        this.dcoManager = Dco;
+        this.DcoManager = Dco;
     }
 
     getPlugin(plugName, raiseError = true){
         if (raiseError && !this.plugins[plugName]) {
-            throw new 'Unable to found plugin ' + plugName;
+            throw 'Unable to find plugin ' + plugName;
         }
         return this.plugins[plugName];
     }
@@ -131,3 +139,4 @@ class App {
 
 const app = new App();
 export { app as App};
+export * as Utils from './utils';

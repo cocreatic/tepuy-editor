@@ -18,7 +18,7 @@ const categories = ['Category 1', 'Category 2', 'Category 3'];
 let objects = [];
 
 export class StorageLocal {
-    constructor() {
+    constructor(app) {
         this.name = 'LocalStorage';
         //initialize store
         this.initializeStore();

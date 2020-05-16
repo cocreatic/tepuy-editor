@@ -1,6 +1,5 @@
 import { App } from '../../js/app';
-import i18next from 'i18next';
-import { Dco, Page } from '../../js/dco';
+
 import { TemplateManager } from './templateManager';
 import { TreeItemEditor } from './treeItemEditor';
 import moment from 'moment';
@@ -23,6 +22,9 @@ export class GuiEditor {
     constructor() {
         App.registerHook('gui_view_editor', this.initialize.bind(this));
         App.registerHook('gui_menu_initialize', this.registerMenu.bind(this));
+
+        //Guarantee this context
+        this.editProperties = this.editProperties.bind(this);
     }
 
     initialize(template) {
@@ -299,7 +301,7 @@ export class GuiEditor {
                 height: ['text', config.height, { label: 'dco.height', validators:[validators.sizeUnit], small: true }],
             }, { label: 'dco.viewOptions' })
         ]);
-        const titleText = this.dco.config.name + ' - ' + i18next.t('dco.propertiesTitle');
+        const titleText = this.dco.config.name + ' - ' + App.i18n.t('dco.propertiesTitle');
         let manager = new App.ui.components.FormManager({formConfig, titleText});
         setTimeout(() => {
             manager.openDialog().then(updatedProperties => {

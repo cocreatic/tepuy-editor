@@ -1,4 +1,5 @@
-import i18next from 'i18next';
+import { App } from '../../js/app';
+
 import { Validators } from './components/validators';
 
 const iconMap = {
@@ -43,7 +44,7 @@ const iconMap = {
 
 export const helpers = {
     translate: (key) => {
-        return i18next.t(key);
+        return App.i18n.t(key);
     },
     icon: (icon) => {
         if (!icon || !iconMap[icon]) return '';

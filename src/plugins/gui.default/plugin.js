@@ -1,4 +1,5 @@
 import { App } from '../../js/app';
+
 import { helpers, converters, tree, shareList, imageInput, icon } from './helpers';
 import { FormManager, FormBuilder, FormArray, FormControl, FormGroup } from './components/formManager';
 import { Dialog } from './components/dialog';
@@ -11,6 +12,9 @@ export class GuiDefault {
     constructor() {
         App.registerHook('gui_initialize', this.initialize.bind(this));
         this.menu = [];
+
+        //Guarantee this context
+        this.menuAction = this.menuAction.bind(this);
     }
 
     initialize() {
@@ -31,7 +35,7 @@ export class GuiDefault {
                 FormArray,
                 FormGroup,
                 FormControl,
-                Dialog: Dialog
+                Dialog
             }
         };
 

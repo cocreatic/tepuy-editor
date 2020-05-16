@@ -1,10 +1,15 @@
 import { App } from '../../js/app';
-import { Dco, Page } from '../../js/dco';
 
 export class GuiTemplateChooser {
 
     constructor() {
         App.registerHook('gui_view_home', this.initialize.bind(this));
+
+        //Guarantee this context on handlers
+        this.createObject = this.createObject.bind(this);
+        this.closeDetail = this.closeDetail.bind(this);
+        this.openForEdition = this.openForEdition.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     initialize() {
@@ -14,9 +19,7 @@ export class GuiTemplateChooser {
         this.onTabActivate = (event, ui) => {
             this.activateTab(ui.newTab, ui.oldTab);
         }
-        
         this.loadNewTab();
-
         contentTpl.link(App.ui.$content, this);
         sidebarTpl.link(App.ui.$sidebar, this);
         App.$container.localize();
@@ -115,8 +118,8 @@ export class GuiTemplateChooser {
     }
 
     createNewObject(properties) {
-        App.dcoManager.createNew(this.model.activeTemplate, properties, App.storage).then(dco => {
-            App.data.dco = new Dco(dco, App.storage);
+        App.DcoManager.createNew(this.model.activeTemplate, properties, App.storage).then(dco => {
+            App.data.dco = new App.DcoManager(dco, App.storage);
             App.ui.load('editor', null);
         }).catch(err => {
             console.log(err); //ToDo: Error handling
@@ -124,7 +127,7 @@ export class GuiTemplateChooser {
     }
 
     openForEdition(dco) {
-        App.data.dco = new Dco(dco, App.storage);
+        App.data.dco = new App.DcoManager(dco, App.storage);
         App.ui.load('editor', null);
     }
 
