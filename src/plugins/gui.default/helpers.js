@@ -1,3 +1,5 @@
+import { App } from '../../js/app';
+
 import { Validators } from './components/validators';
 
 const iconMap = {
@@ -41,8 +43,8 @@ const iconMap = {
 };
 
 export const helpers = {
-    translate: (translator) => (key) => {
-        return translator.t(key);
+    translate: (key) => {
+        return App.i18n.t(key);
     },
     icon: (icon) => {
         if (!icon || !iconMap[icon]) return '';

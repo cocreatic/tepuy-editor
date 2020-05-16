@@ -1,3 +1,5 @@
+import { App } from '../../js/app';
+
 import { helpers, converters, tree, shareList, imageInput, icon } from './helpers';
 import { FormManager, FormBuilder, FormArray, FormControl, FormGroup } from './components/formManager';
 import { Dialog } from './components/dialog';
@@ -7,60 +9,58 @@ let layoutInitialized = false;
 
 export class GuiDefault {
 
-    constructor(app) {
-        this.app = app;
-        app.registerHook('gui_initialize', this.initialize.bind(this));
+    constructor() {
+        App.registerHook('gui_initialize', this.initialize.bind(this));
         this.menu = [];
+
+        //Guarantee this context
+        this.menuAction = this.menuAction.bind(this);
     }
 
     initialize() {
-        $.views.helpers({
-            translate: helpers.translate(this.app.i18n),
-            icon: helpers.icon,
-            debug: helpers.debug
-        });
+        $.views.helpers(helpers);
         $.views.tags({ editableTree: tree, shareList, imageInput, icon });
         $.views.converters(converters);
         this.initializeGuiApi();
-        this.app.invokeHook('gui_menu_initialize');
+        App.invokeHook('gui_menu_initialize');
     }
 
     initializeGuiApi() {
-        this.app.ui = {
+        App.ui = {
             load: this.load.bind(this),
             registerMenuItem: this.registerMenuItem.bind(this),
             components: {
-                FormManager: FormManager.register(this.app),
+                FormManager,
                 FormBuilder,
                 FormArray,
                 FormGroup,
                 FormControl,
-                Dialog: Dialog.register(this.app)
+                Dialog
             }
         };
 
-        this.app.validation = { validators: {...Validators }};
+        App.validation = { validators: {...Validators }};
     }
 
     menuAction(ev, ui) {
         if (ui.item.children("ul").length) return; //Not a leaf
         var hook = `gui_menu_${ui.item.data().id}`;
-        //setTimeout(() => this.app.ui.$menu.menu('collapseAll', true), 200);
+        //setTimeout(() => App.ui.$menu.menu('collapseAll', true), 200);
         setTimeout(() => {
-            //this.app.ui.$menu.menu('collapseAll', true);
-            this.app.invokeHook(hook, ui);
-            setTimeout(() => this.app.ui.$menu.menu('collapseAll', true), 200);
+            //App.ui.$menu.menu('collapseAll', true);
+            App.invokeHook(hook, ui);
+            setTimeout(() => App.ui.$menu.menu('collapseAll', true), 200);
         }, 0);
     }
 
     buildLayout() {
         const template = $.templates("script#gui-default");
-        this.user = this.app.data.user;
-        this.theme = this.app.options.theme;
-        template.link(this.app.$container, this);
-        let $menu = this.app.ui.$menu = $('#tpe-menubar');
-        this.app.ui.$sidebar = $('#tpe-sidebar');
-        this.app.ui.$content = $('#tpe-content');
+        this.user = App.data.user;
+        this.theme = App.options.theme;
+        template.link(App.$container, this);
+        let $menu = App.ui.$menu = $('#tpe-menubar');
+        App.ui.$sidebar = $('#tpe-sidebar');
+        App.ui.$content = $('#tpe-content');
 
         $menu.menu({
             position: { my: 'left top', at: 'left bottom' },
@@ -73,7 +73,7 @@ export class GuiDefault {
                 }
             }
         });
-        $(this.app.$container).addClass("tpe-editor tpe-editor-default").localize(); //ToDo: Change default to the theme name
+        $(App.$container).addClass("tpe-editor tpe-editor-default").localize(); //ToDo: Change default to the theme name
         layoutInitialized = true;
     }
 
@@ -82,10 +82,10 @@ export class GuiDefault {
         if (!layoutInitialized) {
             this.buildLayout();
         }
-        this.app.invokeHook(`gui_view_${view}`, params);
+        App.invokeHook(`gui_view_${view}`, params);
         this.resolveMenuState(this.menu);
         //$.observable(this.menu).refresh(this.menu);
-        this.app.ui.$menu.menu("refresh");
+        App.ui.$menu.menu("refresh");
     }
 
     registerMenuItem(menuItem, parentId) {

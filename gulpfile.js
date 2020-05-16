@@ -26,10 +26,12 @@ const fs = require('fs');
 const destFolder = "./dist";
 
 const vendorjs = [
+    'node_modules/moment/min/moment-with-locales.min.js',
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-ui-dist/jquery-ui.min.js',
     'node_modules/jsviews/jsviews.min.js',
-    'vendor/js/jsviews-jqueryui-widgets.min.js'
+    'vendor/js/jsviews-jqueryui-widgets.min.js',
+    'node_modules/i18next/i18next.min.js'
 ];
 
 const vendorcss = [
@@ -130,9 +132,23 @@ gulp.task("vendorcss", gulp.parallel(joinVendorCss, copyVendorAssets, copyIcons)
 
 function rollupBuildTask(config) {
     return () => {
+        const externals = ['jquery', 'moment', 'i18next', ...config.globals?Object.keys(config.globals):[]];
+        const globals = {
+            'moment': 'moment',
+            'i18next': 'i18next',
+            ...config.globals
+        };
+
         return rollup({
-            input: config.src, // entry point //./src/js/index.js //./src/js/plugins/**/component.js
-            external: ['jquery', ...config.globals?Object.keys(config.globals):[]],
+            input: config.src,
+            external: (id, from) => {
+                if (externals.indexOf(id) >= 0) return true;
+                if (/\/plugins\//.test(from) && /^\./.test(id)) {
+                    const fullpath = path.resolve(path.dirname(from), id);
+                    return externals.indexOf(fullpath) >= 0;
+                }
+                return false;
+            },
             plugins: [
                 multiEntry(),
                 resolve({
@@ -154,9 +170,9 @@ function rollupBuildTask(config) {
         })
         .then(bundle => {
             return bundle.generate({
-                format: config.format || 'umd',
+                format: config.format || 'iife',
                 name: config.className,
-                globals: config.globals || {}
+                globals: globals
             })
         })
         .then(gen => {
@@ -169,13 +185,6 @@ function rollupBuildTask(config) {
 function browserReload(done) {
     browserSync.reload();
     done();
-}
-
-function rollupGlobal(file) {
-    let name = path.basename(file); //Get base name
-    name = name.substr(0, name.length - path.extname(file).length); //Get name without extension
-    name = name[0].toUpperCase() + name.substr(1); //Make it Capital case
-    return { [file]: 'tepuyEditor' };
 }
 
 function pluginClassName(folder) {
@@ -192,20 +201,26 @@ function rollupMain() {
 }
 
 function rollupPlugin(folder, globals) {
+    console.log('Building plugin ' + folder);
     return rollupBuildTask({
         src: path.join('./src/plugins', folder, '/plugin.js'),
         dest: path.join(destFolder, 'plugins', folder),
         filename: 'plugin.js',
         className: pluginClassName(folder),
         globals: globals,
-        format: 'umd'
+        format: 'iife'
     });
 }
 
+function rollupGlobal(file) {
+    let name = path.basename(file); //Get base name
+    name = name.substr(0, name.length - path.extname(file).length); //Get name without extension
+    name = name === 'app' ? '' : '.' + name[0].toUpperCase() + name.substr(1); //Make it Capital case
+    return { [file.substr(0, file.length-path.extname(file).length)]: 'tepuyEditor'+name };
+}
+
 function getPluginGlobals() {
-    let pluginsGlobals = {
-        'moment': 'moment'
-    };
+    let pluginsGlobals = {};
     getFiles('./src/js').forEach(file => Object.assign(pluginsGlobals, rollupGlobal(file)));
     return pluginsGlobals;
 }
@@ -265,8 +280,9 @@ gulp.task('serve', gulp.series('compile', function () {
     gulp.watch(["./src/scss/**/*.scss", "./src/plugins/**/*.scss"], gulp.series('sass'));
     gulp.watch(["./src/js/*.js"], gulp.series(rollupMain(), translations, browserReload));
     gulp.watch(["./src/plugins/**/*.js"]).on("change", (file) => {
-        const folder = path.basename(path.dirname(file));
-        console.log('Rebuilding plugin ' + folder);
+        const fullpath = path.resolve(file);
+        const plugins = path.resolve('./src/plugins');
+        const folder = fullpath.substring(plugins.length+1).split('/')[0];
         const pluginsGlobals = getPluginGlobals();
         return gulp.series(rollupPlugin(folder, pluginsGlobals), translations, browserReload)();
     });

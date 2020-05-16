@@ -1,5 +1,5 @@
-import i18next from 'i18next';
-import { Dco, Page } from '../../js/dco';
+import { App } from '../../js/app';
+
 import { TemplateManager } from './templateManager';
 import { TreeItemEditor } from './treeItemEditor';
 import moment from 'moment';
@@ -19,10 +19,12 @@ const defaultDevice = 'iphone';
 
 export class GuiEditor {
 
-    constructor(app) {
-        this.app = app;
-        app.registerHook('gui_view_editor', this.initialize.bind(this));
-        app.registerHook('gui_menu_initialize', this.registerMenu.bind(this));
+    constructor() {
+        App.registerHook('gui_view_editor', this.initialize.bind(this));
+        App.registerHook('gui_menu_initialize', this.registerMenu.bind(this));
+
+        //Guarantee this context
+        this.editProperties = this.editProperties.bind(this);
     }
 
     initialize(template) {
@@ -30,11 +32,11 @@ export class GuiEditor {
         const contentTpl = TemplateManager.get('content');
         this.sidebarModel = { };
         this.contentModel = { responsiveDevice: defaultDevice };
-        this.dco = app.data.dco;
+        this.dco = App.data.dco;
         //App.data.dco = this.dco = new Dco(template, App.storage);
 
-        contentTpl.link(this.app.ui.$content, this.contentModel);
-        sidebarTpl.link(this.app.ui.$sidebar, this.sidebarModel);
+        contentTpl.link(App.ui.$content, this.contentModel);
+        sidebarTpl.link(App.ui.$sidebar, this.sidebarModel);
 
         $('#tabs').localize().tabs({
             activate: (event, ui) => {
@@ -42,7 +44,7 @@ export class GuiEditor {
             }
         });
 
-        this.activateTab(this.app.ui.$sidebar.find('li[data-tab-id="tab-1"]'));
+        this.activateTab(App.ui.$sidebar.find('li[data-tab-id="tab-1"]'));
     }
 
     activateTab(tab, oldTab) {
@@ -62,35 +64,35 @@ export class GuiEditor {
     }
 
     registerMenu() {
-        this.app.ui.registerMenuItem({ id: 'file'});
-        this.app.ui.registerMenuItem({ id: 'file_properties', show: ['editor']}, 'file');
-        this.app.ui.registerMenuItem({ id: 'file_metadata', show: ['editor']}, 'file');
-        this.app.ui.registerMenuItem({ id: 'file_download', show: ['editor']}, 'file');
-        this.app.ui.registerMenuItem({ id: 'file_exit', show: ['editor']}, 'file');
-        this.app.ui.registerMenuItem({ id: 'view'});
-        this.app.ui.registerMenuItem({ id: 'view_preview', show: ['editor']}, 'view');
-        this.app.ui.registerMenuItem({ id: 'view_responsive', show: ['editor']}, 'view');
-        this.app.ui.registerMenuItem({ id: 'help'});
-        this.app.ui.registerMenuItem({ id: 'help_manual'}, 'help');
-        this.app.ui.registerMenuItem({ id: 'help_about'}, 'help');
+        App.ui.registerMenuItem({ id: 'file'});
+        App.ui.registerMenuItem({ id: 'file_properties', show: ['editor']}, 'file');
+        App.ui.registerMenuItem({ id: 'file_metadata', show: ['editor']}, 'file');
+        App.ui.registerMenuItem({ id: 'file_download', show: ['editor']}, 'file');
+        App.ui.registerMenuItem({ id: 'file_exit', show: ['editor']}, 'file');
+        App.ui.registerMenuItem({ id: 'view'});
+        App.ui.registerMenuItem({ id: 'view_preview', show: ['editor']}, 'view');
+        App.ui.registerMenuItem({ id: 'view_responsive', show: ['editor']}, 'view');
+        App.ui.registerMenuItem({ id: 'help'});
+        App.ui.registerMenuItem({ id: 'help_manual'}, 'help');
+        App.ui.registerMenuItem({ id: 'help_about'}, 'help');
 
         //Register callbacks
-        this.app.registerHook('gui_menu_file_properties', this.editProperties.bind(this));
-        this.app.registerHook('gui_menu_file_metadata', this.notimplemented.bind(this));
-        this.app.registerHook('gui_menu_file_download', this.notimplemented.bind(this));
-        this.app.registerHook('gui_menu_file_exit', this.close.bind(this));
-        this.app.registerHook('gui_menu_view_preview', this.notimplemented.bind(this));
-        this.app.registerHook('gui_menu_view_responsive', this.responsiveView.bind(this));
-        this.app.registerHook('gui_menu_help_manual', this.notimplemented.bind(this));
-        this.app.registerHook('gui_menu_help_about', this.about.bind(this));
-        this.app.registerHook('gui_menu_profile_logout', this.logout.bind(this));
+        App.registerHook('gui_menu_file_properties', this.editProperties.bind(this));
+        App.registerHook('gui_menu_file_metadata', this.notimplemented.bind(this));
+        App.registerHook('gui_menu_file_download', this.notimplemented.bind(this));
+        App.registerHook('gui_menu_file_exit', this.close.bind(this));
+        App.registerHook('gui_menu_view_preview', this.notimplemented.bind(this));
+        App.registerHook('gui_menu_view_responsive', this.responsiveView.bind(this));
+        App.registerHook('gui_menu_help_manual', this.notimplemented.bind(this));
+        App.registerHook('gui_menu_help_about', this.about.bind(this));
+        App.registerHook('gui_menu_profile_logout', this.logout.bind(this));
  
 
     }
 
     loadContentTab() {
         if (!this.sidebarModel.content){
-            const oTree = this.app.data.dco.objectTree();
+            const oTree = App.data.dco.objectTree();
             let tree = { children: [], expanded: true, root: true };
             for(var page of oTree.pages) {
                 var node = {id: page.id, title: page.title, children: [], type: 'page', parent: tree };
@@ -99,15 +101,15 @@ export class GuiEditor {
                     node.children = page.sections.map(section => { return {id: section.id, title: section.title, type: 'section', parent: node }});
                 }
             }
-            let extras = this.app.data.dco.extras().slice(0);
+            let extras = App.data.dco.extras().slice(0);
             $.observable(this.sidebarModel).setProperty('content', {
                 tree: tree,
                 extras: extras,
                 treeCommand: this.onTreeCommand.bind(this)
             });
-            setTimeout(() => this.app.ui.$sidebar.localize(), 100);
+            setTimeout(() => App.ui.$sidebar.localize(), 100);
         }
-        $.observable(this.contentModel).setProperty('template', ['#gui-editor-', CONTENT_TAB, '-content', this.app.ui.responsive ? '-responsive': ''].join(''));
+        $.observable(this.contentModel).setProperty('template', ['#gui-editor-', CONTENT_TAB, '-content', App.ui.responsive ? '-responsive': ''].join(''));
         this.renderFirst();
     }
 
@@ -116,7 +118,7 @@ export class GuiEditor {
             if (!this.contentModel.resources){
                 this.loadResources('/');
             }
-            setTimeout(() => this.app.ui.$sidebar.localize(), 100);
+            setTimeout(() => App.ui.$sidebar.localize(), 100);
         }
         $.observable(this.contentModel).setProperty('template', ['#gui-editor-', RESOURCES_TAB, '-content'].join(''));
     }
@@ -260,21 +262,21 @@ export class GuiEditor {
 
     //Menu handlers
     close() {
-        this.app.ui.load('home');
+        App.ui.load('home');
     }
 
     about() {
         if (!this.aboutTpl) this.aboutTpl = $.templates("script#gui-editor-about");
-        $(this.aboutTpl.render({ theme: this.app.options.theme })).dialog({ modal: true});
+        $(this.aboutTpl.render({ theme: App.options.theme })).dialog({ modal: true});
     }
 
     logout(){
-        this.app.exit();
+        App.exit();
     }
 
     editProperties() {
-        const builder = this.app.ui.components.FormBuilder;
-        const validators = this.app.validation.validators;
+        const builder = App.ui.components.FormBuilder;
+        const validators = App.validation.validators;
 
         const interactionModes = [
             { value: 'web', label: 'interactionMode.web' },
@@ -299,8 +301,8 @@ export class GuiEditor {
                 height: ['text', config.height, { label: 'dco.height', small: true }],
             }, { label: 'dco.viewOptions' })
         ]);
-        const titleText = this.dco.config.name + ' - ' + i18next.t('dco.propertiesTitle');
-        let manager = new this.app.ui.components.FormManager({formConfig, titleText});
+        const titleText = this.dco.config.name + ' - ' + App.i18n.t('dco.propertiesTitle');
+        let manager = new App.ui.components.FormManager({formConfig, titleText});
         setTimeout(() => {
             manager.openDialog().then(updatedProperties => {
                 let properties = Object.assign({}, updatedProperties[0]);
@@ -314,27 +316,27 @@ export class GuiEditor {
 
     responsiveView(ui) {
         $(ui.item).toggleClass('checked');
-        $.observable(this.app.ui).setProperty('responsive', !this.app.ui.responsive);
+        $.observable(App.ui).setProperty('responsive', !App.ui.responsive);
         if (this.activeTab == CONTENT_TAB) {
-            const template = ['#gui-editor-', CONTENT_TAB, '-content', this.app.ui.responsive ? '-responsive': ''].join('');
+            const template = ['#gui-editor-', CONTENT_TAB, '-content', App.ui.responsive ? '-responsive': ''].join('');
             $.observable(this.contentModel).setProperty('template', template);
             this.renderFirst();
         }
 
-        this.app.ui.$content.toggleClass('responsive-view');
-        if (this.app.ui.responsive) {
+        App.ui.$content.toggleClass('responsive-view');
+        if (App.ui.responsive) {
             $.observe(this.contentModel, 'responsiveDevice', this.onDeviceChanged.bind(this));
-            this.app.ui.$content.addClass(this.contentModel.responsiveDevice);
+            App.ui.$content.addClass(this.contentModel.responsiveDevice);
         }
         else {
             $.unobserve(this.contentModel, 'responsiveDevice');
-            this.app.ui.$content.removeClass(this.contentModel.responsiveDevice);
+            App.ui.$content.removeClass(this.contentModel.responsiveDevice);
         }
     }
 
     onDeviceChanged(ev, args) {
         let oldDevice = args.oldValue || defaultDevice;
-        this.app.ui.$content.removeClass(oldDevice).addClass(this.contentModel.responsiveDevice);
+        App.ui.$content.removeClass(oldDevice).addClass(this.contentModel.responsiveDevice);
     }
 
     notimplemented(){
@@ -353,7 +355,7 @@ export class GuiEditor {
 
     renderFirst() {
         const $head = $('#editor-container-frame').contents().find('head');
-        if (this.app.ui.responsive) {
+        if (App.ui.responsive) {
             $head.append('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
         }
         const template = TemplateManager.get('pageViewStyles');
@@ -367,9 +369,9 @@ export class GuiEditor {
 
         let html = [];
         let template = TemplateManager.get('pageView');
-        let home = this.app.data.dco.getHome();
+        let home = App.data.dco.getHome();
         html.push(template.render(home));
-        for(let page of this.app.data.dco.getPages()) {
+        for(let page of App.data.dco.getPages()) {
             html.push(template.render(page));
         }
 

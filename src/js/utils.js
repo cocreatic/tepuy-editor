@@ -50,6 +50,3 @@ export function loadFile(filename, filetype) {
     }
     return Promise.resolve(false);
 }
-
-
-

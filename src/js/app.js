@@ -41,10 +41,10 @@ class App {
                 this.plugins[plugin.id] = new tepuyEditor[objectName];
             }
             else {
-                pluginPromises.push(import(`../plugins/${plugin.id}/plugin.js`).then(loaded => {
+                pluginPromises.push(loadFile(`../plugins/${plugin.id}/plugin.js`, 'js').then(loaded => {
                     if (loaded) {
-                        const pClass = window[objectName][objectName];
-                        this.plugins[plugin.id] = new pClass(this); //pass a reference to the App
+                        const ns = window[objectName];
+                        this.plugins[plugin.id] = new ns[objectName](this); //pass a reference to the App
                     }
                     return loaded;
                 }));
@@ -139,3 +139,4 @@ class App {
 
 const app = new App();
 export { app as App};
+export * as Utils from './utils';

@@ -1,17 +1,13 @@
+import { App } from '../../../js/app';
 import { privateMap, _, getSafe } from '../../../js/utils';
 
 export class Dialog {
-
-    static register(app) {
-        Dialog._app = app;
-        return Dialog;
-    }
 
     constructor(settings) {
         this.host = settings.host;
         this.orphan = false;
         if (!this.host) {
-            this.host = $('<div style="display:none"/>').appendTo(Dialog._app.$container);
+            this.host = $('<div style="display:none"/>').appendTo(App.$container);
             this.orphan = true;
         }
         privateMap.set(this, {
@@ -33,7 +29,7 @@ export class Dialog {
     showModal() {
         let options = {
             modal: true,
-            appendTo: Dialog._app.$container,
+            appendTo: App.$container,
             resizable: false
         };
 
@@ -57,7 +53,7 @@ export class Dialog {
             options.position = {
                 my: 'center center',
                 at: 'center center',
-                of: Dialog._app.ui.$content
+                of: App.ui.$content
             };
         }
         this.$dlg = $(this.host).dialog(options);
@@ -73,10 +69,10 @@ export class Dialog {
     }
 
     static closeButton(callback=null) {
-        return {text: Dialog._app.i18n.t('commands.accept'), callback: callback || this.close.bind(this, true)};
+        return {text: App.i18n.t('commands.accept'), callback: callback || this.close.bind(this, true)};
     }
 
     static acceptButton(callback=null) {
-        return {text: Dialog._app.i18n.t('commands.cancel'), callback: callback || this.close.bind(this, true)};
+        return {text: App.i18n.t('commands.cancel'), callback: callback || this.close.bind(this, true)};
     }
 }
