@@ -19,11 +19,17 @@ export const Validators = (() => {
             if (isEmptyValue(ctrl.value)) return null;
             return ctrl.value.length <= maxLength ? null : { maxLength: true };
         }
-    }
+    };
+
+    const sizeUnit = (ctrl) => {
+        if (!ctrl.value) return { sizeUnit: true };
+        return /^(auto|\d+(?:\.\d+)?%?)$/i.test(''+ctrl.value) ? null : { sizeUnit: true };
+    };
 
     return {
         required,
         email,
-        maxLength
+        maxLength,
+        sizeUnit
     };
 })();
