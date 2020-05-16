@@ -20,8 +20,14 @@ const maxLength = (maxLength) => {
     }
 }
 
+const sizeUnit = (ctrl) => {
+    if (!ctrl.value) return { sizeUnit: true };
+    return /^(auto|\d+(?:\.\d+)?%?)$/i.test(''+ctrl.value) ? null : { sizeUnit: true };
+}
+
 export const Validators = {
     required,
     email,
-    maxLength
+    maxLength,
+    sizeUnit
 };
