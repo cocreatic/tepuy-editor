@@ -1,5 +1,4 @@
 import { templates } from './templates';
-import { resources } from './resources';
 
 const empty = {
     id:'0',
@@ -15,33 +14,36 @@ const empty = {
 
 const store = window.localStorage;
 const categories = ['Category 1', 'Category 2', 'Category 3'];
-let objects = [];
+const collections = {};
+
+function getCollection(name, defaultValue) {
+    if (!collections[name]) {
+        collections[name] = readStoreKey(name, defaultValue);
+    }
+    return collections[name];
+}
+
+function readStoreKey(key, defaultValue = null) {
+    let value = store.getItem(key);
+    if (!value && defaultValue) {
+        value = defaultValue;
+        store.setItem(key, JSON.stringify(defaultValue));
+    }
+    else {
+        value = JSON.parse(value);
+    }
+    return value;
+}
 
 export class StorageLocal {
     constructor(app) {
+        this.app = app;
         this.name = 'LocalStorage';
         //initialize store
         this.initializeStore();
     }
 
     initializeStore() {
-        this.templates = store.getItem('templates');
-        if (!this.templates) {
-            this.templates = templates;
-            store.setItem('templates', JSON.stringify(templates));
-        }
-        else {
-            this.templates = JSON.parse(this.templates);
-        }
-
-        objects = store.getItem('objects');
-        if (!objects) {
-            objects = [];
-            store.setItem('objects', objects);
-        }
-        else {
-            objects = JSON.parse(objects);
-        }
     }
 
     getTemplateCategories() {
@@ -66,11 +68,11 @@ export class StorageLocal {
     }
 
     getObjects(filter) {
-        //return store.getItem("objects") || [];
-        return objects;
+        return getCollection('objects', []);
     }
 
     save(dco) {
+        let objects = getCollection('objects');
         if (!dco.id) {
             dco.id = 'dco_' + (new Date().getTime());
         }
@@ -106,35 +108,58 @@ export class StorageLocal {
     returns: Array with the list of objects in the given path. 
     */
     getResources(dco, path) {
-        return resources.filter(item => {
-            var matchPath = null;
-            if(path && path != ''){
-                var res = new RegExp(path,'i');
-                matchPath = res.test(item.path);
-            }
-            return(matchPath == null|| matchPath);
-        });
+        const resources = getCollection('res_'+dco.id, []);
+        return Promise.resolve(resources.filter(r => r.path.substr(0, r.path.lastIndexOf('/')+1) == path));
     }
     /*
     Will rename a file in the object directory structure
     returns: { succeed: true | false, message: string };
     */
-    renameResource(resource, newpath) {
-        return { succeed: true | false, message: '' };
+    renameResource(dco, res, newName) {
+        const key = 'res_'+dco.id;
+        const resources = getCollection(key, []);
+        const newPath = res.path.substr(0, res.path.lastIndexOf('/')+1) + newName;
+        if (resources.find(r => r.path == newPath)) return Promise.reject('An item with the same path already exists');
+        const item = resources.find(r => r.path == res.path);
+        if (!item) Promise.reject('Resource not found');
+        item.name = newName;
+        item.path = newPath;
+        store.setItem(key, JSON.stringify(resources));
+        return Promise.resolve(true);
     }
-    /*
+    /*º
     Will delete a file in the object directory structure
     returns: { succeed: true | false, message: string };
     */
-    deleteResource(resource) {
-        return { succeed: true | false, message: '' };
+    deleteResource(dco, path) {
+        const key = 'res_'+dco.id;
+        const resources = getCollection(key, []);
+        let index = resources.findIndex(r => r.path == path);
+        if (index >= 0) {
+            resources.splice(index, 1);
+        }
+        store.setItem(key, JSON.stringify(resources));
+        return Promise.resolve(true);
     }
     /*
     Will add a new resource in the directory structure at the given path
     resouce: { type: F|D, name: string, file: Blob | null }
     returns: { succeed: true | false, message: string };
     */
-    addResource(resource, path){
+    addResource(dco, res, basepath){
+        const key = 'res_'+dco.id;
+        const resources = getCollection(key, []);
+        const { type, name, size, createdAt, extension } = res;
+        if (!/\/$/.test(basepath)) basepath += '/';
+        const path = [basepath, name].join('');
 
+        let item = resources.find(r => r.path == path);
+        if (item) {
+            return Promise.reject('An item with the same path already exists');
+        }
+        item = {type, path, name, size, createdAt, extension };
+        resources.push(item);
+        store.setItem(key, JSON.stringify(resources));
+        return Promise.resolve(item);
     }
 }

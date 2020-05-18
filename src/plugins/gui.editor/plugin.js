@@ -124,37 +124,39 @@ export class GuiEditor {
     }
 
     loadResources(path){
-        var resources = this.dco.getResources(path);
-        let children = [];
-        if (!this.sidebarModel.resources) {
-            let tree = { children: [], expanded: true, root: true, id: '/' };
-            $.observable(this.sidebarModel).setProperty('resources', {
-                tree: tree,
-                treeCommand: this.onTreeCommand.bind(this),
-                onAction: this.onResourceAction.bind(this)
-            });
-        }
-        let parent = this.getNodeWithPath(path, this.sidebarModel.resources.tree);
-        for(var resource of resources) {
-            resource.icon = this.getIcon(resource);
-            if (resource.thumbnail && resource.thumbnail != '') {
-                resource.thumb = resource.thumbnail;
+        this.dco.getResources(path).then((resources) => {
+            let children = [];
+            if (!this.sidebarModel.resources) {
+                let tree = { children: [], expanded: true, root: true, id: '/' };
+                $.observable(this.sidebarModel).setProperty('resources', {
+                    tree: tree,
+                    treeCommand: this.onTreeCommand.bind(this),
+                    onAction: this.onResourceAction.bind(this)
+                });
             }
-            let child = {id: resource.path, title: resource.name, parent: parent, icon: resource.icon };
-            if (resource.type == 'D') {
-                child.loaded = false;
-                child.children = [];
+            let parent = this.getNodeWithPath(path, this.sidebarModel.resources.tree);
+            for(const resource of resources) {
+                resource.icon = this.getIcon(resource);
+                if (resource.thumbnail && resource.thumbnail != '') {
+                    resource.thumb = resource.thumbnail;
+                }
+                let child = {id: resource.path, title: resource.name, parent: parent, icon: resource.icon };
+                if (resource.type == 'D') {
+                    child.loaded = false;
+                    child.children = [];
+                }
+                children.push(child);
             }
-            children.push(child);
-        }
+            
+            $.observable(this.contentModel).setProperty("resources", resources);
+            $.observable(this.contentModel).setProperty("resourcesPath", path);
+            $.observable(parent.children).refresh(children);
+        });
         $.observable(this.contentModel).setProperty("resourceClick", this.resourceClick.bind(this));
         $.observable(this.contentModel).setProperty("resourceDblClick", this.resourceDblClick.bind(this));
         $.observable(this.contentModel).setProperty("resourceDragEnter", this.resourceDragEnter.bind(this));
         $.observable(this.contentModel).setProperty("resourceDragLeave", this.resourceDragLeave.bind(this));
         $.observable(this.contentModel).setProperty("resourceDrop", this.resourceDrop.bind(this));
-        $.observable(this.contentModel).setProperty("resources", resources);
-        $.observable(this.contentModel).setProperty("resourcesPath", path);
-        $.observable(parent.children).refresh(children);
     }
 
     resourceClick(resource, ev, args) {
@@ -218,14 +220,26 @@ export class GuiEditor {
             }
             resource.icon = this.getIcon(resource);
 
-            let child = {id: this.contentModel.resourcesPath + file.name, title: file.name, parent: this.sidebarModel.resources.tree, icon: resource.icon };
-            $.observable(this.sidebarModel.resources.tree.children).insert(child);
-            $.observable(this.contentModel.resources).insert(resource);
+            this.dco.addResource(resource, this.contentModel.resourcesPath).then(response => {
+                let child = {id: this.contentModel.resourcesPath + file.name, title: file.name, parent: this.sidebarModel.resources.tree, icon: resource.icon };
+                $.observable(this.sidebarModel.resources.tree.children).insert(child);
+                $.observable(this.contentModel.resources).insert(resource);
+                resource.path = response.path;
+            })
+
         }
     }
 
     resourcenewfolder() {
-        this.notimplemented();
+        const now = new Date();
+        this.dco.addResource({
+            name: 'Folder ' + now.getTime(),
+            type: 'D',
+            createdAt: moment(now).format('YYYY-MM-DD HH:mm')
+        }, this.contentModel.resourcesPath).then(res => {
+            this.loadResources(this.contentModel.resourcesPath);
+        });
+
     }
 
     getNodeWithPath(path, root) {
@@ -287,7 +301,7 @@ export class GuiEditor {
             { value: 'floating', label: 'displayMode.floating' },
             { value: 'modal', label: 'displayMode.modal' }
         ];
-        const config = this.dco.config;
+        const config = this.dco.manifest;
         const formConfig = builder.array([
             builder.group({
                 shareAsTemplate: ['yesno', config.shareAsTemplate, { label: 'dco.shareAsTemplate', column: 1 }],
@@ -301,7 +315,7 @@ export class GuiEditor {
                 height: ['text', config.height, { label: 'dco.height', validators:[validators.sizeUnit], small: true }],
             }, { label: 'dco.viewOptions' })
         ]);
-        const titleText = this.dco.config.name + ' - ' + App.i18n.t('dco.propertiesTitle');
+        const titleText = config.name + ' - ' + App.i18n.t('dco.propertiesTitle');
         let manager = new App.ui.components.FormManager({formConfig, titleText});
         setTimeout(() => {
             manager.openDialog().then(updatedProperties => {

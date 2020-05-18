@@ -7,14 +7,14 @@ const defaultConfig = {
     height: 'auto' //or number
 }
 export class Dco {
-    constructor(dco, storage) {
+    constructor(manifest, storage) {
         this.storage = storage;
         this.tree = {
             pages: [],
             extras: []
         };
 
-        this.config = Object.assign({}, defaultConfig, dco);
+        this.manifest = Object.assign({}, defaultConfig, manifest);
 
         this.home = new Page({id: 'home', title: 'Inicio' });
         this.addExtra({id: 'extra1', title: 'Extra 1'});
@@ -25,21 +25,21 @@ export class Dco {
 
     static createNew(template, properties, storage) {
         let dco = new Dco(template, storage);
-        delete dco.config.id;
+        delete dco.manifest.id;
         return dco.update(properties);
     }
 
     get id() {
-        return this.config.id;
+        return this.manifest.id;
     }
 
     update(properties) {
-        this.config = Object.assign(this.config, properties);
+        this.manifest = Object.assign(this.manifest, properties);
         return this.save();
     }
 
     save() {
-        return this.storage.save(this.config);
+        return this.storage.save(this.manifest);
     }
 
     objectTree() {
@@ -86,16 +86,20 @@ export class Dco {
         this.tree.extras.push(item);
     }
 
-    updateConfig(config) {
-        this.config= Object.assign(this.config, config);
-    }
-
     getResources(path) {
-        return this.storage.getResources(this.dco, path);
+        return this.storage.getResources(this.manifest, path);
     }
 
-    clearForSave({id, type, name, shareWith, config, home, tree}) {
-        return {id, type, name, shareWith, config, home, tree};
+    addResource(resource, path) {
+        return this.storage.addResource(this.manifest, resource, path);
+    }
+
+    renameResource(resource, newName) {
+        return this.storage.renameResource(this.manifest, resource, newName);
+    }
+
+    deleteResource(path) {
+        return this.storage.deleteResource(this.manifest, path);
     }
 }
 

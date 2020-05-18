@@ -34,14 +34,19 @@ export class Storage {
         return this._impl.getResources(dco, path);
     }
 
-    addResource(res) {
+    addResource(dco, res, path) {
         this._checkImplementation('addResource');
-        return this._impl.addResource(dco);
+        return this._impl.addResource(dco, res, path);
     }
 
-    deleteResource(res) {
+    renameResource(dco, res, newName) {
+        this._checkImplementation('renameResource');
+        return this._impl.renameResource(dco, res, newName);
+    }
+
+    deleteResource(dco, path) {
         this._checkImplementation('deleteResource');
-        return this._impl.deleteResource(dco);
+        return this._impl.deleteResource(dco, path);
     }
 
     share(dco) {
