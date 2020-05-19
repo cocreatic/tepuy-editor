@@ -85,7 +85,10 @@
   },
   "editSection": {
     "editTitle": "Editar sección",
-    "newTitle": "Agregar sección"
+    "newTitle": "Agregar sección",
+    "title": "Titulo",
+    "id": "Id #",
+    "append": "Agregar"
   },
   "commands": {
     "add": "Agregar",

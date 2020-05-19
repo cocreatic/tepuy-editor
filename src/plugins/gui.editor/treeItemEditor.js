@@ -19,62 +19,92 @@ export class TreeItemEditor {
     }
 
     add() {
-        let formOptions = {};
-        let model = { isNew: true };
-        let data = this.data;
+        const data = this.data;
+        const model = { isNew: true, title: '', appendAt: 'end', refPos: data.children.length-1 };
 
         if (data.type == 'page') {
-            formOptions.template = TemplateManager.get('editSection');
-            formOptions.title = 'editSection.newTitle';
             model.id = 'section_' + Date.now();
-            formOptions.accept = this.acceptSection.bind(this);
+            model.accept = this.acceptSection.bind(this);
+            model.label = 'editSection';
         }
         else {
-            formOptions.template = TemplateManager.get('editPage');
-            formOptions.title = 'editPage.newTitle';
             model.id = 'page_' + Date.now();
-            formOptions.accept = this.acceptPage.bind(this);
+            model.accept = this.acceptPage.bind(this);
+            model.label = 'editPage';
         }
-        model.title = '';
-        model.appendAt = 'end';
-        model.refPos = -1;
-        model.references = data.children;
-        formOptions.model = model;
-        formOptions.acceptText = 'commands.add';
-        formOptions.cancelText = 'commands.cancel';
-        this.openForm(formOptions);
+        model.acceptText = 'commands.add';
+        this.editItem(model, data.children);
     }
 
     edit() {
-        let formOptions = {};
-        let model = {};
-        let data = this.data;
-        let index = data.parent.children.indexOf(data);
+        const data = this.data;
+        const model = {};
+        const index = data.parent.children.indexOf(data);
 
         if (data.type == 'page') {
-            formOptions.template = TemplateManager.get('editPage');
-            formOptions.title = 'editPage.editTitle';
-            let page = App.data.dco.getPage(data.id);
+            const page = App.data.dco.getPage(data.id);
             model.id = page.id;
             model.title = page.title;
-            formOptions.accept = this.acceptPage.bind(this);
+            model.accept = this.acceptPage.bind(this);
+            model.label = 'editPage';
         }
         else {
-            formOptions.template = TemplateManager.get('editSection');
-            formOptions.title = 'editSection.editTitle';
-            let page = App.data.dco.getPage(data.parent.id);
-            let section = page.getSection(data.id);
+            const page = App.data.dco.getPage(data.parent.id);
+            const section = page.getSection(data.id);
             model.id = section.id;
             model.title = section.title;
-            formOptions.accept = this.acceptSection.bind(this);
+            model.accept = this.acceptSection.bind(this);
+            model.label = 'editSection';
         }
+
         model.appendAt = index == 0 ? 'first' : 'after';
-        model.refPos = --index;
-        model.references = data.parent.children;
-        formOptions.model = model;
-        formOptions.acceptText = 'commands.edit';
-        formOptions.cancelText = 'commands.cancel';
-        this.openForm(formOptions);
+        model.refPos = index == 0 ? 0 : --index;
+        model.acceptText = 'commands.edit';
+
+        this.editItem(model, data.parent.children);
+    }
+
+    editItem(model, children) {
+        const builder = App.ui.components.FormBuilder;
+        const validators = App.validation.validators;
+        const labelPrefix = model.label;
+
+        const positions = [
+            { value: 'first', label: 'position.start' },
+            { value: 'end', label: 'position.end' },
+            { value: 'after', label: 'position.after' },
+            { value: 'before', label: 'position.before' }
+        ];
+
+        const title = labelPrefix + (model.isNew ? '.newTitle' : '.editTitle');
+
+        const references = children.map((item, index) => { 
+            return { value: index, label: item.title };
+        });
+
+        const controls = {
+            id: ['text', model.id, { label: labelPrefix+'.id', readonly: true }],
+            isNew: ['boolean', model.isNew, { visible: false }],
+            title: ['text', model.title, { label: labelPrefix+'.title', validators: [validators.required, validators.maxLength(256) ], maxLength: 256 }],
+        };
+
+        if (references && references.length) {
+            const refPosVisible = () => /^(after|before)$/.test(formConfig.value.appendAt);
+            controls['appendAt'] = ['optionList', model.appendAt, { label: labelPrefix+'.append', options: positions }];
+            controls['refPos'] = ['optionList', model.refPos, { label: labelPrefix+'.refPos', options: references, visible: refPosVisible, depends: ['appendAt'] }];
+        }
+
+        const formConfig = builder.group(controls);
+        const titleText = App.i18n.t(title);
+        const manager = new App.ui.components.FormManager({
+            formConfig, titleText,
+            acceptText: model.acceptText
+        });
+        manager.openDialog().then(form => {
+            model.accept(form);
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     moveup() {
@@ -195,28 +225,6 @@ export class TreeItemEditor {
         }
         this.accept({action: section.isNew ? 'add' : 'edit', item });
         return true;
-    }
-
-    openForm(formOptions) {
-        let $dlg = $("#tpe-modal-edit-dlg").dialog({
-            appendTo: '.tpe-editor-default',
-            modal: true,
-            autoOpen: false,
-            resizable: false,
-            title: App.i18n.t(formOptions.title),
-            buttons: {
-                [App.i18n.t(formOptions.acceptText)]: () => {
-                    if (formOptions.accept(formOptions.model)) $dlg.dialog('close');
-                },
-                [App.i18n.t(formOptions.cancelText)]: () => {
-                    this.cancel();
-                    $dlg.dialog('close');
-                }
-            },
-            close: () => $dlg.empty().dialog('destroy')
-        });
-        formOptions.template.link("#tpe-modal-edit-dlg", formOptions.model);
-        $dlg.dialog('open');
     }
 
     movePage(from, to) {

@@ -112,7 +112,7 @@ export class GuiTemplateChooser {
         });
         const titleText = 'dco.newTitle';
         let manager = new App.ui.components.FormManager({formConfig, titleText});
-        manager.openDialog().then(this.createNewObject.bind(this)).catch((err) => {
+        manager.openDialog({ width: '60vw' }).then(this.createNewObject.bind(this)).catch((err) => {
             console.log(err);
         });
     }

@@ -318,7 +318,7 @@ export class GuiEditor {
         const titleText = config.name + ' - ' + App.i18n.t('dco.propertiesTitle');
         let manager = new App.ui.components.FormManager({formConfig, titleText});
         setTimeout(() => {
-            manager.openDialog().then(updatedProperties => {
+            manager.openDialog({ width: '60vw'}).then(updatedProperties => {
                 let properties = Object.assign({}, updatedProperties[0]);
                 properties = Object.assign(properties, updatedProperties[1]);
                 this.dco.update(properties);

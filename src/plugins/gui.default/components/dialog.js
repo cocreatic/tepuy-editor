@@ -26,9 +26,9 @@ export class Dialog {
     }
 
 
-    showModal() {
+    create() {
         let options = {
-            modal: true,
+            autoOpen: false,
             appendTo: App.$container,
             resizable: false
         };
@@ -53,10 +53,19 @@ export class Dialog {
             options.position = {
                 my: 'center center',
                 at: 'center center',
-                of: App.ui.$content
+                of: App.ui.$content.parent()
             };
         }
         this.$dlg = $(this.host).dialog(options);
+    }
+
+    showModal() {
+        if (!this.$dlg) {
+            this.create();
+        }
+        this.$dlg.dialog('option', {
+            'modal': true
+        }).dialog('open');
     }
 
     close(destroy) {
