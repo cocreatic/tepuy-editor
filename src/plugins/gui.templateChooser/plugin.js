@@ -23,6 +23,8 @@ export class GuiTemplateChooser {
         contentTpl.link(App.ui.$content, this);
         sidebarTpl.link(App.ui.$sidebar, this);
         App.$container.localize();
+
+        this.openForEdition(App.storage.getObjects({})[0]);
     }
 
     activateTab(tab, oldTab) {

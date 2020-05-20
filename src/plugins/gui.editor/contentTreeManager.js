@@ -1,26 +1,140 @@
 import { App } from '../../js/app';
-import { TemplateManager } from './templateManager';
 
-export class TreeItemEditor {
-    constructor(action, data, target, tree) {
-        this.action = action;
-        this.data = data;
-        this.target = target;
-        this.tree = tree;
+export class ContentTreeManager {
+    
+    constructor(actionHandler) {
+        this.actionHandler = actionHandler;
     }
 
-    run() {
-        this.promise = new Promise((resolve, reject) => {
+    getConfig() {
+        return this.initializeJsTree();
+    }
+    
+    initializeJsTree() {
+        const oTree = App.data.dco.objectTree();
+        const tree = {
+            id: '_root',
+            text: App.i18n.t('tree.root'),
+            type: 'root',
+            li_attr: { "data-root": true },
+            state: { opened: true, selected: true }
+        };
+
+        for (const page of oTree.pages) {
+            var node = { id: page.id, text: page.title, children: [], type: 'page', parent: '_root' };
+            tree.children.push(node);
+            if (page.sections && page.sections.length) {
+                node.children = page.sections.map(section => { 
+                    return {id: section.id, text: section.title, type: 'section', parent: node.id }
+                });
+            }
+        }
+
+        const jtData = [tree];
+        const jtPlugins = ["dnd", "contextmenu", "wholerow", "types"];
+        const core = {
+            check_callback: (op, node, parent, position, more) => {
+                return true;
+            }
+        };
+        const types = {
+            "root": {
+                icon: "fas fa-book",
+                valid_children: ["page"]
+            },
+            "page": {
+                icon: "fas fa-file-code",
+                valid_children: ["section"]
+            },
+            "section": {
+                icon: "fas fa-file-alt",
+                valid_children: []
+            }
+        }
+
+        const contextmenu = {
+            items: (node) => {
+                const type = node.type;
+                const actions = {};
+                if (type != 'section') {
+                    const addLabel = node.type == 'root' ? 'editPage.newTitle' : 'editSection.newTitle';
+                    actions.add = {
+                        id: 'add',
+                        label: App.i18n.t(addLabel),
+                        action: this.jtContextMenuHandler.bind(this, node),
+                        icon: 'fas fa-plus-circle'
+                    }
+                }
+                if (type != 'root') {
+                    const editLabel = node.type == 'page' ? 'editPage.editTitle' : 'editSection.editTitle';
+                    actions.edit = {
+                        id: 'edit',
+                        label: App.i18n.t(editLabel),
+                        action: this.jtContextMenuHandler.bind(this, node),
+                        icon: 'fas fa-pen'
+                    }
+                }
+                return actions;
+            }
+        }
+
+        const dnd = {
+            handler: () => {}
+        };
+
+        const events = {
+            'move_node.jstree': this.jtNodeMoved.bind(this),
+            'loaded.jstree': (ev, data) => {
+                this.tree = data.instance;
+            }
+        };
+
+        const jtConfig = { core, types, contextmenu, dnd, wholerow: true, events };
+        return { jtData, jtConfig };
+        //$.observable(this.sidebarModel).setProperty();
+    }
+
+    jtContextMenuHandler(node, menu) {
+        this.runAction(menu.item.id, node, menu.element).then(result => {
+            const handler = this.actionHandler;
+            handler(result)
+            return result;
+        });
+    }
+
+    jtNodeMoved(ev, data) {
+        const node = data.node;
+        if (node.type == 'page') {
+            App.data.dco.movePage(node.id, data.position);
+        }
+        else {
+            if (data.old_parent == data.parent) {
+                const oPage = App.data.dco.getPage(node.parent);
+                oPage.moveSection(section.id, index);
+            }
+            else {
+                const oldPage = App.data.dco.getPage(data.old_parent);
+                const newPage = App.data.dco.getPage(data.parent);
+                const section = oldPage.removeSection(node.id);
+                newPage.addSection(section, data.position);
+            }
+        }
+    }
+
+    runAction(action, node, target) {
+        this.node = node;
+        this.action = action;
+        this.targe = target;
+        const promise = new Promise((resolve, reject) => {
             this.accept = resolve;
             this.cancel = reject;
-            let method = this[this.action].bind(this);
-            if (method) method();
+            if (this[action]) this[action]();
         });
-        return this.promise;
+        return promise;
     }
 
     add() {
-        const data = this.data;
+        const data = this.node;
         const model = { isNew: true, title: '', appendAt: 'end', refPos: data.children.length-1 };
 
         if (data.type == 'page') {
@@ -38,7 +152,7 @@ export class TreeItemEditor {
     }
 
     edit() {
-        const data = this.data;
+        const data = this.node;
         const model = {};
         const parent = this.tree.get_node(data.parent);
         let index = parent.children.indexOf(data.id);
@@ -111,7 +225,7 @@ export class TreeItemEditor {
     }
 
     moveup() {
-        let data = this.data;
+        let data = this.node;
         let index = data.parent.children.indexOf(data);
         if (data.type == 'page') {
             this.movePage(index, --index);
@@ -122,7 +236,7 @@ export class TreeItemEditor {
     }
 
     movedown() {
-        let data = this.data;
+        let data = this.node;
         let index = data.parent.children.indexOf(data);
         if (data.type == 'page') {
             this.movePage(index, ++index);
@@ -133,7 +247,7 @@ export class TreeItemEditor {
     }
 
     acceptPage(page) {
-        const data = this.data;
+        const data = this.node;
         const parent = this.tree.get_node(data.parent);
         if (!page.title || page.title == '') {
             return false; //Invalid
@@ -181,7 +295,7 @@ export class TreeItemEditor {
     }
 
     acceptSection(section) {
-        let data = this.data;
+        let data = this.node;
         const parent = this.tree.get_node(data.parent);
         if (!section.title || section.title == '') {
             return false; //Invalid
@@ -229,7 +343,7 @@ export class TreeItemEditor {
     }
 
     movePage(from, to) {
-        let data = this.data;
+        let data = this.node;
         let parent = data.parent;
         if (to < 0 || to >= parent.children.length) return;
         App.data.dco.movePage(data.id, to);
@@ -239,7 +353,7 @@ export class TreeItemEditor {
     }
 
     moveSection(from, to) {
-        let data = this.data;
+        let data = this.node;
         let parent = data.parent;
         let pidx = parent.parent.children.indexOf(parent);
         if (to < 0 && pidx == 0 || to >= parent.children.length && pidx >= parent.parent.children.length) {

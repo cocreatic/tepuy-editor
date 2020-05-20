@@ -49,7 +49,9 @@
   "editPage": {
     "id": "",
     "title": "",
-    "append": ""
+    "append": "",
+    "newTitle": "",
+    "editTitle": ""
   },
   "position": {
     "start": "",

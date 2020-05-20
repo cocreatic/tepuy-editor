@@ -13,7 +13,7 @@
             <div class="tpe-toolset">
                 <h3 class="ui-widget-header" data-i18n="editor.content.objecttree"></h3>
                 <div class="tpe-toolset-content">
-                    {^{editableTree content.tree ^editable=editable rootLabel=~translate('tree.root') toolbarTpl="#gui-editor-tree-node-toolbar" doAction=content.treeCommand/}}
+                    {^{jstree jtData config=jtConfig /}}
                 </div>
                 <h3 class="ui-widget-header" data-i18n="editor.content.othersections"></h3>
                 <div class="tpe-toolset-content">

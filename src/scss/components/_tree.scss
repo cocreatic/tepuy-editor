@@ -113,3 +113,13 @@
   background-color: #f8f8f8;
   color: Blue;
 }
+
+li[data-root].jstree-node {
+  & > i.jstree-icon.jstree-ocl {
+    display:none;
+  }
+
+  .jstree-icon:empty {
+    width: 16px;
+  }
+}
