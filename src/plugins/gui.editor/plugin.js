@@ -4,6 +4,7 @@ import { Dco, Page } from '../../js/dco';
 import { TemplateManager } from './templateManager';
 import { TreeItemEditor } from './treeItemEditor';
 import moment from 'moment';
+import { resources } from '../storage.local/resources';
 
 const templateMap = {
     sidebar: 'script#gui-editor-sidebar',
@@ -36,6 +37,7 @@ export class GuiEditor {
         });
 
         this.activateTab(App.ui.$sidebar.find('li[data-tab-id="tab-1"]'));
+        $( "#tpe-modal-create-folder" ).hide();
     }
 
     activateTab(tab, oldTab) {
@@ -215,9 +217,41 @@ export class GuiEditor {
     }
 
     resourcenewfolder() {
-        this.notimplemented();
+        //this.createFolder();
+        
+        var pahtFolder  =this.contentModel.resourcesPath;
+        var date  = new Date();
+        var createDate = (date.getFullYear()) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
+        var resource = $.observable(this.contentModel.resources);
+
+
+         $( "#tpe-modal-create-folder" ).dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+            "Crear": function() {            
+                    var newFolder = 
+                    { 
+                        id: $('#name_folder').val(),                       
+                        name: $('#name_folder').val(),
+                        type: "D",
+                        path: pahtFolder,
+                        createdAt: createDate,
+                        isDro: false,
+                        extension: '',
+                        thumbnail: ''
+                    };
+                    console.log(newFolder);
+                    resource.insert(newFolder);
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
     }
 
+    
     getNodeWithPath(path, root) {
         if (path == root.id) {
             return root;
