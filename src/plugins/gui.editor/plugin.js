@@ -1,7 +1,8 @@
 import { App } from '../../js/app';
 
 import { TemplateManager } from './templateManager';
-import { TreeItemEditor } from './treeItemEditor';
+import { ContentTreeManager } from './contentTreeManager';
+
 import moment from 'moment';
 
 const templateMap = {
@@ -92,25 +93,24 @@ export class GuiEditor {
 
     loadContentTab() {
         if (!this.sidebarModel.content){
-            const oTree = App.data.dco.objectTree();
-            let tree = { children: [], expanded: true, root: true };
-            for(var page of oTree.pages) {
-                var node = {id: page.id, title: page.title, children: [], type: 'page', parent: tree };
-                tree.children.push(node);
-                if (page.sections && page.sections.length) {
-                    node.children = page.sections.map(section => { return {id: section.id, title: section.title, type: 'section', parent: node }});
-                }
-            }
+            this.initializeContentTreeManager();
             let extras = App.data.dco.extras().slice(0);
             $.observable(this.sidebarModel).setProperty('content', {
-                tree: tree,
-                extras: extras,
-                treeCommand: this.onTreeCommand.bind(this)
+                extras: extras
             });
             setTimeout(() => App.ui.$sidebar.localize(), 100);
         }
         $.observable(this.contentModel).setProperty('template', ['#gui-editor-', CONTENT_TAB, '-content', App.ui.responsive ? '-responsive': ''].join(''));
         this.renderFirst();
+    }
+
+    initializeContentTreeManager() {
+        this.contentTreeManager = new ContentTreeManager(this.contentTreeActionHandler.bind(this));
+        $.observable(this.sidebarModel).setProperty(this.contentTreeManager.getConfig());
+    }
+
+    contentTreeActionHandler(result) {
+        this.render();
     }
 
     loadResourceTab() {
@@ -318,7 +318,7 @@ export class GuiEditor {
         const titleText = config.name + ' - ' + App.i18n.t('dco.propertiesTitle');
         let manager = new App.ui.components.FormManager({formConfig, titleText});
         setTimeout(() => {
-            manager.openDialog().then(updatedProperties => {
+            manager.openDialog({ width: '60vw'}).then(updatedProperties => {
                 let properties = Object.assign({}, updatedProperties[0]);
                 properties = Object.assign(properties, updatedProperties[1]);
                 this.dco.update(properties);
@@ -355,16 +355,6 @@ export class GuiEditor {
 
     notimplemented(){
         alert('Esta opción aún no se ha implementado');
-    }
-
-    onTreeCommand(data, action, target) {
-        let node = $(target).closest('.tpe-tree-node');
-
-        let editor = new TreeItemEditor(action, data, target);
-        return editor.run().then(result => {
-            this.render();
-            return result;
-        });
     }
 
     renderFirst() {

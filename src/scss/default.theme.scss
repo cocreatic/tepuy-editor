@@ -91,19 +91,19 @@ $xl-screen: 1140px;
     --tpe-widget-overlay-opacity: .003;
     --tpe-second-priority-opacity: .7;
     /* Icons */
-    --tpe-icon-content-sprite: url("images/ui-icons_ffffff_256x240.png");
+    --tpe-icon-content-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
     --tpe-icon-content-filter: brightness(0.267); //hue-rotate(0deg);
-    --tpe-icon-header-sprite: url("images/ui-icons_ffffff_256x240.png");
+    --tpe-icon-header-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
     --tpe-icon-header-filter: brightness(0.267);
-    --tpe-icon-hover-sprite: url("images/ui-icons_ffffff_256x240.png");
+    --tpe-icon-hover-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
     --tpe-icon-hover-filter: brightness(0.333);
-    --tpe-icon-active-sprite: url("images/ui-icons_ffffff_256x240.png");
+    --tpe-icon-active-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
     --tpe-icon-active-filter: none;
-    --tpe-icon-selected-sprite: url("images/ui-icons_777620_256x240.png");
+    --tpe-icon-selected-sprite: url("vendor/assets/jquery-ui/images/ui-icons_777620_256x240.png");
     --tpe-icon-selected-filter: hue-rotate(59deg) saturate(58%) brightness(0.267);
-    --tpe-icon-error-sprite: url("images/ui-icons_cc0000_256x240.png");
+    --tpe-icon-error-sprite: url("vendor/assets/jquery-ui/images/ui-icons_cc0000_256x240.png");
     --tpe-icon-error-filter: hue-rotate(59deg) saturate(58%) brightness(0.267);
-    --tpe-icon-button-sprite: url("images/ui-icons_ffffff_256x240.png");
+    --tpe-icon-button-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
     --tpe-icon-button-filter: brightness(0.467);
 }
 

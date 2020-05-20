@@ -23,6 +23,8 @@ export class GuiTemplateChooser {
         contentTpl.link(App.ui.$content, this);
         sidebarTpl.link(App.ui.$sidebar, this);
         App.$container.localize();
+
+        this.openForEdition(App.storage.getObjects({})[0]);
     }
 
     activateTab(tab, oldTab) {
@@ -112,7 +114,7 @@ export class GuiTemplateChooser {
         });
         const titleText = 'dco.newTitle';
         let manager = new App.ui.components.FormManager({formConfig, titleText});
-        manager.openDialog().then(this.createNewObject.bind(this)).catch((err) => {
+        manager.openDialog({ width: '60vw' }).then(this.createNewObject.bind(this)).catch((err) => {
             console.log(err);
         });
     }

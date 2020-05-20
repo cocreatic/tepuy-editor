@@ -30,24 +30,24 @@ export class FormManager {
         return this.formConfig.value;
     }
 
-    openDialog() {
+    openDialog(options) {
         const priv = _(this);
         priv.template = $.templates(this.template);
-        const dlg = new Dialog({
-            width: '60vw',
-            maxWidth: 650,
+        const dlg = new Dialog(Object.assign({
             title: App.i18n.t(this.titleText),
             centerOnContent: true
-        });
+        }, options));
+        dlg.setButtons([
+            { text: App.i18n.t(this.acceptText), callback: this.submit.bind(this) },
+            { text: App.i18n.t(this.cancelText), callback: this.cancel.bind(this) }
+        ]);
+        dlg.create();
+
         priv.template.link(dlg.host, this, {
             byColumn: filterByColumn
         });
         dlg.host.localize();
         priv.dialog = dlg;
-        dlg.setButtons([
-            { text: App.i18n.t(this.acceptText), callback: this.submit.bind(this) },
-            { text: App.i18n.t(this.cancelText), callback: this.cancel.bind(this) }
-        ]);
         
         return new Promise((resolve, reject) => {
             priv.resolve = resolve;
@@ -91,6 +91,12 @@ export class AbstractControl {
             settings: settings
         });
 
+        if (settings && settings.depends) {
+            this.visible = this.visible.bind(this);
+            this.visible.depends = Array.isArray(settings.depends) ?
+                settings.depends.map(dep => ['parent.value.', dep].join('')) : 
+                [['parent.value.', settings.depends].join('')];
+        }
         $.observe(this, 'value', () => this.updateValidity());
     }
 
@@ -124,6 +130,15 @@ export class AbstractControl {
 
     get settings() {
         return _(this).settings || {};
+    }
+
+    visible() {
+        const visible = this.settings.visible;
+        if (visible === false) return false;
+        if (typeof visible === 'function') {
+            return visible();
+        }
+        return true;
     }
 
     is(status) {
@@ -198,9 +213,6 @@ export class FormControl extends AbstractControl {
     constructor(template, settings) {
         super(template, settings);
         this.value = getSafe(settings, 'value', null);
-        $.observe(this, 'value', () => {
-            this.updateValidity()
-        });
     }
 
     _allControlsDisabled() {
@@ -218,7 +230,6 @@ export class FormGroup extends AbstractControl {
         _(this).controls = controls;
         Object.keys(controls).forEach(key => {
             controls[key].setParent(this);
-            //$.observe(controls[key], 'value', () => this.updateValue())
         });
         this.updateValue();
     }
@@ -232,7 +243,6 @@ export class FormGroup extends AbstractControl {
         if (priv.controls[name]) return priv.controls[name];
         priv.controls[name] = control;
         control.setParent(this);
-        //$.observe(control, 'value', () => this.updateValue())
     }
 
     addControl(name, control) {
@@ -268,10 +278,16 @@ export class FormGroup extends AbstractControl {
     updateValue() {
         let priv = _(this);
         let val = {};
+
         Object.keys(priv.controls).forEach(name => {
             val[name] = Array.isArray(priv.controls[name].value) ? priv.controls[name].value.slice(0) : priv.controls[name].value;
+            if (this.value && this.value[name] != val[name]) {
+                $.observable(this.value).setProperty(name, val[name]);
+            }
         });
-        $.observable(this).setProperty('value', val);
+        if (!this.value && val) {
+            $.observable(this).setProperty('value', val);
+        }
         this.updateValidity();
     }
 

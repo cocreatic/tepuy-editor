@@ -31,14 +31,15 @@ const vendorjs = [
     'node_modules/jquery-ui-dist/jquery-ui.min.js',
     'node_modules/jsviews/jsviews.min.js',
     'vendor/js/jsviews-jqueryui-widgets.min.js',
-    'node_modules/i18next/i18next.min.js'
+    'node_modules/i18next/i18next.min.js',
+    'vendor/js/jstree.js'
 ];
 
 const vendorcss = [
     'node_modules/jquery-ui-dist/jquery-ui.min.css',
     //'node_modules/jquery-ui-dist/jquery-ui.theme.min.css',
     //'node_modules/@fortawesome/fontawesome-free/css/solid.min.css',
-    './vendor/css/*.css'
+    './vendor/css/**/*.css'
 ];
 
 function getFolders(dir) {
@@ -59,13 +60,21 @@ function getFiles(dir) {
 
 function joinVendorCss() {
     return gulp.src(vendorcss)
-        .pipe(concatcss("vendor.min.css"))
+        .pipe(concatcss("vendor.min.css", { rebaseUrls: false }))
         .pipe(gulp.dest(destFolder))
 }
 
-function copyVendorAssets() {
-    return gulp.src(['node_modules/jquery-ui-dist/images/*'])
-        .pipe(gulp.dest(destFolder + '/images'));
+function copyVendorAssets(done) {
+    const jqueryui = () => gulp.src(['node_modules/jquery-ui-dist/images/*'])
+        .pipe(gulp.dest(destFolder + '/vendor/assets/jquery-ui/images'));
+
+    const jstree = () => gulp.src(['./vendor/assets/**/*'])
+        .pipe(gulp.dest(destFolder + '/vendor/assets/'));
+
+    return gulp.parallel(jqueryui, jstree, (subdone) => {
+        subdone();
+        done();
+    })();
 }
 
 function copyThemesAssets() {
@@ -127,7 +136,11 @@ gulp.task("vendorjs", function() {
         .pipe(gulp.dest(destFolder))
 });
 
-gulp.task("vendorcss", gulp.parallel(joinVendorCss, copyVendorAssets, copyIcons));
+gulp.task("vendorassets", copyVendorAssets);
+
+gulp.task("vendorcss", gulp.parallel(joinVendorCss, 'vendorassets', copyIcons));
+
+
 
 
 function rollupBuildTask(config) {

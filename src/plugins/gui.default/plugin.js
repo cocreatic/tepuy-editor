@@ -1,6 +1,8 @@
 import { App } from '../../js/app';
 
 import { helpers, converters, tree, shareList, imageInput, icon } from './helpers';
+import { jstree } from './tags/jstree';
+
 import { FormManager, FormBuilder, FormArray, FormControl, FormGroup } from './components/formManager';
 import { Dialog } from './components/dialog';
 import { Validators } from './components/validators';
@@ -19,7 +21,7 @@ export class GuiDefault {
 
     initialize() {
         $.views.helpers(helpers);
-        $.views.tags({ editableTree: tree, shareList, imageInput, icon });
+        $.views.tags({ editableTree: tree, shareList, imageInput, icon, jstree });
         $.views.converters(converters);
         this.initializeGuiApi();
         App.invokeHook('gui_menu_initialize');

@@ -64,7 +64,7 @@
     margin: .5em 0;
     
     & > label {
-        flex: 1 0 120px;
+        flex: 0 0 220px;
         max-width: 220px;
         margin: .2em 0;
         align-self: flex-start;
@@ -93,8 +93,16 @@
         padding: .2em;
     }
 
+    .tpe-optionlist-wrapper {
+        padding: 0 .2em;
+        border: solid 2px transparent;
+        border-top: 0;
+        border-bottom: 0;
+    }
+
     .ui-selectmenu-button.ui-widget {
-        margin: .2em 0;
+        margin: 0;
+        margin-left: calc(-.2em + -2px);
     }
 
     [readonly] {
@@ -114,6 +122,10 @@
             flex: 0 0 100px;
         }
     }
+}
+
+.tpe-optionlist-wrapper {
+    
 }
 
 .tpe-form-imageinput {

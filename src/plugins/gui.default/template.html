@@ -20,7 +20,7 @@
       </ul>
   </header>
   <section>
-      <div id="tpe-sidebar" class="tpe-sidebar"></div>
+      <div id="tpe-sidebar" class="tpe-sidebar" data-link="{resizable _minWidth=200 _handles='e'}"></div>
       <div id="tpe-content-wrapper" class="tpe-content-wrapper">
         <div id="tpe-content" class="tpe-content"></div>
       </div>
@@ -164,17 +164,21 @@
 
 
 <script id="gui-default-form-text" type="text/x-template">
+  {^{if visible()}}
   <div class="tpe-form-control" data-link="class{merge:settings.small toggle='text-small'}">
       <label data-link="data-i18n{:label}"></label>
-      <input type="text" data-link="value" />
+      <input type="text" data-link="{:value:} readonly{:settings.readonly} maxlength{:settings.maxLength}" />
   </div>
+  {{/if}}
 </script>
 
 <script id="gui-default-form-boolean" type="text/x-template">
+  {^{if visible()}}
   <div class="tpe-form-control">
       <label data-link="data-i18n{:label}" for="checkbox1"></label>
       <input type="checkbox" data-link="value" name="checkbox1" />
   </div>
+  {{/if}}
 </script>
 
 <script id="gui-default-form-yesornot" type="text/x-template">
@@ -201,14 +205,18 @@
 </script>
 
 <script id="gui-default-form-optionlist" type="text/x-template">
+  {^{if visible()}}
   <div class="tpe-form-control">
       <label data-link="data-i18n{:label}"></label>
-      <select class="tpe-optionlist" data-link="{selectmenu value _appendTo='.tpe-form-container'}">
-        {^{for settings.options}}
-          <option value="{{:value}}">{{:~translate(label)}}</option>
-        {{/for}}
+      <div class="tpe-optionlist-wrapper">
+        <select class="tpe-optionlist" data-link="{selectmenu value}">
+          {^{for settings.options}}
+            <option value="{{:value}}">{{:~translate(label)}}</option>
+          {{/for}}
+        </div>
       </div>
   </div>
+  {{/if}}
 </script>
 
 <script id="gui-default-form-sharelist" type="text/x-template">

@@ -82,6 +82,14 @@ export class Dco {
         this.tree.pages.splice(toIndex, 0, oPage);
     }
 
+    deletePage(id) {
+        let index = this.tree.pages.findIndex(p => p.id == id);
+        if (index >= 0) {
+            this.tree.pages.splice(index, 1);
+        }
+        return Promise.resolve(true);
+    }
+
     addExtra(item) {
         this.tree.extras.push(item);
     }
