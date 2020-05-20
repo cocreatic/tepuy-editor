@@ -76,24 +76,28 @@
     "start": "Al principio",
     "end": "Al final"
   },
-  "editPage": {
+  "page": {
     "editTitle": "Editar página",
     "newTitle": "Agregar página",
     "title": "Titulo",
     "id": "Id #",
-    "append": "Agregar"
+    "append": "Agregar",
+    "deleteTitle": "Eliminar página",
+    "deleteConfirmation": "¿Está seguro de eliminar la página <i>{{page}}</i>? No se podrá recuperar luego la información que contiene."
   },
-  "editSection": {
+  "section": {
     "editTitle": "Editar sección",
     "newTitle": "Agregar sección",
     "title": "Titulo",
     "id": "Id #",
-    "append": "Agregar"
+    "append": "Agregar",
+    "deleteTitle": "Eliminar sección",
+    "deleteConfirmation": "¿Está seguro de eliminar la sección <i>{{section}}</i>? No se podrá recuperar luego la información que contiene."
   },
   "commands": {
     "add": "Agregar",
     "cancel": "Cancelar",
-    "edit": "Actualizar",
+    "edit": "Editar",
     "addComponent": "Agregar componente",
     "uploadFile": "Subir archivo",
     "newFolder": "Nueva carpeta",
@@ -168,5 +172,10 @@
   "device": {
     "iphone": "",
     "android": ""
+  },
+  "editPage": {
+    "id": "",
+    "title": "",
+    "append": ""
   }
 }

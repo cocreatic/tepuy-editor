@@ -16,14 +16,13 @@ export const jstree = {
       presetsHash = {};
 
     const plugins = [];
-
     const config = tagCtx.props.config || {};
 
     if (config.core) {
       presetsHash.core = config.core;
     }
 
-    if (config.wholerow) {
+    if (config.wholerow || config.toolbar) {
       plugins.push('wholerow');
     }
 
@@ -69,6 +68,49 @@ export const jstree = {
     // Instantiate widget
     mainElem[widgetName](presetsHash);
 
+
+    // Register toolbar
+    if (config.toolbar) {
+      const template = $.templates('<div class="tpe-jstree-node-toolbar">' +
+        '{{props items}}' +
+        '<span data-action="{{:prop.id}}"><i class="{{:prop.icon}}" style="pointer-events:none"></i></span>' +
+        '{{/props}}' +
+        '</div>');
+
+      mainElem.on('hover_node.jstree', function(ev, data) {
+        const node = data.node;
+        const $nodeEl = mainElem.find('.jstree-node[id='+node.id+']');
+        const $anchor = $nodeEl.find('.jstree-anchor');
+
+        if ($nodeEl.is('.tpe-toolbar-active')) return;
+
+        $nodeEl.addClass('tpe-toolbar-active');
+        const items = config.toolbar.items(node);
+        const pos = $anchor.position();
+        const height = $anchor.outerHeight();
+        
+        $(template({items})).appendTo($nodeEl).on('click', '[data-action]', function(ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          const action = $(this).data().action;
+          const menu = items[action];
+          menu && menu.action({
+            item: menu,
+            reference: node,
+            element: this,
+          });
+        })
+        .css({top: pos.top, height: height});
+        return;
+      });
+
+      mainElem.on('dehover_node.jstree', function(ev, data) {
+        const $nodeEl = mainElem.find('.jstree-node[id='+data.node.id+']');
+        $nodeEl.removeClass('tpe-toolbar-active')
+          .find('.tpe-jstree-node-toolbar').remove();
+      });
+    }
+
     //Register event handlers
     if (config.events) {
       for(const event in config.events) {
@@ -94,44 +136,8 @@ export const jstree = {
       // Widget failed to load, or is not a valid widget factory type
       throw "widget '" + widgetName + "' failed";
     }
-
-//    if (options) {
-//      if ($.isFunction(options)) {
-//        options = tag.options();
-//      }
-//      mainElem[widgetName]("option", options); // initialize options
-//    }
   },
-  onAfterLink: function(tagCtx) { /*
-    var mainElem,
-      tag = this,
-      options = tag.options, // hash (or function returning hash) of option settings
-      props = tagCtx.props,
-      widgetName = tag.widgetName.split("-").pop();
-    if ($.isFunction(options)) {
-      options = tag.options();
-    }
-    mainElem = tag.mainElem;
-    $.each(props, function(key, prop) {
-      var option;
-      if (key.charAt(0) === "_") {
-        key = key.slice(1);
-        option = options && options[key];
-        if (mainElem[widgetName]("option", key) != prop) { // != so undefined and null are considered equivalent
-          mainElem[widgetName]("option", key,
-            option && $.isFunction(option) && prop && $.isFunction(prop)
-              ? function() {
-                // If the same event function option is overridden on the tagDef options
-                // (or in a _create override) and the tagCtx.props, call first the one on
-                // the tagDef options, and then the one declared on the tag properties.
-                option.apply(mainElem[0], arguments);
-                return prop.apply(mainElem[0], arguments);
-              }
-              : prop
-            );
-        }
-      }
-    });*/
+  onAfterLink: function(tagCtx) {
   },
   onUpdate: false, // Don't rerender whole tag on update
   dataBoundOnly: true,

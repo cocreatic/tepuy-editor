@@ -122,4 +122,18 @@ li[data-root].jstree-node {
   .jstree-icon:empty {
     width: 16px;
   }
+
+  .jstree-node.tpe-toolbar-active {
+    /*position: relative;*/
+  }
+  .tpe-jstree-node-toolbar {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0;
+
+    [data-action] {
+      padding: 0 4px;
+    }
+  }
 }

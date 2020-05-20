@@ -11,6 +11,7 @@ export class Dialog {
             this.orphan = true;
         }
         privateMap.set(this, {
+            buttons: settings.buttons,
             settings
         });
     }
@@ -40,7 +41,7 @@ export class Dialog {
         options.title = title;
 
         if(!buttons) {
-            buttons = [ Dialog.acceptButton ];
+            buttons = [ Dialog.acceptButton() ];
         }
 
         options.buttons = {};
@@ -77,11 +78,34 @@ export class Dialog {
         this.$dlg = null;
     }
 
-    static closeButton(callback=null) {
-        return {text: App.i18n.t('commands.accept'), callback: callback || this.close.bind(this, true)};
+    static confirm(question, title) {
+        return new Promise((resolve, reject) => {
+            const dlg = new Dialog({
+                title: title,
+                buttons: [
+                    {
+                        text: App.i18n.t('general.yes'),
+                        callback: () => {
+                            dlg.close(true);
+                            resolve(true);
+                        }
+                    },
+                    Dialog.closeButton(() => {
+                        dlg.close(true);
+                        resolve(false)
+                    })
+                ]
+            });
+            $(dlg.host).html('<p>'+question+'</p>');
+            dlg.showModal();
+        });
     }
 
     static acceptButton(callback=null) {
+        return {text: App.i18n.t('commands.accept'), callback: callback || this.close.bind(this, true)};
+    }
+
+    static closeButton(callback=null) {
         return {text: App.i18n.t('commands.cancel'), callback: callback || this.close.bind(this, true)};
     }
 }

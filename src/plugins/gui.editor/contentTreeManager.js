@@ -31,11 +31,11 @@ export class ContentTreeManager {
         }
 
         const jtData = [tree];
-        const jtPlugins = ["dnd", "contextmenu", "wholerow", "types"];
         const core = {
             check_callback: (op, node, parent, position, more) => {
                 return true;
-            }
+            },
+            multiple: false
         };
         const types = {
             "root": {
@@ -57,7 +57,7 @@ export class ContentTreeManager {
                 const type = node.type;
                 const actions = {};
                 if (type != 'section') {
-                    const addLabel = node.type == 'root' ? 'editPage.newTitle' : 'editSection.newTitle';
+                    const addLabel = node.type == 'root' ? 'page.newTitle' : 'section.newTitle';
                     actions.add = {
                         id: 'add',
                         label: App.i18n.t(addLabel),
@@ -66,17 +66,27 @@ export class ContentTreeManager {
                     }
                 }
                 if (type != 'root') {
-                    const editLabel = node.type == 'page' ? 'editPage.editTitle' : 'editSection.editTitle';
+                    const editLabel = node.type + '.editTitle';
                     actions.edit = {
                         id: 'edit',
-                        label: App.i18n.t(editLabel),
+                        label: App.i18n.t('commands.edit'),
                         action: this.jtContextMenuHandler.bind(this, node),
                         icon: 'fas fa-pen'
+                    }
+                    actions.delete = {
+                        id: 'delete',
+                        label: App.i18n.t('commands.delete'),
+                        action: this.jtContextMenuHandler.bind(this, node),
+                        icon: 'fas fa-trash-alt'
                     }
                 }
                 return actions;
             }
         }
+
+        const toolbar = {
+            items: contextmenu.items
+        };
 
         const dnd = {
             handler: () => {}
@@ -89,7 +99,7 @@ export class ContentTreeManager {
             }
         };
 
-        const jtConfig = { core, types, contextmenu, dnd, wholerow: true, events };
+        const jtConfig = { core, types, contextmenu, dnd, events, toolbar };
         return { jtData, jtConfig };
         //$.observable(this.sidebarModel).setProperty();
     }
@@ -140,12 +150,12 @@ export class ContentTreeManager {
         if (data.type == 'page') {
             model.id = 'section_' + Date.now();
             model.accept = this.acceptSection.bind(this);
-            model.label = 'editSection';
+            model.label = 'section';
         }
         else {
             model.id = 'page_' + Date.now();
             model.accept = this.acceptPage.bind(this);
-            model.label = 'editPage';
+            model.label = 'page';
         }
         model.acceptText = 'commands.add';
         this.editItem(model, data.children);
@@ -162,7 +172,6 @@ export class ContentTreeManager {
             model.id = page.id;
             model.title = page.title;
             model.accept = this.acceptPage.bind(this);
-            model.label = 'editPage';
         }
         else {
             const page = App.data.dco.getPage(data.parent);
@@ -170,14 +179,34 @@ export class ContentTreeManager {
             model.id = section.id;
             model.title = section.title;
             model.accept = this.acceptSection.bind(this);
-            model.label = 'editSection';
         }
-
+        model.label = data.type;
         model.appendAt = index == 0 ? 'first' : 'after';
         model.refPos = index == 0 ? 0 : --index;
-        model.acceptText = 'commands.edit';
+        model.acceptText = 'commands.update';
 
         this.editItem(model, parent.children);
+    }
+
+    delete() {
+        const data = this.node;
+
+        if (data.type != 'page' && data.type != 'section') return; //Not page or section? do nothing
+        const text = data.type + '.deleteConfirmation';
+        const question = App.i18n.t(text, { [data.type]: data.text }, {interpolation: {escapeValue: false}});
+        const title = App.i18n.t(data.type + '.deleteTitle');
+
+        App.ui.components.Dialog.confirm(question, title).then(result => {
+            if (result) {
+                App.data.dco.deletePage(data.id).then(result => {
+                    if (!result) {
+                        //ToDo: report the error
+                        return;
+                    }
+                    this.tree.delete_node(data);
+                })
+            }
+        });
     }
 
     editItem(model, children) {
@@ -388,12 +417,4 @@ export class ContentTreeManager {
         $.observable(parent.children).remove(index);
         resolve({action: 'remove', item: data});
     }
-
-    getTemplate(templateName) {
-        if (!$.templates[templateName]) {
-            $.templates({[templateName]: templateMap[templateName]});
-        }
-        return $.templates[templateName];
-    }
-
 }
