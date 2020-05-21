@@ -177,5 +177,8 @@
     "id": "",
     "title": "",
     "append": ""
+  },
+  "newFolder": {
+    "textFolder": "Crear nueva carpeta"
   }
 }

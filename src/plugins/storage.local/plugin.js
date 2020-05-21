@@ -92,9 +92,11 @@ export class StorageLocal {
     }
 
     addResource(res) {
+
     }
 
     deleteResource(res) {
+        
     }
 
     share(dco) {

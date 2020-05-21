@@ -4,6 +4,7 @@ import { TemplateManager } from './templateManager';
 import { ContentTreeManager } from './contentTreeManager';
 
 import moment from 'moment';
+import { resources } from '../storage.local/resources';
 
 const templateMap = {
     sidebar: 'script#gui-editor-sidebar',
@@ -46,6 +47,7 @@ export class GuiEditor {
         });
 
         this.activateTab(App.ui.$sidebar.find('li[data-tab-id="tab-1"]'));
+        $( "#tpe-modal-create-folder" ).hide();
     }
 
     activateTab(tab, oldTab) {
@@ -130,7 +132,7 @@ export class GuiEditor {
                 let tree = { children: [], expanded: true, root: true, id: '/' };
                 $.observable(this.sidebarModel).setProperty('resources', {
                     tree: tree,
-                    treeCommand: this.onTreeCommand.bind(this),
+                    //treeCommand: this.onTreeCommand.bind(this),
                     onAction: this.onResourceAction.bind(this)
                 });
             }
@@ -231,17 +233,48 @@ export class GuiEditor {
     }
 
     resourcenewfolder() {
-        const now = new Date();
-        this.dco.addResource({
-            name: 'Folder ' + now.getTime(),
-            type: 'D',
-            createdAt: moment(now).format('YYYY-MM-DD HH:mm')
-        }, this.contentModel.resourcesPath).then(res => {
-            this.loadResources(this.contentModel.resourcesPath);
-        });
+//        const now = new Date();
+//        this.dco.addResource({
+//            name: 'Folder ' + now.getTime(),
+//            type: 'D',
+//            createdAt: moment(now).format('YYYY-MM-DD HH:mm')
+//        }, this.contentModel.resourcesPath).then(res => {
+//            this.loadResources(this.contentModel.resourcesPath);
+//        });
 
+        var pahtFolder  =this.contentModel.resourcesPath;
+        var date  = new Date();
+        var createDate = (date.getFullYear()) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
+        var resource = $.observable(this.contentModel.resources);
+
+
+         $( "#tpe-modal-create-folder" ).dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+            "Crear": function() {            
+                    var newFolder = 
+                    { 
+                        id: $('#name_folder').val(),                       
+                        name: $('#name_folder').val(),
+                        type: "D",
+                        path: pahtFolder,
+                        createdAt: createDate,
+                        isDro: false,
+                        extension: '',
+                        thumbnail: ''
+                    };
+                    console.log(newFolder);
+                    resource.insert(newFolder);
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
     }
 
+    
     getNodeWithPath(path, root) {
         if (path == root.id) {
             return root;
