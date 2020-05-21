@@ -35,7 +35,10 @@ export class ContentTreeManager {
             check_callback: (op, node, parent, position, more) => {
                 return true;
             },
-            multiple: false
+            multiple: false,
+            themes: {
+                ellipsis: true
+            }
         };
         const types = {
             "root": {

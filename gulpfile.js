@@ -36,7 +36,7 @@ const vendorjs = [
 ];
 
 const vendorcss = [
-    'node_modules/jquery-ui-dist/jquery-ui.min.css',
+    //'node_modules/jquery-ui-dist/jquery-ui.min.css',
     //'node_modules/jquery-ui-dist/jquery-ui.theme.min.css',
     //'node_modules/@fortawesome/fontawesome-free/css/solid.min.css',
     './vendor/css/**/*.css'

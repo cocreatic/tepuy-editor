@@ -120,7 +120,10 @@ export class ResourceTreeManager {
             check_callback: (op, node, parent, position, more) => {
                 return true;
             },
-            multiple: false
+            multiple: false,
+            themes: {
+                ellipsis: true
+            }
         };
         const valid_children = ['folder', 'file'];
         const types = {
