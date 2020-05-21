@@ -94,6 +94,7 @@ export class ContentTreeManager {
 
         const events = {
             'move_node.jstree': this.jtNodeMoved.bind(this),
+            'select_node.jstree': this.jtNodeSelected.bind(this),
             'loaded.jstree': (ev, data) => {
                 this.tree = data.instance;
             }
@@ -129,6 +130,11 @@ export class ContentTreeManager {
                 newPage.addSection(section, data.position);
             }
         }
+    }
+
+    jtNodeSelected(ev, data) {
+        console.log(ev);
+        console.log(data);
     }
 
     runAction(action, node, target) {
@@ -223,15 +229,18 @@ export class ContentTreeManager {
 
         const title = labelPrefix + (model.isNew ? '.newTitle' : '.editTitle');
 
-        const references = children.map((item, index) => { 
-            const node = this.tree.get_node(item);
-            return { value: index, label: node.text };
-        });
+        const references = children.reduce((result, item, index) => {
+            if (item != model.id) {
+                const node = this.tree.get_node(item);
+                result.push({ value: index, label: node.text })
+            }
+            return result;
+        }, []);
 
         const controls = {
             id: ['text', model.id, { label: labelPrefix+'.id', readonly: true }],
             isNew: ['boolean', model.isNew, { visible: false }],
-            title: ['text', model.title, { label: labelPrefix+'.title', validators: [validators.required, validators.maxLength(256) ], maxLength: 256 }],
+            title: ['text', model.title, { label: labelPrefix+'.title', validators: [validators.required, validators.maxLength(256) ], maxLength: 256, default: true }],
         };
 
         if (references && references.length) {

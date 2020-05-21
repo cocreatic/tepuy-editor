@@ -38,8 +38,8 @@ export class FormManager {
             centerOnContent: true
         }, options));
         dlg.setButtons([
-            { text: App.i18n.t(this.acceptText), callback: this.submit.bind(this) },
-            { text: App.i18n.t(this.cancelText), callback: this.cancel.bind(this) }
+            { text: App.i18n.t(this.acceptText), click: this.submit.bind(this), 'data-default': true },
+            { text: App.i18n.t(this.cancelText), click: this.cancel.bind(this) }
         ]);
         dlg.create();
 

@@ -167,7 +167,12 @@
   {^{if visible()}}
   <div class="tpe-form-control" data-link="class{merge:settings.small toggle='text-small'}">
       <label data-link="data-i18n{:label}"></label>
-      <input type="text" data-link="{:value:} readonly{:settings.readonly} maxlength{:settings.maxLength}" />
+      <input type="text" data-link="
+        {:value:}
+        readonly{:settings.readonly}
+        maxlength{:settings.maxLength}
+        autofocus{:settings.default||null}
+      "/>
   </div>
   {{/if}}
 </script>

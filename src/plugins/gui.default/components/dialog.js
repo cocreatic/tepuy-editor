@@ -44,11 +44,7 @@ export class Dialog {
             buttons = [ Dialog.acceptButton() ];
         }
 
-        options.buttons = {};
-        const noop = () => {};
-        for(const button of buttons) {
-            options.buttons[button.text] = button.callback || noop;
-        }
+        options.buttons = buttons.slice(0);
 
         if (!(settings.centerOnContent === false)) {
             options.position = {
@@ -58,6 +54,17 @@ export class Dialog {
             };
         }
         this.$dlg = $(this.host).dialog(options);
+
+        this.clickDefaultOnEnter();
+    }
+
+    clickDefaultOnEnter() {
+        this.$dlg.keydown(function (event) {
+            if (event.keyCode == $.ui.keyCode.ENTER) {
+                $(this).parent().find("[data-default]").trigger("click");
+                return false;
+            }
+        });
     }
 
     showModal() {
@@ -85,7 +92,7 @@ export class Dialog {
                 buttons: [
                     {
                         text: App.i18n.t('general.yes'),
-                        callback: () => {
+                        click: () => {
                             dlg.close(true);
                             resolve(true);
                         }
@@ -102,10 +109,10 @@ export class Dialog {
     }
 
     static acceptButton(callback=null) {
-        return {text: App.i18n.t('commands.accept'), callback: callback || this.close.bind(this, true)};
+        return {text: App.i18n.t('commands.accept'), click: callback || this.close.bind(this, true), 'data-default': true };
     }
 
     static closeButton(callback=null) {
-        return {text: App.i18n.t('commands.cancel'), callback: callback || this.close.bind(this, true)};
+        return {text: App.i18n.t('commands.cancel'), click: callback || this.close.bind(this, true)};
     }
 }
