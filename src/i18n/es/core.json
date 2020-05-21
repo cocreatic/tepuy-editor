@@ -105,11 +105,17 @@
     "continue": "Continuar",
     "open": "Abrir",
     "delete": "Eliminar",
-    "update": "Actualizar"
+    "update": "Actualizar",
+    "addFile": "",
+    "addFolder": ""
   },
   "resources": {
     "root": "Carpeta principal",
-    "dropzone": "Arrastrar archivos aquí"
+    "dropzone": "Arrastrar archivos aquí",
+    "addFile": "Agregar archivo",
+    "addFolder": "Nueva carpeta",
+    "rename": "Renombrar",
+    "delete": "Eliminar"
   },
   "dco": {
     "newTitle": "Nuevo objeto - Propiedades iniciales",

@@ -20,7 +20,9 @@
     "open": "",
     "delete": "",
     "update": "",
-    "edit": ""
+    "edit": "",
+    "addFile": "",
+    "addFolder": ""
   },
   "sidebar": {
     "content": "",
@@ -45,7 +47,11 @@
     "folders": "",
     "loads": "",
     "root": "",
-    "dropzone": ""
+    "dropzone": "",
+    "addFile": "",
+    "addFolder": "",
+    "rename": "",
+    "delete": ""
   },
   "editPage": {
     "id": "",

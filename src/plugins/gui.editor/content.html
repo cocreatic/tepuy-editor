@@ -35,13 +35,13 @@
 <script id="gui-editor-tab-3-content" type="text/x-template">
     <div class="resource-list">
         <div class="title">
-            {^{:resourcesPath}}
+            {^{:resourceManager.currentPath}}
         </div>
         <div class="container">
-            {^{for resources }}
+            {^{for resources ~resMgr=resourceManager}}
             <div class="resource thumbnail ui-state-default" data-link="
-            {on 'click' #parent.parent.data.resourceClick #data}
-            {on 'dblclick' #parent.parent.data.resourceDblClick #data}
+            {on 'click' ~resMgr.resourceClick #data}
+            {on 'dblclick' ~resMgr.resourceDblClick #data}
             ">
                 <div class="thumb">
                     {{if thumb}}
@@ -59,9 +59,9 @@
             {{/for}}
         </div>
         <div class="dropzone" data-link="
-        {on 'dragenter dragover' resourceDragEnter}
-        {on 'dragleave drop' resourceDragLeave}
-        {on 'drop' resourceDrop}
+        {on 'dragenter dragover' resourceManager.resourceDragEnter}
+        {on 'dragleave drop' resourceManager.resourceDragLeave}
+        {on 'drop' resourceManager.resourceDrop}
         ">
             {{:~translate('resources.dropzone')}}
         </div>

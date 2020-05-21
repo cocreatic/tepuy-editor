@@ -1,10 +1,10 @@
-import { App } from '../../js/app';
+import moment from 'moment';
 
+import { App } from '../../js/app';
 import { TemplateManager } from './templateManager';
 import { ContentTreeManager } from './contentTreeManager';
+import { ResourceTreeManager } from './resourceTreeManager';
 
-import moment from 'moment';
-import { resources } from '../storage.local/resources';
 
 const templateMap = {
     sidebar: 'script#gui-editor-sidebar',
@@ -95,10 +95,11 @@ export class GuiEditor {
 
     loadContentTab() {
         if (!this.sidebarModel.content){
-            this.initializeContentTreeManager();
+            const treeConfig = this.initializeContentTreeManager();
             let extras = App.data.dco.extras().slice(0);
             $.observable(this.sidebarModel).setProperty('content', {
-                extras: extras
+                extras: extras,
+                ...treeConfig
             });
             setTimeout(() => App.ui.$sidebar.localize(), 100);
         }
@@ -108,7 +109,7 @@ export class GuiEditor {
 
     initializeContentTreeManager() {
         this.contentTreeManager = new ContentTreeManager(this.contentTreeActionHandler.bind(this));
-        $.observable(this.sidebarModel).setProperty(this.contentTreeManager.getConfig());
+        return this.contentTreeManager.getConfig();
     }
 
     contentTreeActionHandler(result) {
@@ -117,15 +118,49 @@ export class GuiEditor {
 
     loadResourceTab() {
         if (!this.sidebarModel.resources) {
+            const treeConfig = this.initializeResourceTreeManager();
+            $.observable(this.sidebarModel).setProperty('resources', {
+                ...treeConfig,
+                onAction: this.resourceTreeManager.onSidebarAction
+            });
+
             if (!this.contentModel.resources){
-                this.loadResources('/');
+                this.loadResources();
             }
             setTimeout(() => App.ui.$sidebar.localize(), 100);
         }
         $.observable(this.contentModel).setProperty('template', ['#gui-editor-', RESOURCES_TAB, '-content'].join(''));
     }
 
-    loadResources(path){
+    initializeResourceTreeManager() {
+        this.resourceTreeManager = new ResourceTreeManager();
+        this.contentModel.resourceManager = this.resourceTreeManager;
+
+        $.observe(this.resourceTreeManager, 'currentPath', () => {
+            this.loadResources();
+        });
+        return this.resourceTreeManager.getConfig();
+    }
+
+    loadResources(){
+        this.resourceTreeManager.getResources().then(resources => {
+            $.observable(this.contentModel).setProperty({
+                resources: resources
+            });
+        })
+//        $.observable(this.contentModel).setProperty({
+//            "resourceClick": this.resourceTreeManager.resourceClick.bind(this),
+//            "resourceDblClick": this.resourceTreeManager.resourceDblClick.bind(this),
+//            "resourceDragEnter": this.resourceTreeManager.resourceDragEnter.bind(this),
+//            "resourceDragLeave": this.resourceTreeManager.resourceDragLeave.bind(this),
+//            "resourceDrop": this.resourceTreeManager.resourceDrop.bind(this)
+//        });
+//
+        //$.observable(this.contentModel).setProperty("resourcesPath", path);
+        //$.observable(parent.children).refresh(children);
+
+/*
+
         this.dco.getResources(path).then((resources) => {
             let children = [];
             if (!this.sidebarModel.resources) {
@@ -154,11 +189,7 @@ export class GuiEditor {
             $.observable(this.contentModel).setProperty("resourcesPath", path);
             $.observable(parent.children).refresh(children);
         });
-        $.observable(this.contentModel).setProperty("resourceClick", this.resourceClick.bind(this));
-        $.observable(this.contentModel).setProperty("resourceDblClick", this.resourceDblClick.bind(this));
-        $.observable(this.contentModel).setProperty("resourceDragEnter", this.resourceDragEnter.bind(this));
-        $.observable(this.contentModel).setProperty("resourceDragLeave", this.resourceDragLeave.bind(this));
-        $.observable(this.contentModel).setProperty("resourceDrop", this.resourceDrop.bind(this));
+        */
     }
 
     resourceClick(resource, ev, args) {
@@ -285,26 +316,6 @@ export class GuiEditor {
             }
         }
         return null;
-    }
-
-    getIcon(resource) {
-        if (resource.type == 'D') return 'folder';
-        if (/^(png|jpg|gif|jpeg|)$/.test(resource.extension)) {
-            return 'file-image';
-        }
-        if (/^(png|jpg|gif|jpeg|)$/.test(resource.extension)) {
-            return 'file-doc';
-        }
-        if (/^(mp3|wav)$/.test(resource.extension)) {
-            return 'file-audio';
-        }
-        if (/^(mp4|mpeg)$/.test(resource.extension)) {
-            return 'file-video';
-        }
-        if (/^(pdf)$/.test(resource.extension)) {
-            return 'file-pdf';
-        }
-        return 'file';
     }
 
     //Menu handlers

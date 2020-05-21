@@ -13,7 +13,7 @@
             <div class="tpe-toolset">
                 <h3 class="ui-widget-header" data-i18n="editor.content.objecttree"></h3>
                 <div class="tpe-toolset-content">
-                    {^{jstree jtData config=jtConfig /}}
+                    {^{jstree content.jtData config=content.jtConfig /}}
                 </div>
                 <h3 class="ui-widget-header" data-i18n="editor.content.othersections"></h3>
                 <div class="tpe-toolset-content">
@@ -33,14 +33,14 @@
             <div class="tpe-toolset">
                 <h3 class="ui-widget-header" data-i18n="editor.resources.folders"></h3>
                 <div class="tpe-toolset-content">
-                    {^{editableTree resources.tree ^editable=editable rootLabel=~translate('resources.root') /}}
+                    {^{jstree resources.jtData config=resources.jtConfig /}}
                 </div>
                 <h3 class="ui-widget-header" data-i18n="editor.resources.actions"></h3>
                 <div class="tpe-toolset-content centered" data-link="{on 'click' '.ui-button' resources.onAction}">
-                    <div class="ui-widget ui-button" data-action="upload">
+                    <div class="ui-widget ui-button" data-action="addFile">
                         <span data-i18n="commands.uploadFile">Subir Archivo</span>
                     </div>
-                    <div class="ui-widget ui-button" data-action="newfolder">
+                    <div class="ui-widget ui-button" data-action="addFolder">
                         <span data-i18n="commands.newFolder">Nueva carpeta</span>
                     </div>
                 </div>
