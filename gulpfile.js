@@ -156,7 +156,7 @@ function rollupBuildTask(config) {
             input: config.src,
             external: (id, from) => {
                 if (externals.indexOf(id) >= 0) return true;
-                if (/\/plugins\//.test(from) && /^\./.test(id)) {
+                if (/[\/\\]plugins[\/\\]/.test(from) && /^\./.test(id)) {
                     const fullpath = path.resolve(path.dirname(from), id);
                     return externals.indexOf(fullpath) >= 0;
                 }
