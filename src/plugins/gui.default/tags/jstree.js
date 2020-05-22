@@ -88,10 +88,9 @@ export const jstree = {
         const items = config.toolbar.items(node);
         const pos = $anchor.position();
         const height = $anchor.outerHeight();
-        const bg = $nodeEl.children('.jstree-wholerow').css('background');
-        //console.log($nodeEl.children('.jstree-wholerow').css('background'));
+        const awidth = $anchor.width()
         
-        $(template({items})).appendTo($nodeEl).on('click', '[data-action]', function(ev) {
+        const $toolbar = $(template({items})).appendTo($nodeEl).on('click', '[data-action]', function(ev) {
           ev.preventDefault();
           ev.stopPropagation();
           const action = $(this).data().action;
@@ -106,10 +105,12 @@ export const jstree = {
           const $anchor = $node.children('.jstree-anchor');
           if (!$anchor.is('.jstree-hovered')) {  //The toolbar can pass hover to an external node without dehover current node, if this is the case, remove the toolbar
             $nodeEl.removeClass('tpe-toolbar-active');
-              $(this).remove();
+            $(this).remove();
+            $anchor.width('');
           }
         })
-        .css({top: pos.top, height: height, background: bg});
+        .css({top: pos.top, height: height});
+        $anchor.width(awidth - $toolbar.width())
         return;
       });
 
@@ -119,6 +120,7 @@ export const jstree = {
         if (!$toolbar.is(':hover')) { //The node can be dehover because the tollbar took hover, so ignore it in this case
           $nodeEl.removeClass('tpe-toolbar-active');
           $toolbar.remove();
+          $nodeEl.children('.jstree-anchor').width('');
         }
       });
     }

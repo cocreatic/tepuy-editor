@@ -91,14 +91,6 @@ export class StorageLocal {
     download(dco) {
     }
 
-    addResource(res) {
-
-    }
-
-    deleteResource(res) {
-        
-    }
-
     share(dco) {
     }
 
@@ -154,9 +146,7 @@ export class StorageLocal {
         const { type, name, size, createdAt, extension } = res;
         if (!/\/$/.test(basepath)) basepath += '/';
         const path = [basepath, name].join('');
-        console.log(path);
         let item = resources.find(r => r.path == path);
-        console.log(item);
         if (item) {
             return Promise.reject('An item with the same path already exists');
         }
