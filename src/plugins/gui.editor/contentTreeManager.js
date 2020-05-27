@@ -86,7 +86,6 @@ export class ContentTreeManager {
                 return actions;
             }
         }
-
         const toolbar = {
             items: contextmenu.items
         };

@@ -185,6 +185,10 @@
     "append": ""
   },
   "newFolder": {
-    "textFolder": "Crear nueva carpeta"
+    "textFolder": "Crear nueva carpeta",
+    "newTitle": "Agregar nueva carpeta",
+    "title": "Nombre de la carpeta",
+    "editTitle": "Editar nombre de la carpeta",
+    "textButtonFolder": "Crear carpeta"
   }
 }
