@@ -127,6 +127,9 @@ export const tree = {
         .catch(reason => {
         });
     },
+    select: function(){
+
+    },
     getData: function(){
         return this.tagCtx.args && this.tagCtx.args[0] || this.tagCtx.view.data;
     },
