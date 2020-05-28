@@ -449,7 +449,6 @@ export class ResourceTreeManager {
         }, []);
 
         const controls = {
-            //id: ['text', model.id, { label: labelPrefix+'.id', readonly: true }],
             isNew: ['boolean', model.isNew, { visible: false }],
             title: ['text', model.title, { label: labelPrefix+'.title', validators: [validators.required, validators.maxLength(256) ], maxLength: 256, default: true }],
         };
@@ -467,17 +466,13 @@ export class ResourceTreeManager {
         });
 
         manager.openDialog().then(form => {         
-
             this.dco.addResource({
                 name: form.title,
                 type: 'D',
                 createdAt: createdAt
             }, pathFolder).then(res => {
                 this.loadResources(pathFolder);
-                
-
             });    
-
         }).catch((err) => {
             console.log(err);
         });
@@ -493,15 +488,12 @@ export class ResourceTreeManager {
         App.ui.components.Dialog.confirm(question, title).then(result => {
             if (result) {
                 App.data.dco.deleteResource(data.id).then(result => {
-                    if (!result) {
-                        //ToDo: report the error                     
+                    if (!result) {                   
                         return;
                     }
                     this.tree.delete_node(data);
-                    console.log(this.tree.delete_node(data));
                 });
             }
         });
     }
-
 }

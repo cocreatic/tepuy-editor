@@ -262,44 +262,7 @@ export class GuiEditor {
 
         }
     }
-
-    resourcenewfolder() {
-//        const now = new Date();
-//        this.dco.addResource({
-//            name: 'Folder ' + now.getTime(),
-//            type: 'D',
-//            createdAt: moment(now).format('YYYY-MM-DD HH:mm')
-//        }, this.contentModel.resourcesPath).then(res => {
-//            this.loadResources(this.contentModel.resourcesPath);
-//        });
- 
-         $( "#tpe-modal-create-folder" ).dialog({
-            resizable: false,
-            height: "auto",
-            width: 400,
-            modal: true,
-            buttons: {
-            "Crear": function() {            
-                    var newFolder = 
-                    { 
-                        id: $('#name_folder').val(),                       
-                        name: $('#name_folder').val(),
-                        type: "D",
-                        path: pahtFolder,
-                        createdAt: createDate,
-                        isDro: false,
-                        extension: '',
-                        thumbnail: ''
-                    };
-                    console.log(newFolder);
-                    resource.insert(newFolder);
-                    $( this ).dialog( "close" );
-                }
-            }
-        });
-    }
-
-    
+     
     getNodeWithPath(path, root) {
         if (path == root.id) {
             return root;

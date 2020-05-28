@@ -83,7 +83,6 @@ export class Dco {
     }
 
     deletePage(id) {
-        console.log(id);
         let index = this.tree.pages.findIndex(p => p.id == id);
         if (index >= 0) {
             this.tree.pages.splice(index, 1);
