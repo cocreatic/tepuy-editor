@@ -57,7 +57,7 @@ export class ResourceTreeManager {
                 let tree = { children: [], expanded: true, root: true, id: '/' };
                 $.observable(this.sidebarModel).setProperty('resources', {
                     tree: tree,
-                    //treeCommand: this.onTreeCommand.bind(this),
+                    treeCommand: this.onTreeCommand.bind(this),
                     onAction: this.onResourceAction.bind(this)
                 });
             }
@@ -210,9 +210,55 @@ export class ResourceTreeManager {
     }
 
     getNodePath(node) {
-        if (node.id == '#') return '/';
+        if (node.id == '#'|| node.id == '_root') return '/';
         return node.li_attr['data-path'];
     }
+ 
+
+    /* Events*/
+
+
+    resourceClick(resource, ev, args) {
+        let $el = $(ev.target);
+        $el
+            .closest('.container')
+            .find('.resource.thumbnail')
+            .addClass('ui-state-default')
+            .removeClass('ui-state-highlight');
+        $el
+            .closest('.resource.thumbnail')
+            .addClass('ui-state-highlight');
+    }
+    resourceDblClick(resource, ev, args) {
+    }
+
+    resourceDragEnter(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        $('.dropzone').addClass('ui-state-highlight');
+    }
+
+    resourceDragLeave(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        $('.dropzone').removeClass('ui-state-highlight');
+    }
+
+    resourceDrop(ev) {
+        let dt = ev.dataTransfer || ev.originalEvent.dataTransfer;
+        let files = dt.files;
+        this.uploadFiles([...files]);
+    }
+
+    onResourceAction(ev, args) {
+        let $el = $(ev.target).closest('.ui-button');
+        let action = $el.data().action;
+
+        let method = this['resource'+action].bind(this);
+        method($el);
+    }
+
+
 
     //ToDo: This should be async (using promises)
     getResources() {
@@ -373,77 +419,24 @@ export class ResourceTreeManager {
     }
 
     addFolder(){
-
-        const data = this.node;
-        const model = { isNew: true, title: '', appendAt: 'end', refPos: data.children.length-1 };      
-        model.id = 'page_' + Date.now();
-        model.accept = this.acceptFolder.bind(this);
-        model.label = 'newFolder';        
-        model.acceptText = 'newFolder.textButtonFolder';
+        const data = this.node;       
+        const model = { isNew: true, title: '', appendAt: 'end', refPos: data.children.length-1 };  
+        model.label = 'newFolder';
+        model.acceptText = 'resources.addFolder';
         this.editFolder(model, data.children);
+}
 
-    }
 
-    acceptFolder(page) {
-        const data = this.node;
-        const parent = this.tree.get_node(data.parent);
-        if (!page.title || page.title == '') {
-            return false; //Invalid
-        }
-
-        let item = {
-            id: page.id,
-            text: page.title
-        };
-        let index = -1;
-        if (page.isNew) {
-            item.type = 'page';
-            item.parent = data.id;
-            item.children = [];
-        }
-        else {
-            this.tree.rename_node(data, item.text);
-        }
-        item.appendAt = page.appendAt;
-        item.refPos = parseInt(page.refPos);
-
-        let end = page.isNew ? data.children.length : parent.children.length;
-        if (item.appendAt == 'before' || item.appendAt == 'after') {
-            index = item.refPos + (item.appendAt == 'before' ? 0 : 1);
-        }
-        else {
-            index = item.appendAt == 'first' ? 0 : end;
-        }
-        if (index < 0) index = 0;
-        if (index > end) index = end;
-        if (page.isNew) {
-            this.tree.create_node(data, item, index);
-            App.data.dco.addPage({id:item.id, title:item.text}, index);
-        }
-        else {
-            let current = parent.children.indexOf(data.id);
-            if (current != index) {
-                this.tree.move_node(data, data.parent, index);
-            }
-            let oPage = App.data.dco.getPage(page.id);
-            oPage.title = page.title;
-        }
-        this.accept({action: page.isNew ? 'add' : 'edit', item });
-        return true;
-    }
-
-    editFolder(model, children) {
+    editFolder(model, children){
 
         const builder = App.ui.components.FormBuilder;
         const validators = App.validation.validators;
         const labelPrefix = model.label;
-
-        const positions = [
-            { value: 'first', label: 'position.start' },
-            { value: 'end', label: 'position.end' },
-            { value: 'after', label: 'position.after' },
-            { value: 'before', label: 'position.before' }
-        ];
+        const now = new Date();
+        const dataP = this.node;
+        const pathFolder = this.getNodePath(this.node);
+        const createdAt = moment(now).format('YYYY-MM-DD HH:mm');
+        
 
         const title = labelPrefix + (model.isNew ? '.newTitle' : '.editTitle');
 
@@ -456,13 +449,13 @@ export class ResourceTreeManager {
         }, []);
 
         const controls = {
+            //id: ['text', model.id, { label: labelPrefix+'.id', readonly: true }],
             isNew: ['boolean', model.isNew, { visible: false }],
             title: ['text', model.title, { label: labelPrefix+'.title', validators: [validators.required, validators.maxLength(256) ], maxLength: 256, default: true }],
         };
 
         if (references && references.length) {
-            const refPosVisible = () => /^(after|before)$/.test(formConfig.value.appendAt);
-            controls['appendAt'] = ['optionList', model.appendAt, { label: labelPrefix+'.append', options: positions }];
+            const refPosVisible = () => /^(after|before)$/.test(formConfig.value.appendAt);           
             controls['refPos'] = ['optionList', model.refPos, { label: labelPrefix+'.refPos', options: references, visible: refPosVisible, depends: ['appendAt'] }];
         }
 
@@ -472,10 +465,43 @@ export class ResourceTreeManager {
             formConfig, titleText,
             acceptText: model.acceptText
         });
-        manager.openDialog().then(form => {
-            model.accept(form);
+
+        manager.openDialog().then(form => {         
+
+            this.dco.addResource({
+                name: form.title,
+                type: 'D',
+                createdAt: createdAt
+            }, pathFolder).then(res => {
+                this.loadResources(pathFolder);
+                
+
+            });    
+
         }).catch((err) => {
             console.log(err);
         });
     }
+
+    delete(){
+        const data = this.node;
+        console.log(data)
+        const text = 'newFolder.deleteConfirmation';
+        const question = App.i18n.t(text, { [data.type]: data.text }, {interpolation: {escapeValue: false}});
+        const title = App.i18n.t('newFolder.deleteTitle');
+
+        App.ui.components.Dialog.confirm(question, title).then(result => {
+            if (result) {
+                App.data.dco.deleteResource(data.id).then(result => {
+                    if (!result) {
+                        //ToDo: report the error                     
+                        return;
+                    }
+                    this.tree.delete_node(data);
+                    console.log(this.tree.delete_node(data));
+                });
+            }
+        });
+    }
+
 }

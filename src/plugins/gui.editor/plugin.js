@@ -272,13 +272,7 @@ export class GuiEditor {
 //        }, this.contentModel.resourcesPath).then(res => {
 //            this.loadResources(this.contentModel.resourcesPath);
 //        });
-
-        var pahtFolder  =this.contentModel.resourcesPath;
-        var date  = new Date();
-        var createDate = (date.getFullYear()) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
-        var resource = $.observable(this.contentModel.resources);
-
-
+ 
          $( "#tpe-modal-create-folder" ).dialog({
             resizable: false,
             height: "auto",

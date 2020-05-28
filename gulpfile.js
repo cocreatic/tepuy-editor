@@ -295,7 +295,7 @@ gulp.task('serve', gulp.series('compile', function () {
     gulp.watch(["./src/plugins/**/*.js"]).on("change", (file) => {
         const fullpath = path.resolve(file);
         const plugins = path.resolve('./src/plugins');
-        const folder = fullpath.substring(plugins.length+1).split('/')[0];
+        const folder = fullpath.substring(plugins.length+1).split(/[\\\/]/)[0];
         const pluginsGlobals = getPluginGlobals();
         return gulp.series(rollupPlugin(folder, pluginsGlobals), translations, browserReload)();
     });

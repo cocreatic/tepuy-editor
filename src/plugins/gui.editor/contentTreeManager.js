@@ -206,7 +206,7 @@ export class ContentTreeManager {
 
         App.ui.components.Dialog.confirm(question, title).then(result => {
             if (result) {
-                App.data.dco.deletePage(data.id).then(result => {
+                App.data.dco.deleteResource(data.id).then(result => {
                     if (!result) {
                         //ToDo: report the error
                         return;

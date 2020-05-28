@@ -120,6 +120,8 @@
     "android": ""
   },
   "newFolder": {
-    "textFolder": ""
+    "textFolder": "",
+    "deleteConfirmation": "",
+    "deleteTitle": ""
   }
 }

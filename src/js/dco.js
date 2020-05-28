@@ -83,6 +83,7 @@ export class Dco {
     }
 
     deletePage(id) {
+        console.log(id);
         let index = this.tree.pages.findIndex(p => p.id == id);
         if (index >= 0) {
             this.tree.pages.splice(index, 1);
@@ -91,7 +92,7 @@ export class Dco {
     }
 
     addExtra(item) {
-        this.tree.extras.push(item);
+        this.tree.extras.push(item); 
     }
 
     getResources(path) {
@@ -108,6 +109,10 @@ export class Dco {
 
     deleteResource(path) {
         return this.storage.deleteResource(this.manifest, path);
+    }
+
+    deleteFolder(path) {
+        return this.storage.deleteFolder(this.manifest, path);
     }
 }
 
@@ -147,3 +152,4 @@ export class Page {
         this.sections.splice(toIndex, 0, section);
     }
 }
+
