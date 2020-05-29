@@ -9,6 +9,7 @@ const iconMap = {
     "file-pdf": "file-pdf",
     "file-audio": "file-audio",
     "file-video": "file-video",
+    "file-archive": "file-archive",
     "file_properties": "list",
     "file_metadata": "tags",
     "file_download": "download",
@@ -62,6 +63,18 @@ export const converters = {
     },
     fromYesNo: (value) => {
         return value === 'yes';
+    },
+    isoDateTime: (value) => {
+        return moment.unix(value).format('YYYY-MM-DD hh:mm a');
+    },
+    isoDate: (value) => {
+        return moment.unix(value).format('YYYY-MM-DD');
+    },
+    localDateTime: (value) => {
+        return moment.unix(value).format('L LT');
+    },
+    localDate: (value) => {
+        return moment.unix(value).format('L');
     }
 }
 

@@ -91,7 +91,7 @@ export class Dco {
     }
 
     addExtra(item) {
-        this.tree.extras.push(item); 
+        this.tree.extras.push(item);
     }
 
     getResources(path) {

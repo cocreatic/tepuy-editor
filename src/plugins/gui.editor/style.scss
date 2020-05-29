@@ -144,15 +144,12 @@
             margin: 5px;
             justify-content: flex-start;
             align-items: center;
-            //border: solid 1px var(--tpe-panel-border);
             border-radius: 5px;
-            //background: var(--tpe-panel-content-bg);
             font-size: .8em;
-            //color: var(--tpe-state-active-bg);
-            flex: 0 0 150px;
+            flex: 0 0 200px;
             height: 60px;
             cursor: pointer;
-            width: 150px;
+            width: 200px;
 
             &:first-child {
                 margin-top: 0;

@@ -117,22 +117,22 @@ export class StorageLocal {
         const item = resources.find(r => r.path == res.path);
         if (!item) Promise.reject('Resource not found');
         item.name = newName;
+        const oldPath = item.path + '/';
         item.path = newPath;
+        resources.filter(r => r.path.startsWith(oldPath)).map(r => r.path = r.path.replace(oldPath, newPath+'/'));
         store.setItem(key, JSON.stringify(resources));
-        return Promise.resolve(true);
+        return Promise.resolve(item);
     }
-    /*º
+    /*
     Will delete a file in the object directory structure
     returns: { succeed: true | false, message: string };
     */
     deleteResource(dco, path) {
         const key = 'res_'+dco.id;
         const resources = getCollection(key, []);
-        let index = resources.findIndex(r => r.path == path);
-        if (index >= 0) {
-            resources.splice(index, 1);
-        }
-        store.setItem(key, JSON.stringify(resources));
+        const basePath = path + '/';
+        collections[key] = resources.filter(r => !(r.path == path || r.path.startsWith(basePath)));
+        store.setItem(key, JSON.stringify(collections[key]));
         return Promise.resolve(true);
     }
     /*
@@ -150,7 +150,7 @@ export class StorageLocal {
         if (item) {
             return Promise.reject('An item with the same path already exists');
         }
-        item = {type, path, name, size, createdAt, extension };
+        item = {type, path, name, size, createdAt, extension, parent: basepath };
         resources.push(item);
         store.setItem(key, JSON.stringify(resources));
         return Promise.resolve(item);

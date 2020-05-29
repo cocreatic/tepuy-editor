@@ -26,10 +26,25 @@ export const Validators = (() => {
         return /^(auto|\d+(?:\.\d+)?%?)$/i.test(''+ctrl.value) ? null : { sizeUnit: true };
     };
 
+    const pattern = (pattern) => {
+        if (!(pattern instanceof RegExp)) {
+            if (typeof pattern === 'string') {
+                pattern = new RegExp(pattern);
+            }
+            else {
+                throw new TypeError('pattern should be either RegExp or valid RegExp string pattern');
+            }
+        }
+        return (ctrl) => {
+            return (pattern.test(ctrl.value)) ? null : { pattern: true };
+        }
+    }
+
     return {
         required,
         email,
         maxLength,
-        sizeUnit
+        sizeUnit,
+        pattern
     };
 })();
