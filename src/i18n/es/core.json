@@ -111,7 +111,7 @@
   },
   "resources": {
     "root": "Carpeta principal",
-    "dropzone": "Arrastrar archivos aquí",
+    "dropzone": "Arrastra los archivos aquí",
     "addFile": "Agregar archivo",
     "addFolder": "Nueva carpeta",
     "rename": "Renombrar",
@@ -157,24 +157,6 @@
       "emptySrc": "Sin asignar"
     }
   },
-  "properties": {
-    "title": "",
-    "config": "",
-    "screen": "",
-    "mode": "",
-    "mode_page": "",
-    "mode_scorm": "",
-    "display": "",
-    "page-star": "",
-    "mode-screen": "",
-    "window": "",
-    "float": "",
-    "modal": "",
-    "width": "",
-    "height": "",
-    "image": "",
-    "delete": ""
-  },
   "device": {
     "iphone": "",
     "android": ""
@@ -184,7 +166,13 @@
     "title": "",
     "append": ""
   },
-  "newFolder": {
-    "textFolder": "Crear nueva carpeta"
+  "folder": {
+    "textFolder": "Crear nueva carpeta",
+    "newTitle": "Agregar nueva carpeta",
+    "title": "Nombre de la carpeta",
+    "editTitle": "Editar nombre de la carpeta",
+    "textButtonFolder": "Crear carpeta",
+    "deleteConfirmation": "¿Está seguro de eliminar la carpeta <i>{{folder}}</i>? <br/> No se podrá recuperar la información que esta contiene.",
+    "deleteTitle": "Eliminar Carpeta"
   }
 }

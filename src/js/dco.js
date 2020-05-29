@@ -109,6 +109,10 @@ export class Dco {
     deleteResource(path) {
         return this.storage.deleteResource(this.manifest, path);
     }
+
+    deleteFolder(path) {
+        return this.storage.deleteFolder(this.manifest, path);
+    }
 }
 
 export class Page {
@@ -147,3 +151,4 @@ export class Page {
         this.sections.splice(toIndex, 0, section);
     }
 }
+

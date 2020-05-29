@@ -35,7 +35,6 @@ export class GuiEditor {
         this.sidebarModel = { };
         this.contentModel = { responsiveDevice: defaultDevice };
         this.dco = App.data.dco;
-        //App.data.dco = this.dco = new Dco(template, App.storage);
 
         contentTpl.link(App.ui.$content, this.contentModel);
         sidebarTpl.link(App.ui.$sidebar, this.sidebarModel);
@@ -47,7 +46,6 @@ export class GuiEditor {
         });
 
         this.activateTab(App.ui.$sidebar.find('li[data-tab-id="tab-1"]'));
-        $( "#tpe-modal-create-folder" ).hide();
     }
 
     activateTab(tab, oldTab) {
@@ -89,8 +87,6 @@ export class GuiEditor {
         App.registerHook('gui_menu_help_manual', this.notimplemented.bind(this));
         App.registerHook('gui_menu_help_about', this.about.bind(this));
         App.registerHook('gui_menu_profile_logout', this.logout.bind(this));
- 
-
     }
 
     loadContentTab() {
@@ -124,9 +120,6 @@ export class GuiEditor {
                 onAction: this.resourceTreeManager.onSidebarAction
             });
 
-            if (!this.contentModel.resources){
-                this.loadResources();
-            }
             setTimeout(() => App.ui.$sidebar.localize(), 100);
         }
         $.observable(this.contentModel).setProperty('template', ['#gui-editor-', RESOURCES_TAB, '-content'].join(''));
@@ -135,187 +128,7 @@ export class GuiEditor {
     initializeResourceTreeManager() {
         this.resourceTreeManager = new ResourceTreeManager();
         this.contentModel.resourceManager = this.resourceTreeManager;
-
-        $.observe(this.resourceTreeManager, 'currentPath', () => {
-            this.loadResources();
-        });
         return this.resourceTreeManager.getConfig();
-    }
-
-    loadResources(){
-        this.resourceTreeManager.getResources().then(resources => {
-            $.observable(this.contentModel).setProperty({
-                resources: resources
-            });
-        })
-//        $.observable(this.contentModel).setProperty({
-//            "resourceClick": this.resourceTreeManager.resourceClick.bind(this),
-//            "resourceDblClick": this.resourceTreeManager.resourceDblClick.bind(this),
-//            "resourceDragEnter": this.resourceTreeManager.resourceDragEnter.bind(this),
-//            "resourceDragLeave": this.resourceTreeManager.resourceDragLeave.bind(this),
-//            "resourceDrop": this.resourceTreeManager.resourceDrop.bind(this)
-//        });
-//
-        //$.observable(this.contentModel).setProperty("resourcesPath", path);
-        //$.observable(parent.children).refresh(children);
-
-/*
-
-        this.dco.getResources(path).then((resources) => {
-            let children = [];
-            if (!this.sidebarModel.resources) {
-                let tree = { children: [], expanded: true, root: true, id: '/' };
-                $.observable(this.sidebarModel).setProperty('resources', {
-                    tree: tree,
-                    //treeCommand: this.onTreeCommand.bind(this),
-                    onAction: this.onResourceAction.bind(this)
-                });
-            }
-            let parent = this.getNodeWithPath(path, this.sidebarModel.resources.tree);
-            for(const resource of resources) {
-                resource.icon = this.getIcon(resource);
-                if (resource.thumbnail && resource.thumbnail != '') {
-                    resource.thumb = resource.thumbnail;
-                }
-                let child = {id: resource.path, title: resource.name, parent: parent, icon: resource.icon };
-                if (resource.type == 'D') {
-                    child.loaded = false;
-                    child.children = [];
-                }
-                children.push(child);
-            }
-            
-            $.observable(this.contentModel).setProperty("resources", resources);
-            $.observable(this.contentModel).setProperty("resourcesPath", path);
-            $.observable(parent.children).refresh(children);
-        });
-        */
-    }
-
-    resourceClick(resource, ev, args) {
-        let $el = $(ev.target);
-        $el
-            .closest('.container')
-            .find('.resource.thumbnail')
-            .addClass('ui-state-default')
-            .removeClass('ui-state-highlight');
-        $el
-            .closest('.resource.thumbnail')
-            .addClass('ui-state-highlight');
-    }
-
-    resourceDblClick(resource, ev, args) {
-    }
-
-    resourceDragEnter(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        $('.dropzone').addClass('ui-state-highlight');
-    }
-
-    resourceDragLeave(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        $('.dropzone').removeClass('ui-state-highlight');
-    }
-
-    resourceDrop(ev) {
-        let dt = ev.dataTransfer || ev.originalEvent.dataTransfer;
-        let files = dt.files;
-        this.uploadFiles([...files]);
-    }
-
-    onResourceAction(ev, args) {
-        let $el = $(ev.target).closest('.ui-button');
-        let action = $el.data().action;
-
-        let method = this['resource'+action].bind(this);
-        method($el);
-    }
-
-    resourceupload(target) {
-        let $uploader = $('<input type="file" multiple="true"/>').css({display:'none'}).appendTo('body')
-            .on('change', (ev) => {
-                this.uploadFiles(ev.target.files);
-                $uploader.remove();
-            })
-        $uploader.trigger('click');
-    }
-
-    uploadFiles(files) {
-        for(let file of files) {
-            let resource = {
-                type: 'F',
-                name: file.name,
-                size: Math.round(file.size / 1024) + ' KB',
-                createdAt: moment(file.lastModifiedDate).format('YYYY-MM-DD HH:mm'),
-                extension: file.name.substring(file.name.lastIndexOf('.'))
-            }
-            resource.icon = this.getIcon(resource);
-
-            this.dco.addResource(resource, this.contentModel.resourcesPath).then(response => {
-                let child = {id: this.contentModel.resourcesPath + file.name, title: file.name, parent: this.sidebarModel.resources.tree, icon: resource.icon };
-                $.observable(this.sidebarModel.resources.tree.children).insert(child);
-                $.observable(this.contentModel.resources).insert(resource);
-                resource.path = response.path;
-            })
-
-        }
-    }
-
-    resourcenewfolder() {
-//        const now = new Date();
-//        this.dco.addResource({
-//            name: 'Folder ' + now.getTime(),
-//            type: 'D',
-//            createdAt: moment(now).format('YYYY-MM-DD HH:mm')
-//        }, this.contentModel.resourcesPath).then(res => {
-//            this.loadResources(this.contentModel.resourcesPath);
-//        });
-
-        var pahtFolder  =this.contentModel.resourcesPath;
-        var date  = new Date();
-        var createDate = (date.getFullYear()) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
-        var resource = $.observable(this.contentModel.resources);
-
-
-         $( "#tpe-modal-create-folder" ).dialog({
-            resizable: false,
-            height: "auto",
-            width: 400,
-            modal: true,
-            buttons: {
-            "Crear": function() {            
-                    var newFolder = 
-                    { 
-                        id: $('#name_folder').val(),                       
-                        name: $('#name_folder').val(),
-                        type: "D",
-                        path: pahtFolder,
-                        createdAt: createDate,
-                        isDro: false,
-                        extension: '',
-                        thumbnail: ''
-                    };
-                    console.log(newFolder);
-                    resource.insert(newFolder);
-                    $( this ).dialog( "close" );
-                }
-            }
-        });
-    }
-
-    
-    getNodeWithPath(path, root) {
-        if (path == root.id) {
-            return root;
-        }
-        for(child of root.children) {
-            if (child.path.indexOf(path)) {
-                return this.getNodeWithPath(path, child)
-            }
-        }
-        return null;
     }
 
     //Menu handlers
@@ -431,35 +244,4 @@ export class GuiEditor {
         let height = $viewer.get(0).contentWindow.document.documentElement.scrollHeight + 'px';
         $viewer.css({height: height});
     }
-
-/*
-  $("#form1a").validate({
-    //required to validate jQuery UI select menu
-    ignore: [],
-    //rules for all form fields
-    rules:{
-      name1a: {required: true, fullName: true,},
-      gender1a: {required: true, },
-      drinks1a: {required: true, },
-      food1a: {required: true,},
-      food1a_1: {required: function(element) {
-        return $("#food1a").val() == 1;
-        }}
-      },
-      errorPlacement: function(error, element) {
-if ( element.is(":radio") || element.is(":checkbox")) {
-error.appendTo( element.parent());
-} else if (element.is("select")) {
-  error.appendTo( element.parent().next());
-} else {
-error.insertAfter(element);
-}},
-      errorClass: "ui-tooltip ui-widget ui-corner-all ui-widget-content",
-    errorElement: "span",
-    highlight: function(element, errorClass, validClass) {$(element).addClass("ui-widget-content").removeClass(validClass);},
-    unhighlight: function(element, errorClass, validClass) {$(element).removeClass("ui-widget-content").addClass(validClass);},
-    });
-    //
-    //  End of Form Validation
-    ///////////////////////////////*/
 }

@@ -38,7 +38,7 @@
             {^{:resourceManager.currentPath}}
         </div>
         <div class="container">
-            {^{for resources ~resMgr=resourceManager}}
+            {^{for resourceManager.files ~resMgr=resourceManager}}
             <div class="resource thumbnail ui-state-default" data-link="
             {on 'click' ~resMgr.resourceClick #data}
             {on 'dblclick' ~resMgr.resourceDblClick #data}
@@ -53,7 +53,7 @@
                 <div class="info">
                     <label title="{{:name}}">{{:name}}</label>
                     <span>{{:size}}</span>
-                    <span>{{:createdAt}}</span>
+                    <span>{{:createdAt convert="isoDateTime"}}</span>
                 </div>
             </div>
             {{/for}}

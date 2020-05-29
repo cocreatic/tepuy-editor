@@ -41,7 +41,7 @@ class App {
                 this.plugins[plugin.id] = new tepuyEditor[objectName];
             }
             else {
-                pluginPromises.push(loadFile(`../plugins/${plugin.id}/plugin.js`, 'js').then(loaded => {
+                pluginPromises.push(loadFile(`plugins/${plugin.id}/plugin.js`, 'js').then(loaded => {
                     if (loaded) {
                         const ns = window[objectName];
                         this.plugins[plugin.id] = new ns[objectName](this); //pass a reference to the App

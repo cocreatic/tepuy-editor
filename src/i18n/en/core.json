@@ -97,29 +97,17 @@
     "propertiesTitle": "",
     "nopreview": ""
   },
-  "properties": {
-    "title": "",
-    "config": "",
-    "screen": "",
-    "mode": "",
-    "mode_page": "",
-    "mode_scorm": "",
-    "display": "",
-    "page-star": "",
-    "mode-screen": "",
-    "window": "",
-    "float": "",
-    "modal": "",
-    "width": "",
-    "height": "",
-    "image": "",
-    "delete": ""
-  },
   "device": {
     "iphone": "",
     "android": ""
   },
-  "newFolder": {
-    "textFolder": ""
+  "folder": {
+    "textFolder": "",
+    "newTitle": "",
+    "title": "",
+    "editTitle": "",
+    "textButtonFolder": "",
+    "deleteConfirmation": "",
+    "deleteTitle": ""
   }
 }

@@ -140,10 +140,10 @@ gulp.task("vendorassets", copyVendorAssets);
 
 gulp.task("vendorcss", gulp.parallel(joinVendorCss, 'vendorassets', copyIcons));
 
-
-
-
 function rollupBuildTask(config) {
+    const isPluginPath = (path) => {
+
+    }
     return () => {
         const externals = ['jquery', 'moment', 'i18next', ...config.globals?Object.keys(config.globals):[]];
         const globals = {
@@ -156,7 +156,7 @@ function rollupBuildTask(config) {
             input: config.src,
             external: (id, from) => {
                 if (externals.indexOf(id) >= 0) return true;
-                if (/\/plugins\//.test(from) && /^\./.test(id)) {
+                if (/[\/\\]plugins[\/\\]/.test(from) && /^\./.test(id)) {
                     const fullpath = path.resolve(path.dirname(from), id);
                     return externals.indexOf(fullpath) >= 0;
                 }
@@ -295,26 +295,26 @@ gulp.task('serve', gulp.series('compile', function () {
     gulp.watch(["./src/plugins/**/*.js"]).on("change", (file) => {
         const fullpath = path.resolve(file);
         const plugins = path.resolve('./src/plugins');
-        const folder = fullpath.substring(plugins.length+1).split('/')[0];
+        const folder = fullpath.substring(plugins.length+1).split(path.sep)[0];
         const pluginsGlobals = getPluginGlobals();
         return gulp.series(rollupPlugin(folder, pluginsGlobals), translations, browserReload)();
     });
     gulp.watch(["./index.html", "./src/plugins/**/*.html"], gulp.parallel('html', translations));
 }));
 
-gulp.task('build-js', gulp.series('js', function () {
+gulp.task('build-js', function () {
     return gulp.src("./dist/tepuy-editor.js")
         .pipe(uglify())
         .pipe(rename('tepuy-editor.min.js'))
         .pipe(gulp.dest(destFolder));
-}));
+});
 
-gulp.task('build-css', gulp.series('sass', function () {
+gulp.task('build-css', function () {
     return gulp.src("./src/css/*.css")
         .pipe(concat("tepuy-editor.min.css"))
         .pipe(postcss([cssnano()]))
         .pipe(gulp.dest(destFolder))
-}));
+});
 
 gulp.task("build", gulp.series('compile', 'build-js', 'build-css'));
 
