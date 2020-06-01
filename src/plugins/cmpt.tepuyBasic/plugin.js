@@ -1,9 +1,13 @@
+import * as components from './components';
+
 export class CmptTepuyBasic {
     constructor() {
 
     }
 
-    getComponentList() {
-        //Este metodo debe retornar una lista de los componentes disponibles. No implementar aún
+    registerComponents(register) {
+        console.log('Register components invoked');
+        register(components.HtmlBlock);
+        register(components.ContentBox);
     }
 }

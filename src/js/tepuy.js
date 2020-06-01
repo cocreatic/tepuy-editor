@@ -1,4 +1,5 @@
 import { App } from './app';
+import { Page, Section } from './component';
 import { newid, b64DecodeUnicode } from './utils';
 
 export class Tepuy {
@@ -8,47 +9,76 @@ export class Tepuy {
     }
 
     parse() {
-        
         return new Promise((resolve, reject) => {
-            const html = b64DecodeUnicode(this.manifest.index); 
-            console.log(html);
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            console.log(doc);
-            console.log(doc.documentElement.childNodes);
-
-            const $q = $(doc);
-            console.log($q);
-            this.traverseBody($q);
+            this.traverseIndex();
+            resolve(true);
         });
     }
 
+    traverseIndex() {
+        const html = b64DecodeUnicode(this.manifest.index);
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const $body = $(doc).find('body');
+        const bodyData = $body.data();
+        const root = new Section($body.find('main')[0]);
+        this.home = {
+            config: {...bodyData},
+            root: root
+        };
+    }
+
+    traverseContent() {
+
+    }
 
     traverseBody($html) {
         console.log('traverseBody');
-        this.home = {};
-        const $body = $html.find('body');
-        console.log($body);
+        //console.log($body);
         console.log('body found');;
-        const bodyData = $body.data();
-        console.log(bodyData);
-        this.home.config = bodyData;
+        //console.log(bodyData);
         console.log('will traverse body');
-        console.log($body.find('main'));
-        this.home.components = this.traverseMain($body.find('main'));
+        //console.log($body.find('main'));
     }
 
     traverseMain($main) {
         const $children = $main.children();
         const components = [];
         $children.each((i, child) => {
-            components.push(this.resolveComponent($(child)));
+            components.push(this.resolveComponent(child));
         });
         console.log(components);
+        return components;
     }
 
-    resolveComponent($el) {
-        return this.createHtmlComponent($el);
+    prepareComponents() {
+        const plugins = App.getPlugins('cmpt'); //Get components plugins.
+        let components = [];
+        for(let plug of plugins) {
+            components = [...components, ...plug.getComponentsList()];
+        }
+        this.components = components;
+    }
+
+    resolveComponent(el) {
+        let i = this.components.length;
+        let result;
+        for(;--i;) {
+            const component = this.components[i];
+            if (component.matches(el)) {
+                result = new component[i](el);
+                if (component.container) {
+                    component.resolveChildren(this.components);
+                }
+            } return new component[i](el);
+        }
+    }
+
+    resolveComponentChildren(component) {
+        const children = [];
+        for(let child of component.getChildElements()) {
+            children.push(this.resolveComponent(child))
+        }
     }
 
     createHtmlComponent($el) {

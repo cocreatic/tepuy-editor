@@ -1,5 +1,5 @@
-const babel = require('rollup-plugin-babel');
-const resolve = require('@rollup/plugin-node-resolve');
+const { babel } = require('@rollup/plugin-babel');
+const resolve = require('@rollup/plugin-node-resolve').default;
 const commonjs = require('@rollup/plugin-commonjs');
 const eslint = require("gulp-eslint");
 const multiEntry = require("rollup-plugin-multi-entry");
@@ -12,7 +12,7 @@ function rollupConfig(config) {
         'i18next': 'i18next',
         ...config.globals
     };
-    console.log(config.src);
+
     return {
         //input: config.src,
         external: (id, from) => {
@@ -30,7 +30,7 @@ function rollupConfig(config) {
                 browser: true,
             }),
             commonjs({
-                namedExports: { 'chai': ['expect', 'assert', 'should']}
+                //namedExports: { 'chai': ['expect', 'assert', 'should']}
             }),
             eslint({
                 exclude: [
@@ -39,7 +39,8 @@ function rollupConfig(config) {
                 ]
             }),
             babel({
-                exclude: 'node_modules/**'
+                exclude: 'node_modules/**',
+                babelHelpers: 'bundled'
             }),
             //(process.env.NODE_ENV === 'production' && uglify())
         ],
@@ -48,6 +49,10 @@ function rollupConfig(config) {
             name: config.className,
             globals: globals,
             sourcemap: 'inline'
+        },
+        onwarn: function ( message ) {
+            if (/Circular dependency: node_modules\/chai\/lib\/chai\.js/.test(message)) return; //Ignore annoying chai circular dependency warnings
+            console.error(message);
         }
     };
 }
@@ -58,6 +63,8 @@ module.exports = function(config) {
         files: [
             { pattern: 'dist/vendor.min.js', watched: false },
             { pattern: 'dist/vendor.min.css', watched: false },
+            { pattern: 'dist/tepuy-editor.js', watched: true, included: true, served: true },
+            { pattern: 'dist/plugins/**/plugin.js', watched: true, included: true, served: true },
             /**
              * Make sure to disable Karma’s file watcher
              * because the preprocessor will use its own.

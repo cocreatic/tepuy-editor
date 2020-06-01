@@ -1,16 +1,15 @@
-import { Component, ComponentType } from '../../../js/component';
+import { ContainerComponent, ComponentType } from '../../../js/component';
 import { _ } from '../../../js/utils';
 
-export class ContentBox extends Component {
+export class ContentBox extends ContainerComponent {
+    static get legacySelector() {
+        return '.box-text';
+    }
 
     constructor(element) { //All controls must receive the host element as a parameter, if no element or string provided, the element will be created but not added to the DOM
         super(element);
         //Initialize public properties
         this.host.addClass('box-text');
-    }
-
-    get selector() {
-        return '.box-text';
     }
 
     initialize() {

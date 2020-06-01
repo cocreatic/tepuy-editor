@@ -16,12 +16,15 @@ const browserSync = require('browser-sync').create();
 const reload      = browserSync.reload;
 const { rollup }  = require('rollup');
 const { minify } = require('html-minifier');
-const babel = require('rollup-plugin-babel');
-const resolve = require('@rollup/plugin-node-resolve');
+const { babel } = require('@rollup/plugin-babel');
+const resolve = require('@rollup/plugin-node-resolve').default;
 const commonjs = require('@rollup/plugin-commonjs');
 const multiEntry = require("rollup-plugin-multi-entry");
 const i18nScanner = require('i18next-scanner');
 const fs = require('fs');
+const KarmaServer = require('karma').Server;
+
+console.log(babel);
 
 const destFolder = "./dist";
 
@@ -176,7 +179,8 @@ function rollupBuildTask(config) {
                     ]
                 }),
                 babel({
-                    exclude: 'node_modules/**'
+                    exclude: 'node_modules/**',
+                    babelHelpers: 'bundled'
                 }),
                 //(process.env.NODE_ENV === 'production' && uglify())
             ]
@@ -301,6 +305,13 @@ gulp.task('serve', gulp.series('compile', function () {
     });
     gulp.watch(["./index.html", "./src/plugins/**/*.html"], gulp.parallel('html', translations));
 }));
+
+
+gulp.task('test', function (done) {
+  new KarmaServer({
+    configFile: __dirname + '/karma.config.js'
+  }, done).start();
+});
 
 gulp.task('build-js', function () {
     return gulp.src("./dist/tepuy-editor.js")
