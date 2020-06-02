@@ -6,8 +6,8 @@ export class CmptTepuyBasic {
     }
 
     registerComponents(register) {
-        console.log('Register components invoked');
         register(components.HtmlBlock);
         register(components.ContentBox);
+        register(components.InstructionBox);
     }
 }

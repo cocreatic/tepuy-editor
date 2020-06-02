@@ -44,7 +44,6 @@ export class GuiEditor {
                 this.activateTab(ui.newTab, ui.oldTab);
             }
         });
-
         this.activateTab(App.ui.$sidebar.find('li[data-tab-id="tab-1"]'));
     }
 

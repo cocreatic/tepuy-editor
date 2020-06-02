@@ -52,8 +52,8 @@ class App {
             }
         }
 
-        return Promise.all(pluginPromises).then(() =>
-            this.initLanguage().then(() => {
+        return Promise.all(pluginPromises).then(() => {
+            return this.initLanguage().then(() => {
                 this.resolveAuth();
                 this.resolveStorage();
                 this.resolveDcoManager();
@@ -61,12 +61,15 @@ class App {
                     theme: {}
                 };
                 this.invokeHook('gui_initialize');
-                this.auth.authenticate().then(userInfo => {
+                return this.auth.authenticate().then(userInfo => {
                     this.data.user = userInfo;
                     this.ui.load(this.options.defaultView);
+                    return true;
+                }, err => {
+                    console.log('Authenticate failed');
                 });
-            })
-        );
+            });
+        });
     }
 
 
@@ -107,15 +110,13 @@ class App {
     }
 
     registerPlugin(ns, typeName, type, name) {
-        console.log('registerPlugin');
-        console.log(type);
         const instance = new ns[typeName];
         instance.type = type;
         instance.name = name;
         if (type == 'cmpt') {
             instance.registerComponents(Component.registerComponent);
         }
-        this.plugins[plugin.id] = instance;
+        this.plugins[[type, name].join('.')] = instance;
     }
 
     getPlugin(plugName, raiseError = true){
@@ -159,4 +160,5 @@ class App {
 const app = new App();
 export { app as App};
 export * as Utils from './utils';
-export { Component, ContainerComponent, Page, Section } from './component';
+export * as Component from './component';
+export * as Tepuy from './tepuy';

@@ -24,7 +24,6 @@ export class Component {
     }
 
     static registerComponent(component) {
-        console.log('registerComponent called');
         if (!Component._registry) {
             Component._registry = [];
         }
@@ -47,12 +46,13 @@ export class Component {
     static resolveComponent(el) {
         let i = Component._registry.length;
         let result;
-        for(;--i;) {
+        for(;i--;) {
             const component = Component._registry[i];
             if (component.matches(el)) {
-                return new component[i](el);
+                return new component(el);
             }
         }
+        return null;
     }
 
     static matches(element) {
@@ -79,8 +79,7 @@ export class Component {
             host = element.cloneNode(false); //Clone only node attributes
         }
 
-        //this.contructor will refer to the Declaring type, so it can be used to call static methods and properties
-        host.setAttribute('data-cmpt-type', this.constructor.id);
+        host.setAttribute('data-cmpt-type', this.cmptType);
 
         privateMap.set(this, {
             host: host,
@@ -88,6 +87,11 @@ export class Component {
         });
 
         this.initialize();
+    }
+
+    get cmptType() {
+        //this.contructor will refer to the Declaring type, so it can be used to call static methods and properties
+        return this.constructor.id;
     }
 
     get container() {
@@ -119,8 +123,8 @@ export class Component {
     classesInUse(classList) {
         let list = classList;
         if (typeof list === 'string') list = list.split(' ');
-        const classes = this.host.classList.split(' ');
-        return list.filter(c => classes.indexOf(c) >= 0);
+        //const classes = this.host.classList.split(' ');
+        return list.filter(c => this.host.classList.contains(c));
     }
 
     getPropertyValue(propName) {
@@ -139,7 +143,7 @@ export class Component {
         }
         const keys = Object.keys(properties);
         let i = keys.length;
-        for(;--i;) {
+        for(;i--;) {
             const propName = keys[i];
             value = properties[propName];
             const property = this.properties.find(p => p.name == propName);
@@ -163,9 +167,9 @@ export class ContainerComponent extends Component {
 
     constructor(element, options) {
         super(element, options);
-        checkAbstractImplementation(this, ContainerComponent, 'insert'); //Will throw an exception if not implemented
-        checkAbstractImplementation(this, ContainerComponent, 'append'); //Will throw an exception if not implemented
-        checkAbstractImplementation(this, ContainerComponent, 'resolveChildren'); //Will throw an exception if not implemented
+        //checkAbstractImplementation(this, ContainerComponent, 'insert'); //Will throw an exception if not implemented
+        //checkAbstractImplementation(this, ContainerComponent, 'append'); //Will throw an exception if not implemented
+        //checkAbstractImplementation(this, ContainerComponent, 'resolveChildren'); //Will throw an exception if not implemented
         this.resolveChildren(element);
     }
 
@@ -177,8 +181,17 @@ export class ContainerComponent extends Component {
         return ComponentType.CONTAINER;
     }
 
-    get children() {
+    insert(component, index = 0) {
+        index = index < 0 ? 0 : index > this.children.length ? this.children.length : index;
+        this.children.splice(index, 0, component);
+    }
 
+    append(component) {
+        this.children.push(component);
+    }
+
+    resolveChildren(element) {
+        this.children = Component.resolveComponents(element);
     }
 }
 
@@ -196,19 +209,19 @@ export class Page extends ContainerComponent {
         if (!(component instanceof Section)) {
             throw new TypeError('Page only accepts Section children');
         }
-        index = index < 0 ? 0 : index > this.children.length ? this.children.length : index;
-        this.children.splice(index, 0, component);
+        super.insert(component, index);
     }
 
     append(component) {
         if (!(component instanceof Section)) {
             throw new TypeError('Page only accepts Section children');
         }
-        this.children.push(component);
+        super.append(component);
     }
 
     resolveChildren(element) {
-        this.children = Component.resolveComponents(element);
+        const sections = Array.prototype.filter.call(element.children, child => child.matches('.subpage,[data-cmpt-type="section"]'));
+        this.sections = sections.map(section => new Section(section));
     }
 }
 
@@ -229,9 +242,5 @@ export class Section extends ContainerComponent {
 
     append(component) {
         this.children.push(component);
-    }
-
-    resolveChildren(element) {
-        this.children = Component.resolveComponents(element);
     }
 }

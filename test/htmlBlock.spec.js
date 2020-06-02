@@ -7,6 +7,7 @@ describe('HtmlBlock component', function () {
     const selector = '[data-cmpt-type="html-block"],:not([data-cmpt-type])'
 
     before(function() {
+        console.log('running HtmlBlock tests');
     })
 
     beforeEach(function() {

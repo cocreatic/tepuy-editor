@@ -9,6 +9,7 @@ describe('ContentBox component', function () {
     let invalidElement1;
 
     before(function() {
+        console.log('running ContentBox tests');
     })
 
     beforeEach(function() {

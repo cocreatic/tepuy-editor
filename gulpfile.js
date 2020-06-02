@@ -24,8 +24,6 @@ const i18nScanner = require('i18next-scanner');
 const fs = require('fs');
 const KarmaServer = require('karma').Server;
 
-console.log(babel);
-
 const destFolder = "./dist";
 
 const vendorjs = [
@@ -144,9 +142,6 @@ gulp.task("vendorassets", copyVendorAssets);
 gulp.task("vendorcss", gulp.parallel(joinVendorCss, 'vendorassets', copyIcons));
 
 function rollupBuildTask(config) {
-    const isPluginPath = (path) => {
-
-    }
     return () => {
         const externals = ['jquery', 'moment', 'i18next', ...config.globals?Object.keys(config.globals):[]];
         const globals = {
@@ -283,7 +278,22 @@ gulp.task('html', function () {
         .pipe(browserSync.stream());
 });
 
-gulp.task('compile', gulp.parallel('html', 'sass', 'vendorcss', 'vendorjs', 'js', copyThemesAssets, translations));
+gulp.task('html-test', function () {
+    return gulp.src('./test.html')
+        .pipe(inject(gulp.src(['./src/plugins/**/*.html']), {
+            starttag: '<!-- inject:template:{{ext}} -->',
+            transform: (filePath, file) => {
+                return minify(file.contents.toString('utf8'), { 
+                    collapseWhitespace: true,
+                    processScripts: ['text/html', 'text/x-template', 'text/x-jsrender']
+                });
+            }
+        }))
+        .pipe(gulp.dest(destFolder))
+        .pipe(browserSync.stream());
+});
+
+gulp.task('compile', gulp.parallel('html', 'html-test', 'sass', 'vendorcss', 'vendorjs', 'js', copyThemesAssets, translations));
 
 // Static Server + watching scss/html files
 gulp.task('serve', gulp.series('compile', function () {
