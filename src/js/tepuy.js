@@ -122,7 +122,9 @@ export class Tepuy {
         const doc = this.contentDoc;
         if (!doc) return this.manifest.content;
         const $doc = $(doc);
+        const $head = $doc.find('head');
         const $body = $doc.find('body');
+        const local = [window.location.protocol, '//', window.location.host, window.location.pathname].join('');
         $body.data(this.content.config);
         const $main = $body.find('main').first();
         $main.empty();
@@ -131,7 +133,24 @@ export class Tepuy {
             $main.append(this.content.pages[i].html(editMode));
         }
 
-        const $base = $doc.find('head').find('base');
+        //Dependecies
+        $head.children().each((i, it) => {
+            const path = it.src;
+            if (!path) return true; //just ignore it
+            const key = path.split('/').pop();
+            const dep = dependencies[key];
+            if (!dep) return true; //just ignore it
+            const src = (editMode ? local : '') + dep.src;
+            if (it.href) {
+                it.href = src;
+                if (dep.media) it.media = dep.media;
+            }
+            else if (it.src) {
+                it.src = src;
+            }
+        });
+
+        const $base = $head.find('base');
         if (!editMode) {
             if ($base.length) $base.remove();
             return b64EncodeUnicode(doc.documentElement.outerHTML);
@@ -139,9 +158,9 @@ export class Tepuy {
         $body.attr('data-model', 'page');
         //$body.data('model', 'page'); //To prevent the dialog when loading content;
         if (!$base.length && baseUrl) {
-            $doc.find('head').prepend('<base href="' + baseUrl + '" />');
+            $head.prepend('<base href="' + baseUrl + '" />');
         }
-        $doc.find('head').children('script[src*="scorm"]').remove(); //ToDo: Need to indentify adding/removing only required scripts
+        $head.children('script[src*="scorm"]').remove(); //ToDo: Need to indentify adding/removing only required scripts
         return doc.documentElement.outerHTML;
     }
 
