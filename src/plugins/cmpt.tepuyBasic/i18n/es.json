@@ -1,0 +1,16 @@
+{
+    "html-block": {
+        "title": "Bloque Html",
+        "content": "Contenido"
+    },
+    "content-box": {
+        "title": "Bloque de Texto",
+        "type": "Tipo",
+        "label": "Título"
+    },
+    "instruction-box": {
+        "title": "Instrucción",
+        "type": "Tipo",
+        "content": "Contenido"
+    }
+}

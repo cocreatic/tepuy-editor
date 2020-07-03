@@ -77,9 +77,9 @@ $xl-screen: 1140px;
     --tpe-state-active-bdr: #{color($my-palette, 'gray', 900)}; //#003eff;
     --tpe-state-active-clr: #{$active-state-color}; //#ffffff;
 
-    --tpe-state-selected-bg: #fffa90;
+    --tpe-state-selected-bg: linear-gradient(to bottom, #beebff 0%, #a8e4ff 100%); //#fffa90;
     --tpe-state-selected-bdr: #dad55e;
-    --tpe-state-selected-clr: #777620;
+    --tpe-state-selected-clr: #454545;
 
     --tpe-state-error-bg: #fddfdf;
     --tpe-state-error-bdr: #f1a899;

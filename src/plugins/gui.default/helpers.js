@@ -40,7 +40,8 @@ const iconMap = {
     "pdf": "fa fa-file-pdf",
     "share-edit": "pen",
     "share-view": "eye",
-    "check": "check"
+    "check": "check",
+    "box": "box"
 };
 
 export const helpers = {
@@ -139,6 +140,9 @@ export const tree = {
         })
         .catch(reason => {
         });
+    },
+    select: function(){
+
     },
     getData: function(){
         return this.tagCtx.args && this.tagCtx.args[0] || this.tagCtx.view.data;

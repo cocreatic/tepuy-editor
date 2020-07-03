@@ -1,3 +1,4 @@
+//import { v4 as uuidv4 } from 'uuid';
 export const privateMap = new WeakMap();
 
 export const _ = (instance) => {
@@ -50,3 +51,40 @@ export function loadFile(filename, filetype) {
     }
     return Promise.resolve(false);
 }
+
+export function newid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+    //return uuidv4();// ''+(new Date().getTime());
+}
+
+export function b64EncodeUnicode(str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode(parseInt(p1, 16))
+    }))
+}
+
+export function b64DecodeUnicode(str) {
+    return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+    }).join(''))
+}
+
+export function checkAbstractImplementation(instance, classDefinition, method) {
+    if (instance[method] === classDefinition.prototype[method]) {
+        throw new TypeError('Please implement abstract method ' + method);
+    }
+}
+
+export function camelCaseToDash(str) {
+    return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+export function capitalize(string) {
+    return string[0].toUpperCase()+string.slice(1);
+}
+
+
+

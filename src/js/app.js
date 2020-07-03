@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import Backend from 'i18next-xhr-backend';
+import Backend from 'i18next-http-backend';
 import jqueryI18next from 'jquery-i18next';
 import properties from './properties';
 import { sortInsert } from './utils';
@@ -7,6 +7,7 @@ import { Dco } from './dco';
 import { Auth } from './auth';
 import { Storage } from './storage';
 import { loadFile } from './utils';
+import { Component } from './component';
 
 const defaultOptions = {
     container: "#tepuy-editor",
@@ -31,41 +32,46 @@ class App {
         this.parseOptions(options);
 
 
-        let pluginPromises = [];
+        const pluginPromises = [];
         //Load active plugins
         for(let plugin of properties.plugins) {
             if (!plugin.active) continue;
-            let [type, name] = plugin.id.split('.');
-            let objectName = [type, name].map(p => p[0].toUpperCase() + p.substr(1)).join('');
-            if (objectName in tepuyEditor) {
-                this.plugins[plugin.id] = new tepuyEditor[objectName];
+            const [type, name] = plugin.id.split('.');
+            const objectName = [type, name].map(p => p[0].toUpperCase() + p.substr(1)).join('');
+            if (window.tepuyEditor && objectName in window.tepuyEditor) {
+                this.registerPlugin(tepuyEditor, objectName, type, name);
             }
             else {
                 pluginPromises.push(loadFile(`plugins/${plugin.id}/plugin.js`, 'js').then(loaded => {
                     if (loaded) {
                         const ns = window[objectName];
-                        this.plugins[plugin.id] = new ns[objectName](this); //pass a reference to the App
+                        this.registerPlugin(ns, objectName, type, name);
                     }
                     return loaded;
                 }));
             }
         }
 
-        Promise.all(pluginPromises).then(() =>
-        this.initLanguage().then(() => {
-            this.resolveAuth();
-            this.resolveStorage();
-            this.resolveDcoManager();
-            this.data = {
-                theme: {}
-            };
-            this.invokeHook('gui_initialize');
-            this.auth.authenticate().then(userInfo => {
-                this.data.user = userInfo;
-                this.ui.load(this.options.defaultView);
+        return Promise.all(pluginPromises).then(() => {
+            return this.initLanguage().then(() => {
+                this.resolveAuth();
+                this.resolveStorage();
+                this.resolveDcoManager();
+                this.data = {
+                    theme: {}
+                };
+                this.invokeHook('gui_initialize');
+                return this.auth.authenticate().then(userInfo => {
+                    this.data.user = userInfo;
+                    this.ui.load(this.options.defaultView);
+                    return true;
+                }, err => {
+                    console.log('Authenticate failed');
+                });
             });
-        }));
+        });
     }
+
 
     parseOptions(options) {
         this.options = Object.assign(defaultOptions, options);
@@ -103,11 +109,25 @@ class App {
         this.DcoManager = Dco;
     }
 
+    registerPlugin(ns, typeName, type, name) {
+        const instance = new ns[typeName];
+        instance.type = type;
+        instance.name = name;
+        if (type == 'cmpt') {
+            instance.registerComponents(Component.registerComponent);
+        }
+        this.plugins[[type, name].join('.')] = instance;
+    }
+
     getPlugin(plugName, raiseError = true){
         if (raiseError && !this.plugins[plugName]) {
             throw 'Unable to find plugin ' + plugName;
         }
         return this.plugins[plugName];
+    }
+
+    getPlugins(type) {
+        return this.plugins.filter(p => p.type == type);
     }
 
     initLanguage() {
@@ -116,10 +136,12 @@ class App {
         .init({
             lng: 'es',
             fallbackLng: 'es',
-            ns: ['core'],
+            ns: ['core', ...Object.keys(this.plugins)],
             defaultNS: 'core',
             backend: {
-                loadPath: 'i18n/{{lng}}/{{ns}}.json'
+                loadPath: (lngs, namespaces) => {
+                    return namespaces.indexOf('core') >= 0 ? 'i18n/{{lng}}/{{ns}}.json' : 'plugins/{{ns}}/i18n/{{lng}}.json';
+                }
             }
         }, (err, t) => {
             jqueryI18next.init(i18next, $);
@@ -140,3 +162,5 @@ class App {
 const app = new App();
 export { app as App};
 export * as Utils from './utils';
+export * as Component from './component';
+export * as Tepuy from './tepuy';

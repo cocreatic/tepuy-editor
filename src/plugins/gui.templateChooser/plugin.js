@@ -24,7 +24,9 @@ export class GuiTemplateChooser {
         sidebarTpl.link(App.ui.$sidebar, this);
         App.$container.localize();
 
-        //this.openForEdition(App.storage.getObjects({})[0]);
+        const obj = App.storage.getObjects({})[0];
+        if (!obj.baseUrl) obj.baseUrl = 'http://localhost/tepuy-repository/plantilla/';
+        this.openForEdition(obj);
     }
 
     activateTab(tab, oldTab) {

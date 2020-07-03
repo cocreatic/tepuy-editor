@@ -2,8 +2,9 @@ import { App } from '../../js/app';
 
 export class ContentTreeManager {
     
-    constructor(actionHandler) {
+    constructor(actionHandler, selectionHandler) {
         this.actionHandler = actionHandler;
+        this.selectionHandler = selectionHandler;
     }
 
     getConfig() {
@@ -11,28 +12,51 @@ export class ContentTreeManager {
     }
     
     initializeJsTree() {
-        const oTree = App.data.dco.objectTree();
-        const tree = {
-            id: '_root',
-            text: App.i18n.t('tree.root'),
-            type: 'root',
-            li_attr: { "data-root": true },
-            state: { opened: true, selected: true }
+        const jtData = (node, callback) => {
+            App.data.dco.objectTree().then(oTree => {
+                const pages = [];
+                const floating = [];
+                //Prepare pages
+                for (const page of oTree.pages) {
+                    const item = { id: page.id, text: page.title, children: [], type: 'page', parent: '_root' };
+                    pages.push(item);
+                    if (page.sections && page.sections.length) {
+                        item.children = page.sections.map(section => { 
+                            return {id: section.id, text: section.title, type: 'section', parent: item.id }
+                        });
+                    }
+                }
+
+                //Prepare floating sections
+                for (const section of oTree.floating) {
+                    const item = { id: section.id, text: section.title, type: 'section', parent: '_floating' };
+                    floating.push(item);
+                }
+                let children = [];
+                if (node.id == '#' || node.id == '_root') {
+                    children = [{
+                        id: '_root',
+                        text: App.i18n.t('tree.root'),
+                        type: 'root',
+                        li_attr: { "data-root": true },
+                        state: { opened: true, selected: false },
+                        children: pages
+                    },{
+                        id: '_floating',
+                        text: App.i18n.t('tree.floating'),
+                        type: 'root',
+                        li_attr: { "data-root": true },
+                        state: { opened: true, selected: false },
+                        children: floating
+                    }]
+                }
+                callback.call(this, children);
+            });
         };
-
-        for (const page of oTree.pages) {
-            var node = { id: page.id, text: page.title, children: [], type: 'page', parent: '_root' };
-            tree.children.push(node);
-            if (page.sections && page.sections.length) {
-                node.children = page.sections.map(section => { 
-                    return {id: section.id, text: section.title, type: 'section', parent: node.id }
-                });
-            }
-        }
-
-        const jtData = [tree];
+        
         const core = {
             check_callback: (op, node, parent, position, more) => {
+                if (op == 'move_node' && node.parent == '_floating') return false; //Prevent moving floating sections
                 return true;
             },
             multiple: false,
@@ -50,6 +74,10 @@ export class ContentTreeManager {
                 valid_children: ["section"]
             },
             "section": {
+                icon: "fas fa-file-alt",
+                valid_children: []
+            },
+            "fsection": {
                 icon: "fas fa-file-alt",
                 valid_children: []
             }
@@ -99,6 +127,7 @@ export class ContentTreeManager {
             'select_node.jstree': this.jtNodeSelected.bind(this),
             'loaded.jstree': (ev, data) => {
                 this.tree = data.instance;
+                this.tree.select_node('_root');
             }
         };
 
@@ -130,13 +159,32 @@ export class ContentTreeManager {
                 const newPage = App.data.dco.getPage(data.parent);
                 const section = oldPage.removeSection(node.id);
                 newPage.addSection(section, data.position);
+                this.ensurePageHasSections(oldPage);
             }
         }
+        const handler = this.actionHandler;
+        handler({node, action: 'move'});
     }
 
     jtNodeSelected(ev, data) {
-        console.log(ev);
-        console.log(data);
+        const handler = this.selectionHandler;
+        if (data.node.type == 'page' || (data.node.type == 'root' && data.node.id == '_floating')) {
+            this.tree.deselect_node(data.node);
+            this.tree.select_node(data.node.children[0]);
+            return;
+        }
+        handler(data.node);
+    }
+
+    getSelection() {
+        const selected = this.tree.get_selected();
+        return this.tree.get_node(selected[0])
+    }
+
+    setSelection(id) {
+        const selected = this.tree.get_selected();
+        if (selected && selected.length) this.tree.deselect_node(selected[0]); //Only one node selected
+        this.tree.select_node(id);
     }
 
     runAction(action, node, target) {
@@ -156,12 +204,12 @@ export class ContentTreeManager {
         const model = { isNew: true, title: '', appendAt: 'end', refPos: data.children.length-1 };
 
         if (data.type == 'page') {
-            model.id = 'section_' + Date.now();
+            model.id = App.data.dco.getNextSectionId();
             model.accept = this.acceptSection.bind(this);
             model.label = 'section';
         }
         else {
-            model.id = 'page_' + Date.now();
+            model.id = App.data.dco.getNextPageId();
             model.accept = this.acceptPage.bind(this);
             model.label = 'page';
         }
@@ -212,6 +260,7 @@ export class ContentTreeManager {
                         return;
                     }
                     this.tree.delete_node(data);
+                    this.accept(true);
                 })
             }
         });
@@ -306,7 +355,7 @@ export class ContentTreeManager {
         else {
             this.tree.rename_node(data, item.text);
         }
-        item.appendAt = page.appendAt;
+        item.appendAt = page.appendAt||'first';
         item.refPos = parseInt(page.refPos);
 
         let end = page.isNew ? data.children.length : parent.children.length;
@@ -319,8 +368,10 @@ export class ContentTreeManager {
         if (index < 0) index = 0;
         if (index > end) index = end;
         if (page.isNew) {
-            this.tree.create_node(data, item, index);
-            App.data.dco.addPage({id:item.id, title:item.text}, index);
+            const oPage = App.data.dco.addPage({id:item.id, title:item.text}, index);
+            this.tree.create_node(data, item, index, (node) => {
+                this.ensurePageHasSections(oPage);
+            });
         }
         else {
             let current = parent.children.indexOf(data.id);
@@ -353,9 +404,8 @@ export class ContentTreeManager {
         else {
             this.tree.rename_node(data, item.text);
         }
-        item.appendAt = section.appendAt;
+        item.appendAt = section.appendAt||'first';
         item.refPos = parseInt(section.refPos);
-
         let end = section.isNew ? data.children.length : parent.children.length;
         if (item.appendAt == 'before' || item.appendAt == 'after') {
             index = item.refPos + (item.appendAt == 'before' ? 0 : 1);
@@ -389,7 +439,8 @@ export class ContentTreeManager {
         App.data.dco.movePage(data.id, to);
         $.observable(parent.children).move(from, to);
         let action = from < to ? 'movedown' : 'moveup';
-        this.accept({action});
+        console.log('Accept');
+        this.accept({action, from, to});
     }
 
     moveSection(from, to) {
@@ -413,6 +464,7 @@ export class ContentTreeManager {
             $.observable(tpage).setProperty("expanded", true);
             let oSection = fPage.removeSection(section.id);
             tPage.addSection(oSection, toidx);
+            this.ensurePageHasSections(fPage);
         }
         else {
             $.observable(parent.children).move(from, to);
@@ -420,6 +472,19 @@ export class ContentTreeManager {
         }
         let action = from < to ? 'movedown' : 'moveup';
         this.accept(action);
+    }
+
+    //A page needs to have a least one section
+    ensurePageHasSections(oPage) {
+        if (oPage.sections.length) return;
+        const section = {
+            id: App.data.dco.getNextSectionId(),
+            type: 'section',
+            parent: oPage.id
+        };
+        section.text = App.i18n.t('section.emptyTitle', { seq: section.id.replace(/[^\d]*/, '')});
+        const oSection = oPage.addSection({id: section.id, title: section.text});
+        this.tree.create_node(oPage.id, section);
     }
 
     removeTreeItem(data, resolve, reject) {

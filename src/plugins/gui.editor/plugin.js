@@ -4,7 +4,7 @@ import { App } from '../../js/app';
 import { TemplateManager } from './templateManager';
 import { ContentTreeManager } from './contentTreeManager';
 import { ResourceTreeManager } from './resourceTreeManager';
-
+import { ComponentEditor } from './componentEditor';
 
 const templateMap = {
     sidebar: 'script#gui-editor-sidebar',
@@ -44,7 +44,6 @@ export class GuiEditor {
                 this.activateTab(ui.newTab, ui.oldTab);
             }
         });
-
         this.activateTab(App.ui.$sidebar.find('li[data-tab-id="tab-1"]'));
     }
 
@@ -100,16 +99,39 @@ export class GuiEditor {
             setTimeout(() => App.ui.$sidebar.localize(), 100);
         }
         $.observable(this.contentModel).setProperty('template', ['#gui-editor-', CONTENT_TAB, '-content', App.ui.responsive ? '-responsive': ''].join(''));
-        this.renderFirst();
+        this.headRendered = false;
+        //this.renderFirst();
     }
 
     initializeContentTreeManager() {
-        this.contentTreeManager = new ContentTreeManager(this.contentTreeActionHandler.bind(this));
+        this.contentTreeManager = new ContentTreeManager(
+            this.contentTreeActionHandler.bind(this),
+            this.contentTreeSelectionHandler.bind(this)
+        );
         return this.contentTreeManager.getConfig();
     }
 
     contentTreeActionHandler(result) {
-        this.render();
+        let container = this.editor.container;
+        if (/(add|move)/.test(result.action)){
+            container = 'content'; //Only content allows moving operations
+        }
+        App.data.dco.updateHtml(container);
+        if (result.action == 'add' && !this.editor.isIndex) {
+            const node = this.contentTreeManager.getSelection();
+            this.renderHead(node).then(() => this.render(node));
+        }
+        else {
+            this.render(this.contentTreeManager.getSelection());
+        }
+    }
+
+    contentTreeSelectionHandler(node) {
+        if (!this.headRendered) {
+            this.renderHead(node);
+            this.headRendered = true;
+        }
+        this.render(node);
     }
 
     loadResourceTab() {
@@ -191,7 +213,9 @@ export class GuiEditor {
         if (this.activeTab == CONTENT_TAB) {
             const template = ['#gui-editor-', CONTENT_TAB, '-content', App.ui.responsive ? '-responsive': ''].join('');
             $.observable(this.contentModel).setProperty('template', template);
-            this.renderFirst();
+            this.headRendered = false;
+            this.contentTreeSelectionHandler(this.contentTreeManager.getSelection());
+            //this.renderFirst();
         }
 
         App.ui.$content.toggleClass('responsive-view');
@@ -214,31 +238,203 @@ export class GuiEditor {
         alert('Esta opción aún no se ha implementado');
     }
 
-    renderFirst() {
-        const $head = $('#editor-container-frame').contents().find('head');
-        if (App.ui.responsive) {
-            $head.append('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
+    renderHead(node) {
+        const $frame = $('#editor-container-frame');
+        this.editor = $frame.get(0);
+        if (node.id == '_root') {
+            this.editor.isIndex = true;
+            this.editor.container = 'index';
         }
-        const template = TemplateManager.get('pageViewStyles');
-        $head.append(template.render());
-        this.render();
+        else {
+            this.editor.isIndex = false;
+            this.editor.container = 'content';
+        }
+        const html = App.data.dco.getHtml(this.editor.container);
+        let promise = new Promise((resolve, reject) => {
+            this.editor.resolve = resolve;
+            this.editor.reject = reject;
+            this.editor.srcdoc = html; //HTML5 only property
+        })
+        $frame.off('load').on('load', () => {
+            const $content = $frame.contents();
+            const $head = $content.find('head');
+            if (App.ui.responsive) {
+                $head.append('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
+            }
+            const template = TemplateManager.get('pageViewStyles');
+            $head.append(template.render());
+            this.registerEditHandlers();
+            this.editor.resolve();
+        });
+        return promise;
     }
 
-    render() {
-        let $viewer = $('#editor-container-frame')
-        let $body = $viewer.contents().find('body');
+    render(node) {
+        let section;
+        if (node.id == '_root') {
+            if (!this.editor.isIndex) {
+                this.renderHead(node);
+                return;
+            }
+        }
+        else {
+            if (this.editor.isIndex) {
+                this.renderHead(node).then(() => this.render(node));
+                return;
+            }
 
-        let html = [];
-        let template = TemplateManager.get('pageView');
-        let home = App.data.dco.getHome();
-        html.push(template.render(home));
-        for(let page of App.data.dco.getPages()) {
-            html.push(template.render(page));
+            if (node.type == 'page') {
+                const page = App.data.dco.getPage(node.id);
+                section = page.getSectionAt(0);
+                this.loadPageInEditor(page, section);
+            }
+            else {
+                if (node.parent == '_floating') {
+                    return; //ToDo: Need to display the hidden section
+                }
+                else {
+                    const page = App.data.dco.getPage(node.parent);
+                    section = page.getSection(node.id);
+                    this.loadPageInEditor(page, section);
+                }
+            }
+        }
+        return;
+    }
+
+    get editorWindow() {
+        return this.editor.contentWindow;
+    }
+    get tepuyApp() {
+        return this.editorWindow.dhbgApp;
+    }
+
+    loadPageInEditor(page, section) {
+        const pageIndex = App.data.dco.pages.indexOf(page);
+        const sectionIndex = page.sections.indexOf(section);
+        this.tepuyApp.loadPage(pageIndex, sectionIndex);
+    }
+
+    registerEditHandlers() {
+        const _$ = this.editorWindow.$;
+        _$(this.editorWindow.document).on('click', '[data-cmpt-type] .tepuy-action', (ev) => {
+            const $target = _$(ev.target); //Need to use jQuery form the frame window so it has all the tepuy plugins added
+            const data = $target.data();
+            if (/^add/.test(data.tepuyAction)) {
+                this.appendComponentDialog(data, $target, data.tepuyAction);
+            }
+            else if (data.tepuyAction == 'remove') {
+                this.removeComponent(data, $target);
+            }
+            else if (/^move-(up|down)$/.test(data.tepuyAction)) {
+                this.moveComponent(data, $target);
+            }
+            else if (data.tepuyAction == 'edit') {
+                this.editComponent(data, $target);
+            }
+        }).on('mouseover', '[data-cmpt-type]', function(e) {
+            e.stopImmediatePropagation();
+            _$('.tepuy-edit-toolbar.'+this.id).show();
+        }).on('mouseout', '[data-cmpt-type]', function(e) {
+            e.stopImmediatePropagation();
+            _$('.tepuy-edit-toolbar.'+this.id).hide();
+        }).on('tepuy.scorm-playing', (ev) => {
+            ev.preventDefault();
+            const page = App.data.dco.pages[0];
+            page && this.contentTreeManager.setSelection(page.id);
+        });
+    }
+
+    appendComponentDialog(data, $target, action) {
+        const $cmpt = $target.closest('[data-cmpt-type]');
+        const id = $cmpt.get(0).id;
+        let ed = this.componentEditor;
+        if (!ed) {
+            ed = this.componentEditor = new ComponentEditor();
+        }
+        ed.setTitle(App.i18n.t('component.addTitle'));
+        ed.setAcceptText(App.i18n.t('commands.add'));
+        ed.show().then((child) => {
+            //Find the parent by id then append the selected node
+            let component = App.data.dco.getComponent(id, this.editor.container);
+            const options = { refEl: $cmpt };
+            if (action == 'add-before') {
+                options.position = 'before';
+                component = component.parent;
+            }
+            else if (action == 'add-after') {
+                options.position = 'after';
+                component = component.parent;
+            }
+            component.appendChild(child, options);
+            component.parser.registerComponent(child, this.editor.container); //Required for the dco.getComponent() method to work with new added components
+            App.data.dco.updateHtml(this.editor.container);
+        }, (err) => {
+            if (err == null) return; //Dialog cancelled
+            //ToDo: handle error.
+        });
+    }
+
+    editComponent(data, $target) {
+        const $cmpt = $target.closest('[data-cmpt-type]');
+        const id = $cmpt.get(0).id;
+
+        let ed = this.componentEditor;
+        if (!ed) {
+            ed = this.componentEditor = new ComponentEditor();
         }
 
-        $body.html(html.join('<br\\>'));
-        this.resize($viewer);
+        ed.setTitle(App.i18n.t('component.editTitle'));
+        ed.setAcceptText(App.i18n.t('commands.accept'));
+
+        const component = App.data.dco.getComponent($cmpt.get(0).id, this.editor.container);
+        component.$host = $cmpt;
+
+        ed.show(component).then((cmpt) => {
+            //update Html
+            component.parser.updateComponentRegistration(this.editor.container, id, cmpt.id);
+            App.data.dco.updateHtml(this.editor.container);
+        }, (err) => {
+            if (err == null) return; //Dialog cancelled
+            //ToDo: handle error.
+        });
     }
+
+    removeComponent(data, $target) {
+        const $cmpt = $target.closest('[data-cmpt-type]');
+        const text = 'component.deleteConfirmation';
+        const question = App.i18n.t(text, {  }, {interpolation: {escapeValue: false}});
+        const title = App.i18n.t('component.deleteTitle');
+
+        App.ui.components.Dialog.confirm(question, title).then(result => {
+            if (!result) return;
+            const component = App.data.dco.getComponent($cmpt.get(0).id, this.editor.container);
+            component.$host = $cmpt;
+            if (component) {
+                component.parser.unregisterComponent(component);
+                component.remove(); //Remove the node from the tree
+                App.data.dco.updateHtml(this.editor.container);
+            }
+        });
+    }
+
+    moveComponent(data, $target) {
+        const direction = data.tepuyAction.replace('move-', '');
+        const $cmpt = $target.closest('[data-cmpt-type]');
+        const id = $cmpt.get(0).id;
+        const component = App.data.dco.getComponent(id, this.editor.container);
+        component.$host = $cmpt;
+        const parent = component.parent;
+
+        if (data.tepuyAction == 'move-up') {
+            parent.moveUp(component);
+        }
+        else {
+            parent.moveDown(component);
+        }
+        App.data.dco.updateHtml(this.editor.container);
+    }
+
 
     resize($viewer) {
         let height = $viewer.get(0).contentWindow.document.documentElement.scrollHeight + 'px';

@@ -16,12 +16,13 @@ const browserSync = require('browser-sync').create();
 const reload      = browserSync.reload;
 const { rollup }  = require('rollup');
 const { minify } = require('html-minifier');
-const babel = require('rollup-plugin-babel');
-const resolve = require('@rollup/plugin-node-resolve');
+const { babel } = require('@rollup/plugin-babel');
+const resolve = require('@rollup/plugin-node-resolve').default;
 const commonjs = require('@rollup/plugin-commonjs');
 const multiEntry = require("rollup-plugin-multi-entry");
 const i18nScanner = require('i18next-scanner');
 const fs = require('fs');
+const KarmaServer = require('karma').Server;
 
 const destFolder = "./dist";
 
@@ -29,10 +30,12 @@ const vendorjs = [
     'node_modules/moment/min/moment-with-locales.min.js',
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-ui-dist/jquery-ui.min.js',
-    'node_modules/jsviews/jsviews.min.js',
+    'node_modules/jsviews/jsviews.js',
     'vendor/js/jsviews-jqueryui-widgets.min.js',
     'node_modules/i18next/i18next.min.js',
-    'vendor/js/jstree.js'
+    'vendor/js/jstree.js',
+    'vendor/js/tinymce.min.js',
+    'vendor/js/jquery.tinymce.min.js'
 ];
 
 const vendorcss = [
@@ -71,7 +74,10 @@ function copyVendorAssets(done) {
     const jstree = () => gulp.src(['./vendor/assets/**/*'])
         .pipe(gulp.dest(destFolder + '/vendor/assets/'));
 
-    return gulp.parallel(jqueryui, jstree, (subdone) => {
+    const tepuy = () => gulp.src(['./vendor/tepuy/**/*'])
+        .pipe(gulp.dest(destFolder + '/vendor/tepuy/'));
+
+    return gulp.parallel(jqueryui, jstree, tepuy, (subdone) => {
         subdone();
         done();
     })();
@@ -108,8 +114,8 @@ function customTransform(file, enc, done) {
     done();
 }
 
-function translations() {
-    return gulp.src(["./src/**/*.{js,html}"]) //'./src/**.{js,html}'
+function translations(done) {
+    const core = () => gulp.src(["./src/**/*.{js,html}"]) //'./src/**.{js,html}'
         .pipe(i18nScanner({
             lngs: ['es', 'en'], // supported languages
             trans: false,
@@ -128,6 +134,14 @@ function translations() {
         }, customTransform))
         .pipe(gulp.dest('./src'))
         .pipe(gulp.dest(destFolder));
+
+    const plugins = () => gulp.src(['./src/plugins/**/i18n/*.json'])
+        .pipe(gulp.dest(destFolder + '/plugins/'));
+
+    return gulp.parallel(core, plugins, (subdone) => {
+        subdone();
+        done();
+    })();
 }
 
 gulp.task("vendorjs", function() {
@@ -141,9 +155,6 @@ gulp.task("vendorassets", copyVendorAssets);
 gulp.task("vendorcss", gulp.parallel(joinVendorCss, 'vendorassets', copyIcons));
 
 function rollupBuildTask(config) {
-    const isPluginPath = (path) => {
-
-    }
     return () => {
         const externals = ['jquery', 'moment', 'i18next', ...config.globals?Object.keys(config.globals):[]];
         const globals = {
@@ -176,7 +187,8 @@ function rollupBuildTask(config) {
                     ]
                 }),
                 babel({
-                    exclude: 'node_modules/**'
+                    exclude: 'node_modules/**',
+                    babelHelpers: 'bundled'
                 }),
                 //(process.env.NODE_ENV === 'production' && uglify())
             ]
@@ -279,7 +291,22 @@ gulp.task('html', function () {
         .pipe(browserSync.stream());
 });
 
-gulp.task('compile', gulp.parallel('html', 'sass', 'vendorcss', 'vendorjs', 'js', copyThemesAssets, translations));
+gulp.task('html-test', function () {
+    return gulp.src('./test.html')
+        .pipe(inject(gulp.src(['./src/plugins/**/*.html']), {
+            starttag: '<!-- inject:template:{{ext}} -->',
+            transform: (filePath, file) => {
+                return minify(file.contents.toString('utf8'), { 
+                    collapseWhitespace: true,
+                    processScripts: ['text/html', 'text/x-template', 'text/x-jsrender']
+                });
+            }
+        }))
+        .pipe(gulp.dest(destFolder))
+        .pipe(browserSync.stream());
+});
+
+gulp.task('compile', gulp.parallel('html', 'html-test', 'sass', 'vendorcss', 'vendorjs', 'js', copyThemesAssets, translations));
 
 // Static Server + watching scss/html files
 gulp.task('serve', gulp.series('compile', function () {
@@ -301,6 +328,13 @@ gulp.task('serve', gulp.series('compile', function () {
     });
     gulp.watch(["./index.html", "./src/plugins/**/*.html"], gulp.parallel('html', translations));
 }));
+
+
+gulp.task('test', function (done) {
+  new KarmaServer({
+    configFile: __dirname + '/karma.config.js'
+  }, done).start();
+});
 
 gulp.task('build-js', function () {
     return gulp.src("./dist/tepuy-editor.js")

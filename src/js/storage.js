@@ -49,6 +49,26 @@ export class Storage {
         return this._impl.deleteResource(dco, path);
     }
 
+    getIndex(dco) {
+        this._checkImplementation('getIndex');
+        return this._impl.getIndex(dco);
+    }
+
+    updateIndex(dco, index) {
+        this._checkImplementation('updateIndex');
+        return this._impl.updateIndex(dco, index);
+    }
+
+    getContent(dco) {
+        this._checkImplementation('getContent');
+        return this._impl.getContent(dco);
+    }
+
+    updateContent(dco, content) {
+        this._checkImplementation('updateContent');
+        return this._impl.updateContent(dco, content);
+    }
+
     share(dco) {
         this._checkImplementation('share');
         return this._impl.share(dco);

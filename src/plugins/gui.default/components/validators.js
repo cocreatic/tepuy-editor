@@ -1,4 +1,6 @@
 export const Validators = (() => {
+    const P_HTML_ID = /^[a-zA-Z][\w\.-]*$/;
+    const P_HTML_CLASSNAME = /^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$/;
     const EMAIL_REGEXP =
       /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/;
 
@@ -45,6 +47,10 @@ export const Validators = (() => {
         email,
         maxLength,
         sizeUnit,
-        pattern
+        pattern,
+        patterns: {
+            HTMLID: P_HTML_ID,
+            HTMLCLASSNAME: P_HTML_CLASSNAME
+        }
     };
 })();
