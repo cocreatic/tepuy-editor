@@ -26,7 +26,7 @@ export class GuiTemplateChooser {
 
         //const obj = App.storage.getObjects({})[0];
         //if (!obj.baseUrl) obj.baseUrl = 'http://localhost/tepuy-repository/plantilla/';
-        this.openForEdition(obj);
+        //this.openForEdition(obj);
     }
 
     activateTab(tab, oldTab) {
