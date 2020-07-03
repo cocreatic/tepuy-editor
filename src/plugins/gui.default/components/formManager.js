@@ -426,6 +426,9 @@ export class FormBuilder {
             },
             array: {
                 default: '#gui-default-form-array'
+            },
+            html: {
+                default: '#gui-default-form-html'
             }
         };
     }
@@ -462,6 +465,10 @@ export class FormBuilder {
     
     static imageInput(value, settings) {
         return FormBuilder.control(FormBuilder.templates.imageInput.default, value, settings);
+    }
+    
+    static html(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.html.default, value, settings);
     }
     
     static group(controlsConfig, settings){

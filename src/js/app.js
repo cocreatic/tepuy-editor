@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import Backend from 'i18next-xhr-backend';
+import Backend from 'i18next-http-backend';
 import jqueryI18next from 'jquery-i18next';
 import properties from './properties';
 import { sortInsert } from './utils';
@@ -136,10 +136,12 @@ class App {
         .init({
             lng: 'es',
             fallbackLng: 'es',
-            ns: ['core'],
+            ns: ['core', ...Object.keys(this.plugins)],
             defaultNS: 'core',
             backend: {
-                loadPath: 'i18n/{{lng}}/{{ns}}.json'
+                loadPath: (lngs, namespaces) => {
+                    return namespaces.indexOf('core') >= 0 ? 'i18n/{{lng}}/{{ns}}.json' : 'plugins/{{ns}}/i18n/{{lng}}.json';
+                }
             }
         }, (err, t) => {
             jqueryI18next.init(i18next, $);

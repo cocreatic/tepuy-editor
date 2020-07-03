@@ -1,3 +1,4 @@
+//import { v4 as uuidv4 } from 'uuid';
 export const privateMap = new WeakMap();
 
 export const _ = (instance) => {
@@ -52,7 +53,11 @@ export function loadFile(filename, filetype) {
 }
 
 export function newid() {
-    return ''+(new Date().getTime());
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+    //return uuidv4();// ''+(new Date().getTime());
 }
 
 export function b64EncodeUnicode(str) {
@@ -75,6 +80,10 @@ export function checkAbstractImplementation(instance, classDefinition, method) {
 
 export function camelCaseToDash(str) {
     return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+export function capitalize(string) {
+    return string[0].toUpperCase()+string.slice(1);
 }
 
 

@@ -6,8 +6,9 @@ export class CmptTepuyBasic {
     }
 
     registerComponents(register) {
-        register(components.HtmlBlock);
-        register(components.ContentBox);
-        register(components.InstructionBox);
+        const ns = 'cmpt.tepuyBasic';
+        register(components.HtmlBlock, ns);
+        register(components.ContentBox, ns);
+        register(components.InstructionBox, ns);
     }
 }

@@ -12,6 +12,7 @@
 
 #tpe-content {
     display: flex;
+    min-height: 100%;
 
     iframe {
         border:none;
@@ -119,6 +120,104 @@
     .image-wrapper {
         display: flex;
         img { margin: auto; width: 120px }
+    }
+}
+
+.ui-dialog-content.tpe-component-editor {
+    padding-bottom: 0;
+}
+
+.tpe-component-lookup {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    overflow-y: hidden;
+
+    .filter-container {
+        padding-bottom: 10px;
+        border-bottom: solid 2px var(--tpe-state-default-bdr);
+        .search-box {
+            display: flex;
+            align-items: center;
+            input {
+                flex: 1
+            }
+            button {
+                flex: 0 0 100px;
+            }
+        }
+
+        label {
+            margin-top: 5px;
+            &+div {
+                margin-top: 5px;
+            }
+        }
+    }
+
+    .tpe-check-list {
+        display: flex;
+        justify-content: flex-start;
+        
+        h2 {
+
+        }
+    }
+
+    .tpe-component-list-viewer {
+        min-height: 300px;
+        display: flex;
+        flex: 1;
+        align-items: flex-start;
+        justify-content: center;
+        .tpe-component-list {
+            flex: 1 0 29%;
+            height: 100%;
+            overflow-y: auto;
+            list-style-type: none;
+            margin: 0;
+            box-sizing: border-box;
+
+            .tpe-list-item {
+                display: grid;
+                grid-template-columns: 30px auto;
+                grid-template-rows: 50% 50%;
+                margin: 0;
+                padding: 5px;
+
+                &.ui-selecting {
+                    background: #FECA40;
+                }
+
+                &.ui-selected {
+                    background: var(--tpe-state-selected-bg); // #F39814;
+                    color: var(--tpe-state-selected-clr);
+                }
+
+                .cmpt-thumbnail {
+                    grid-row: 1 / span 2;
+                    grid-column: 1;
+                    font-size: 2em;
+                }
+                .label {
+                    grid-column: 2;
+                    &.name {
+                        grid-row: 1;
+                    }
+                    &.category {
+                        grid-row: 2;
+                    }
+                }
+            }
+        }
+        .tpe-component-viewer {
+            flex: 1 0 70%;
+            height: 100%;
+            overflow-y: auto;
+            border-left: solid 2px var(--tpe-state-default-bdr);
+            padding: 5px;
+            box-sizing: border-box;
+        }
     }
 }
 

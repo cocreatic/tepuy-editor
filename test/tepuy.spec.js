@@ -1,6 +1,6 @@
 import { expect } from './setup';
 import { App } from '../src/js/app';
-import { Component, Section } from '../src/js/component';
+import { Section } from '../src/js/component';
 import { Tepuy } from '../src/js/tepuy';
 import { default as tepuys } from './tepuy.spec.json';
 
@@ -133,7 +133,7 @@ describe('Tepuy parser', function () {
                     if (!contentbox) this.skip();
                 })
 
-                const instructioBoxes = [
+                const instructionBoxes = [
                     { index: 2, title: 'Help', type: '' },
                     { index: 6, title: 'Info', type: 'info' },
                     { index: 9, title: 'Danger', type: 'danger' },
@@ -141,7 +141,7 @@ describe('Tepuy parser', function () {
                     { index: 11, title: 'None', type: 'none' }
                 ];
 
-                instructioBoxes.forEach((test, i) => {
+                instructionBoxes.forEach((test, i) => {
                     describe(test.title + ' Instruction Box', function() {
                         let instructionbox;
 
@@ -153,7 +153,7 @@ describe('Tepuy parser', function () {
                             expect(instructionbox).to.not.be.undefined;
                         })
 
-                        it('should be an InstructionBox', function() {
+                        it('should be an Instruction Box', function() {
                             expect(instructionbox).to.have.property('cmptType', 'instruction-box');
                         })
 

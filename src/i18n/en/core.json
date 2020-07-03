@@ -67,7 +67,9 @@
     "before": ""
   },
   "tree": {
-    "root": ""
+    "root": "",
+    "content": "",
+    "floating": ""
   },
   "template": {
     "lastMod": ""
@@ -80,7 +82,9 @@
     "create": "",
     "close": "",
     "yes": "",
-    "not": ""
+    "not": "",
+    "notitle": "",
+    "keyword": ""
   },
   "label": {
     "category": "",
@@ -109,5 +113,24 @@
     "textButtonFolder": "",
     "deleteConfirmation": "",
     "deleteTitle": ""
-  }
+  },
+  "section": {
+    "notitle": "",
+    "newTitle": "",
+    "emptyTitle": ""
+  },
+  "component": {
+    "name": "",
+    "category": "",
+    "categoryName": "",
+    "categoryLabel": "",
+    "deleteTitle": "",
+    "editTitle": "",
+    "addTitle": "",
+    "errors": {
+      "componentRequired": "",
+      "invalidInformation": ""
+    }
+  },
+  "tepuy": ""
 }

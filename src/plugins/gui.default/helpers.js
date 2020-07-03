@@ -40,7 +40,8 @@ const iconMap = {
     "pdf": "fa fa-file-pdf",
     "share-edit": "pen",
     "share-view": "eye",
-    "check": "check"
+    "check": "check",
+    "box": "box"
 };
 
 export const helpers = {

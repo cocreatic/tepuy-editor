@@ -8,20 +8,12 @@
             <li data-tab-id="tab-5"><a href="#tab-5">{{:~icon('share')}}</a></li>
         </ul>
         <div id="tab-1" class="tpe-object-tree">
-            <h3 class="ui-widget ui-widget-header" data-i18n="sidebar.content"></h3>
+            <!--h3 class="ui-widget ui-widget-header" data-i18n="sidebar.content"></h3-->
             {^{if content}}
             <div class="tpe-toolset">
                 <h3 class="ui-widget-header" data-i18n="editor.content.objecttree"></h3>
                 <div class="tpe-toolset-content">
                     {^{jstree content.jtData config=content.jtConfig /}}
-                </div>
-                <h3 class="ui-widget-header" data-i18n="editor.content.othersections"></h3>
-                <div class="tpe-toolset-content">
-                    {^{selectable class="tpe-list" elem="ul"}}
-                    {^{for content.extras }}
-                        <li data-item-id="{{:id}}" class="tpe-list-item">{{:title}}</li>
-                    {{/for}}
-                    {{/selectable}}
                 </div>
             </div>
             {{/if}}

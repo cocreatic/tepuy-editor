@@ -1,3 +1,7 @@
+import { Tepuy } from './tepuy';
+import { Page } from './component';
+import { b64DecodeUnicode, capitalize } from './utils';
+
 const defaultConfig = {
     shareAsTemplate: false,
     interactionMode: 'web', //'web' || 'scorm'
@@ -16,7 +20,7 @@ export class Dco {
 
         this.manifest = Object.assign({}, defaultConfig, manifest);
 
-        this.home = new Page({id: 'home', title: 'Inicio' });
+        //this.home = new Page({id: 'home', title: 'Inicio' });
         this.addExtra({id: 'extra1', title: 'Extra 1'});
         this.addExtra({id: 'extra2', title: 'Extra 2'});
         this.addExtra({id: 'extra3', title: 'Extra 3'});
@@ -33,6 +37,10 @@ export class Dco {
         return this.manifest.id;
     }
 
+    get pages() {
+        return this.parser.content.pages;
+    }
+
     update(properties) {
         this.manifest = Object.assign(this.manifest, properties);
         return this.save();
@@ -42,8 +50,41 @@ export class Dco {
         return this.storage.save(this.manifest);
     }
 
+    getHtml(container, editMode=true) {
+        const suffix = capitalize(container);
+        return this.parser['get'+suffix]({editMode, baseUrl: this.manifest.baseUrl});
+    }
+
+    updateHtml(container) {
+        const suffix = capitalize(container);
+        return this.storage['update'+suffix](this.manifest, this.parser['get'+suffix]({editMode: false}));
+    }
+
+//    getIndex(editMode = true) {
+//        return this.parser.getIndex({editMode, baseUrl: this.manifest.baseUrl});
+//    }
+//
+//    updateIndex() {
+//        return this.storage.updateIndex(this.manifest, this.parser.getIndex({editMode: false}));
+//    }
+//
+//    getContent(editMode = true) {
+//        return this.parser.getContent({editMode, baseUrl: this.manifest.baseUrl});
+//    }
+//
+//    updateContent() {
+//        return this.storage.updateContent(this.manifest, this.parser.getContent({editMode: false}));
+//    }
+//
     objectTree() {
-        return this.tree;
+        return Promise.all([this.storage.getIndex(this.manifest), this.storage.getContent(this.manifest)]).then(output => {
+            const [index, content] = [...output];
+            this.parser = new Tepuy({index, content});
+
+            return this.parser.parse().then(result => {
+                return { pages: this.parser.content.pages, floating: this.parser.content.floating };
+            });
+        });
     }
 
     extras() {
@@ -51,41 +92,49 @@ export class Dco {
     }
 
     getHome() {
-        return this.home;
+        return this.parser.home;
+    }
+
+    getNextPageId() {
+        return this.parser.nextPageId();
+    }
+
+    getNextSectionId() {
+        return this.parser.nextSectionId();
     }
 
     addPage(page, index) {
-        let oPage = new Page(page);
+        const oPage = new Page('section', { id: page.id, title: page.title });
         if (index == undefined) {
-            this.tree.pages.push(oPage);
+            this.pages.push(oPage);
         }
         else {
-            this.tree.pages.splice(index, 0, oPage);
+            this.pages.splice(index, 0, oPage);
         }
         return oPage;
     }
 
-    getPage(id) {
-        return this.tree.pages.find(p => p.id == id);
+    getComponent(id, container) {
+        return this.parser.getComponent(id, container);
     }
 
-    getPages() {
-        return this.tree.pages;
+    getPage(id) {
+        return this.pages.find(p => p.id == id);
     }
 
     movePage(id, toIndex) {
-        let index = this.tree.pages.findIndex(p => p.id == id);
+        let index = this.pages.findIndex(p => p.id == id);
         if (toIndex > index) {
             toIndex--;
         }
-        let oPage = this.tree.pages.splice(index, 1)[0];
-        this.tree.pages.splice(toIndex, 0, oPage);
+        let oPage = this.pages.splice(index, 1)[0];
+        this.pages.splice(toIndex, 0, oPage);
     }
 
     deletePage(id) {
-        let index = this.tree.pages.findIndex(p => p.id == id);
+        let index = this.pages.findIndex(p => p.id == id);
         if (index >= 0) {
-            this.tree.pages.splice(index, 1);
+            this.pages.splice(index, 1);
         }
         return Promise.resolve(true);
     }
@@ -114,41 +163,3 @@ export class Dco {
         return this.storage.deleteFolder(this.manifest, path);
     }
 }
-
-export class Page {
-    constructor({id, title}) {
-        this.id = id;
-        this.title = title;
-        this.sections = [];
-    }
-
-    getSection(id) {
-        return this.sections.find(s => s.id == id);
-    }
-
-    addSection(section, index) {
-        section.parent = this;
-        if (index == undefined || index < 0 || index >= this.sections.length) {
-            this.sections.push(section);
-        }
-        else {
-            this.sections.splice(index, 0, section);
-        }
-        return section;
-    }
-
-    removeSection(id) {
-        let idx = this.sections.findIndex(s => s.id == id);
-        return this.sections.splice(idx, 1)[0];
-    }
-
-    moveSection(id, toIndex) {
-        let index = this.sections.findIndex(s => s.id == id);
-        if (toIndex > index) {
-            toIndex--;
-        }
-        let section = this.sections.splice(index, 1)[0];
-        this.sections.splice(toIndex, 0, section);
-    }
-}
-

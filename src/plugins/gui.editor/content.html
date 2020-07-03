@@ -89,7 +89,7 @@
     </div>
 </script>
 
-<script id="gui-editor-page" type="text/x-template">
+<script id="gui-editor-page-deprecated" type="text/x-template">
     <div class="ui-component page" id="{{:id}}">
         <h1 class="title">{{:title}}</h1>
         <button class="ui-widget ui-button">{{:~translate('commands.addComponent')}}&nbsp;<i>+</i></button>
@@ -106,46 +106,149 @@
     </div>
 </script>
 
+<script id="gui-editor-page" type="text/x-template">
+    <div class="ui-component section" id="{{:id}}">
+        <h2 class="title">{{:title||~translate('section.notitle')}}</h2>
+        <button class="ui-widget ui-button">{{:~translate('commands.addComponent')}}<i>+</i></button>
+        <p>--&gt;Usar el boton agregar componente para agregar contenido&lt;--<p>
+        {{for children}}
+        <div class="ui-component component">
+            {{:html}}
+        </div>
+        {{/for}}
+    </div>
+</script>
+
+<script id="gui-editor-component-lookup" type="text/x-template">
+    {^{if mode=='loading' }}
+    <div class="loading">Loading...</div>
+    {{else mode=='lookup' }}
+    <div class="tpe-component-lookup">
+        <div class="filter-container">
+            <label data-i18n="general.keyword"></label>
+            <div class="search-box">
+                {{:~icon('search')}}
+                <input type="text" id="keyword" class="text-box" placeholder="{{:~translate('general.keyword')}}" />
+                <button class="ui-button ui-corner-all" id="filter" data-link="{on applyFilter}" >
+                    {{:~icon('filter')}}&nbsp;{{:~translate('button.filter')}} 
+                </button>
+            </div>
+            <label data-i18n="general.category"></label>
+            <div id="category-selector" class="tpe-check-list">
+                {^{for categories ~categories=filter.categories}}
+                <div>
+                    <input type="checkbox" value="{{:id}}" id="c_{{:#index}}" data-link="{:~categories[id]}" />
+                    <label for="c_{{:#index}}">{{:~translate(label)}}</label>
+                </div>
+                {{/for}}
+            </div>
+        </div>
+        <div class="tpe-component-list-viewer">
+            {^{selectableList components selectedIndex=selectedIndex elem="ul" class="tpe-item-list tpe-component-list"}}
+                <div class="cmpt-thumbnail">{^{:~icon('box')}}</div>
+                <span class="label name"><strong>{{:~translate('component.name')}}</strong>:{^{:name}}</span>
+                <span class="label category"><strong>{{:~translate('component.categoryLabel')}}</strong>: {^{:~translate('component.category.'+category)}}</span>
+            {{/selectableList}}
+            <div class="tpe-component-viewer">
+                Details of the component selected here: {^{:selectedIndex}}
+                {^{include components[selectedIndex] onError=""}}
+                    {{:name}}<br/>
+                    {{:category}}
+                {{/include}}
+            </div>
+        </div>
+    </div>
+    {{else mode=='edit'}}
+    <div class="component-editor">
+        <div class="tpe-form-container">
+            <div class="tpe-form form-group">
+            {^{props form.controls}}
+                {^{include prop ^tmpl=prop^template ~ctrlName=key id=prop.id /}}
+            {{/props}}
+            </div>
+        </div>
+    </div>
+    {{/if}}
+</script>
+
+<script id="gui-editor-page-index" type="text/x-template">
+    <script type="text/javascript">
+        
+
+    </script>
+</script>
 <script id="gui-editor-page-styles" type="text/x-template">
     <style>
-        body {
-            font-size: 14px;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        .ui-component {
+        [data-cmpt-type] {
             border: 1px dashed #ccc;
+            padding-top: 4px;
             margin: 0 4px 10px 4px;
             display: flex;
             flex-flow: column;
         }
-        .ui-component .title {
+
+        [data-cmpt-type="page"] {
+            border: none;
+        }
+
+        [data-cmpt-type].tepuy-edit {
+            position: relative;
+            cursor: default;
+        }
+
+        [data-cmpt-type].tepuy-edit .tepuy-edit-toolbar {
+            position: absolute;
+            right: 0;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            font-size: 1.2em;
+            background-color: #cecece;
+            cursor: pointer;
+        }
+
+        [data-cmpt-type].tepuy-edit .tepuy-edit-toolbar i {
+            margin: 4px;
+            flex: 1;
+        }
+
+        [data-cmpt-type].tepuy-edit .tepuy-edit-toolbar i:hover {
+            background-color: #fefefe;
+        }
+
+        [data-cmpt-type].tepuy-edit .tepuy-edit-toolbar i.disabled {
+            pointer-events: none;
+            user-select: none;
+            cursor: default;
+        }
+
+        [data-cmpt-type].tepuy-edit .tepuy-edit-toolbar.toolbar-top {
+            top: -26px;
+        }
+
+        [data-cmpt-type].tepuy-edit .tepuy-edit-toolbar.toolbar-bottom {
+            bottom: -26px;
+        }
+
+        [data-cmpt-type] .title {
             border: solid 1px #666;
             margin: .2em;
             padding: .2em;
         }
 
-        .ui-button {
-            width: 150px;
-            margin: 0 auto;
+        [data-cmpt-type] .tepuy-button {
+            width: 170px;
+            margin: 5px auto;
             padding: .5em;
             border: solid 1px #ccc;
             margin-bottom: 10px;
             display: inline-block;
         }
 
-        p {
-            text-align: center;
-            margin: .2em;
-        }
-
-        i {
-            border: solid 1px #ccc;
-            border-radius: 50%;
-            font-size: 1.4em;
-            height: 20px;
-            width: 20px;
+        [data-cmpt-type] .tepuy-button i {
             display: inline-block;
+            margin-left: 5px;
+            pointer-events: none;
         }
     </style>
 </script>

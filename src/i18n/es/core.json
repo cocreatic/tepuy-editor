@@ -33,7 +33,9 @@
     "profile_logout": "Salir"
   },
   "tree": {
-    "root": "Inicio"
+    "root": "Inicio",
+    "content": "Contenido",
+    "floating": "Secciones independientes"
   },
   "label": {
     "keyword": "Palabra clave",
@@ -57,7 +59,9 @@
     "license": "Licencia",
     "category": "Categoría",
     "yes": "Si",
-    "not": "No"
+    "not": "No",
+    "notitle": "Sin título",
+    "keyword": "Palabra clave"
   },
   "detail": {
     "description": "Descripción"
@@ -92,7 +96,9 @@
     "id": "Id #",
     "append": "Agregar",
     "deleteTitle": "Eliminar sección",
-    "deleteConfirmation": "¿Está seguro de eliminar la sección <i>{{section}}</i>? No se podrá recuperar luego la información que contiene."
+    "deleteConfirmation": "¿Está seguro de eliminar la sección <i>{{section}}</i>? No se podrá recuperar luego la información que contiene.",
+    "notitle": "Sin título",
+    "emptyTitle": "Sección {{seq}}"
   },
   "commands": {
     "add": "Agregar",
@@ -172,7 +178,28 @@
     "title": "Nombre de la carpeta",
     "editTitle": "Editar nombre de la carpeta",
     "textButtonFolder": "Crear carpeta",
-    "deleteConfirmation": "¿Está seguro de eliminar la carpeta <i>{{folder}}</i>? <br/> No se podrá recuperar la información que esta contiene.",
+    "deleteConfirmation": "¿Está seguro de eliminar la carpeta <i>{{folder}}</i>? <br/>No se podrá recuperar la información que esta contiene.",
     "deleteTitle": "Eliminar Carpeta"
-  }
+  },
+  "component": {
+    "id": "Id",
+    "name": "Nombre",
+    "categoryLabel": "Categoría",
+    "category": {
+      "textblock": "Texto especial",
+      "multimedia": "Multimedia",
+      "layout": "Formato de contenido",
+      "activity": "Actividad"
+    },
+    "categoryName": "",
+    "deleteConfirmation": "¿Está seguro de eliminar el componente seleccionado? <br/>No se podrá recuperar luego la información que contiene.",
+    "addTitle": "Agregar componente",
+    "deleteTitle": "Remover componente",
+    "editTitle": "Editar componente",
+    "errors": {
+      "componentRequired": "Por favor seleccione un tipo de componente para continuar",
+      "invalidInformation": "La información proporcionada esta incompleta o no es válida. Por favor verifique antes de continuar."
+    }
+  },
+  "tepuy": "Tepuy Editor"
 }

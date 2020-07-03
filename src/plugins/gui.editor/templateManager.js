@@ -4,7 +4,8 @@ const templateMap = {
     editPage: 'script#gui-editor-edit-page',
     editSection: 'script#gui-editor-edit-section',
     pageView: 'script#gui-editor-page',
-    pageViewStyles: 'script#gui-editor-page-styles'
+    pageViewStyles: 'script#gui-editor-page-styles',
+    componentLookup: 'script#gui-editor-component-lookup'
 }
 
 export const TemplateManager = {

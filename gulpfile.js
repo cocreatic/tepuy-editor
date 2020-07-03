@@ -30,10 +30,12 @@ const vendorjs = [
     'node_modules/moment/min/moment-with-locales.min.js',
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-ui-dist/jquery-ui.min.js',
-    'node_modules/jsviews/jsviews.min.js',
+    'node_modules/jsviews/jsviews.js',
     'vendor/js/jsviews-jqueryui-widgets.min.js',
     'node_modules/i18next/i18next.min.js',
-    'vendor/js/jstree.js'
+    'vendor/js/jstree.js',
+    'vendor/js/tinymce.min.js',
+    'vendor/js/jquery.tinymce.min.js'
 ];
 
 const vendorcss = [
@@ -72,7 +74,10 @@ function copyVendorAssets(done) {
     const jstree = () => gulp.src(['./vendor/assets/**/*'])
         .pipe(gulp.dest(destFolder + '/vendor/assets/'));
 
-    return gulp.parallel(jqueryui, jstree, (subdone) => {
+    const tepuy = () => gulp.src(['./vendor/tepuy/**/*'])
+        .pipe(gulp.dest(destFolder + '/vendor/tepuy/'));
+
+    return gulp.parallel(jqueryui, jstree, tepuy, (subdone) => {
         subdone();
         done();
     })();
@@ -109,8 +114,8 @@ function customTransform(file, enc, done) {
     done();
 }
 
-function translations() {
-    return gulp.src(["./src/**/*.{js,html}"]) //'./src/**.{js,html}'
+function translations(done) {
+    const core = () => gulp.src(["./src/**/*.{js,html}"]) //'./src/**.{js,html}'
         .pipe(i18nScanner({
             lngs: ['es', 'en'], // supported languages
             trans: false,
@@ -129,6 +134,14 @@ function translations() {
         }, customTransform))
         .pipe(gulp.dest('./src'))
         .pipe(gulp.dest(destFolder));
+
+    const plugins = () => gulp.src(['./src/plugins/**/i18n/*.json'])
+        .pipe(gulp.dest(destFolder + '/plugins/'));
+
+    return gulp.parallel(core, plugins, (subdone) => {
+        subdone();
+        done();
+    })();
 }
 
 gulp.task("vendorjs", function() {
