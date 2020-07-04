@@ -8,7 +8,7 @@ export const templates = [{
     license:'GPL',
     createdBy:"Fulanito",
     url: "http://localhost/rutatic_salud/plantilla/",
-    baseUrl: 'http://tepuy.bambuco.co/rutatic/plantilla/'
+    baseUrl: 'https://tepuy.bambuco.co/rutatic/plantilla/'
 }, {
     id:'2',
     preview:'https://picsum.photos/400/100?t=2',
@@ -19,7 +19,7 @@ export const templates = [{
     license:'GPL',
     createdBy:"Jesús Otero",
     url: "http://localhost/rutatic_salud/plantilla/",
-    baseUrl: 'http://tepuy.bambuco.co/rutatic/plantilla/'
+    baseUrl: 'https://tepuy.bambuco.co/rutatic/plantilla/'
 }, {
     id:'4',
     preview:'https://picsum.photos/400/100?t=3',
@@ -30,7 +30,7 @@ export const templates = [{
     license:'GPL',
     createdBy:"Fulanito",
     url: "http://localhost/rutatic_salud/plantilla/",
-    baseUrl: 'http://tepuy.bambuco.co/rutatic/plantilla/'
+    baseUrl: 'https://tepuy.bambuco.co/rutatic/plantilla/'
 }, {
     id:'5',
     preview:'https://picsum.photos/400/100?t=4',
@@ -41,5 +41,5 @@ export const templates = [{
     license:'GPL',
     createdBy:"Jesús Otero",
     url: "http://localhost/rutatic_salud/plantilla/",
-    baseUrl: 'http://tepuy.bambuco.co/rutatic/plantilla/'
+    baseUrl: 'https://tepuy.bambuco.co/rutatic/plantilla/'
 }];

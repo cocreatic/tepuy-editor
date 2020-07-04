@@ -10,7 +10,7 @@ const empty = {
     license:'GPL',
     createdBy:"",
     url: "",
-    baseUrl: 'http://tepuy.bambuco.co/rutatic/plantilla/'
+    baseUrl: 'https://tepuy.bambuco.co/rutatic/plantilla/'
 };
 
 const store = window.localStorage;
