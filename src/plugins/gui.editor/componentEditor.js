@@ -4,7 +4,8 @@ import { Component } from '../../js/component';
 import { TemplateManager } from './templateManager';
 
 export class ComponentEditor {
-    constructor() {
+    constructor(jQuery) {
+        this.jQuery = jQuery;
         const dlg = new App.ui.components.Dialog({
             title: '',
         });
@@ -20,7 +21,7 @@ export class ComponentEditor {
             components: Object.keys(Component.registry).map((key, i) => { 
                 const entry = Component.registry[key];
                 const t = App.i18n.getFixedT(null, entry.ns);
-                return {name: t(key+'.title'), category: entry.ctor.type, ctor: entry.ctor }; 
+                return {name: t(key+'.title'), category: entry.ctor.type, ctor: entry.ctor, icon: entry.ctor.iconName }; 
             })
         });
         this.filter = {
@@ -80,7 +81,7 @@ export class ComponentEditor {
             dlg.create({
                 open: this.onDialogOpen.bind(this)
             });
-            dlg.host.addClass('tpe-component-editor')
+            dlg.host.addClass('tpy-component-editor')
             dlg.host.empty();
             priv.template.link(dlg.host, this)
             $.observe(this, 'mode', () => {
@@ -120,10 +121,20 @@ export class ComponentEditor {
             //name: ['text', cmpt.name, { label: 'component.name', validators: [validators.required, validators.maxLength(60) ], maxLength: 60, default: true }],
         };
 
-        const length = cmpt.properties.length;
+        let properties = cmpt.properties.slice();
+        if (this.parent && this.parent.childProperties) {
+            const childProperties = this.parent.resolveChildProperties(this.jQuery); // .childProperties.slice();
+            for(let i = 0; i < childProperties.length; i++) {
+                const pName = childProperties[i].name;
+                const cmptValue = cmpt.getPropertyValue(pName);
+                childProperties[i].value = (cmptValue == undefined) ? childProperties[i].value : cmptValue;
+            }
+            properties = [...childProperties, ...properties];
+        }
+        const length = properties.length;
         for(let i = 0; i < length; i++) {
-            const prop = cmpt.properties[i];
-            controls[prop.name] = [prop.type, prop.value, prop.editSettings]
+            const prop = properties[i];
+            controls[prop.name] = [prop.type, prop.value, prop.editSettings];
         }
 
         this.form = builder.group(controls);
@@ -144,13 +155,14 @@ export class ComponentEditor {
             this.setMode('edit');
             return;
         }
-
+        $.observable(this.form).setProperty('submitted', true);
         if (!this.form.valid) {
             App.ui.components.Dialog.message(App.i18n.t('component.errors.invalidInformation'), App.i18n.t('tepuy'));
             return; //Form is not valid. //ToDo: Show errors
         }
         const value = this.form.value;
         this.selected.id = value.id;
+        if (this.parent) this.selected.parent = this.parent;
         for(let prop in value) {
             if (prop == 'id') continue;
             this.selected.setPropertyValue(prop, value[prop]);

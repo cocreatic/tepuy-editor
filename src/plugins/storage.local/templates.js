@@ -41,5 +41,5 @@ export const templates = [{
     license:'GPL',
     createdBy:"Jesús Otero",
     url: "http://localhost/rutatic_salud/plantilla/",
-    baseUrl: 'https://tepuy.bambuco.co/rutatic/plantilla/'
+    baseUrl: 'http://localhost/tepuy-repository/plantilla/'
 }];

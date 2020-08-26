@@ -1,4 +1,4 @@
-.tpe-editor-default {
+.tpy-editor-default {
     display: flex;
     flex-flow: column;
 }
@@ -25,15 +25,15 @@ section {
     flex: 1;
 }
 
-.tpe-avatar {
+.tpy-avatar {
     height: 16px;
     border-radius: 50%;
     margin: 0 2px;
 }
 
-.tpe-list {
+.tpy-list {
 
-    .tpe-list-item {
+    .tpy-list-item {
         cursor: pointer;
     }
 }

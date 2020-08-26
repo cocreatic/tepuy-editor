@@ -33,6 +33,10 @@ export class Dco {
         return dco.update(properties);
     }
 
+    static delete(manifest, storage) {
+        return storage.delete(manifest);
+    }
+
     get id() {
         return this.manifest.id;
     }
@@ -50,6 +54,10 @@ export class Dco {
         return this.storage.save(this.manifest);
     }
 
+    delete() {
+        return this.storage.delete(this.manifest);
+    }
+
     getHtml(container, editMode=true) {
         const suffix = capitalize(container);
         return this.parser['get'+suffix]({editMode, baseUrl: this.manifest.baseUrl});
@@ -60,22 +68,6 @@ export class Dco {
         return this.storage['update'+suffix](this.manifest, this.parser['get'+suffix]({editMode: false}));
     }
 
-//    getIndex(editMode = true) {
-//        return this.parser.getIndex({editMode, baseUrl: this.manifest.baseUrl});
-//    }
-//
-//    updateIndex() {
-//        return this.storage.updateIndex(this.manifest, this.parser.getIndex({editMode: false}));
-//    }
-//
-//    getContent(editMode = true) {
-//        return this.parser.getContent({editMode, baseUrl: this.manifest.baseUrl});
-//    }
-//
-//    updateContent() {
-//        return this.storage.updateContent(this.manifest, this.parser.getContent({editMode: false}));
-//    }
-//
     objectTree() {
         return Promise.all([this.storage.getIndex(this.manifest), this.storage.getContent(this.manifest)]).then(output => {
             const [index, content] = [...output];

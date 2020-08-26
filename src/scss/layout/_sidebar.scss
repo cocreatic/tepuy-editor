@@ -1,7 +1,7 @@
-.tpe-sidebar {
+.tpy-sidebar {
     flex: 0 0 270px;
-    border-right: var(--tpe-panel-border);
-    background: var(--tpe-panel-content-bg);
+    border-right: var(--tpy-panel-border);
+    background: var(--tpy-panel-content-bg);
     overflow-x: hidden;
     display: flex;
     flex-flow: column;
@@ -44,7 +44,7 @@
         border-right: 0;
     }
 
-    .tpe-toolset {
+    .tpy-toolset {
         display: flex;
         flex-flow: column;
         flex: 1;
@@ -54,7 +54,7 @@
             margin: .2em 0;
         }
 
-        .tpe-toolset-content {
+        .tpy-toolset-content {
             flex: 1;
             overflow: auto;
         }

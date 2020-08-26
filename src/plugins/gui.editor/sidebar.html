@@ -7,28 +7,28 @@
             <li data-tab-id="tab-4"><a href="#tab-4">{{:~icon('log')}}</a></li>
             <li data-tab-id="tab-5"><a href="#tab-5">{{:~icon('share')}}</a></li>
         </ul>
-        <div id="tab-1" class="tpe-object-tree">
+        <div id="tab-1" class="tpy-object-tree">
             <!--h3 class="ui-widget ui-widget-header" data-i18n="sidebar.content"></h3-->
             {^{if content}}
-            <div class="tpe-toolset">
+            <div class="tpy-toolset">
                 <h3 class="ui-widget-header" data-i18n="editor.content.objecttree"></h3>
-                <div class="tpe-toolset-content">
+                <div class="tpy-toolset-content">
                     {^{jstree content.jtData config=content.jtConfig /}}
                 </div>
             </div>
             {{/if}}
         </div>
         <div id="tab-2" data-i18n="sidebar.look"></div>
-        <div id="tab-3" class="tpe-object-tree">
+        <div id="tab-3" class="tpy-object-tree">
             {^{if resources}}
             <h3 class="ui-widget ui-widget-header" data-i18n="sidebar.resources"></h3>
-            <div class="tpe-toolset">
+            <div class="tpy-toolset">
                 <h3 class="ui-widget-header" data-i18n="editor.resources.folders"></h3>
-                <div class="tpe-toolset-content">
+                <div class="tpy-toolset-content">
                     {^{jstree resources.jtData config=resources.jtConfig /}}
                 </div>
                 <h3 class="ui-widget-header" data-i18n="editor.resources.actions"></h3>
-                <div class="tpe-toolset-content centered" data-link="{on 'click' '.ui-button' resources.onAction}">
+                <div class="tpy-toolset-content centered" data-link="{on 'click' '.ui-button' resources.onAction}">
                     <div class="ui-widget ui-button" data-action="addFile">
                         <span data-i18n="commands.uploadFile">Subir Archivo</span>
                     </div>
@@ -42,7 +42,7 @@
         <div id="tab-4" data-i18n="sidebar.activityLog"></div>
         <div id="tab-5" data-i18n="sidebar.share"></div>
     </div>
-    <div id="tpe-modal-edit-dlg" title="{{:~translate(dlgTitle)}}"></div>
+    <div id="tpy-modal-edit-dlg" title="{{:~translate(dlgTitle)}}"></div>
 </script>
 <script id="gui-editor-tree-node-toolbar" type="text/x-template">
     {^{if root}}
@@ -58,17 +58,17 @@
     {{/if}}
 </script>
 <script id="gui-editor-edit-page" type="text/x-template">
-    <div class="tpe-form">
-        <div class="tpe-form-control">
+    <div class="tpy-form">
+        <div class="tpy-form-control">
             <label data-i18n="editPage.id">Id</label>
             <input type="text" data-link="id" readonly="true" />
         </div>
-        <div class="tpe-form-control">
+        <div class="tpy-form-control">
             <label data-i18n="editPage.title">Título</label>
             <input type="text" data-link="title" />
         </div>
         {^{if references.length}}
-        <div class="tpe-form-control">
+        <div class="tpy-form-control">
             <label data-i18n="editPage.append">Agregar</label>
             <select data-link="{selectmenu appendAt}">
                 <option value="first" data-i18n="position.start">Al principio</option>
@@ -88,17 +88,17 @@
     </div>
 </script>
 <script id="gui-editor-edit-section" type="text/x-template">
-    <div class="tpe-form">
-        <div class="tpe-form-control">
+    <div class="tpy-form">
+        <div class="tpy-form-control">
             <label data-i18n="editPage.id">Id</label>
             <input type="text" data-link="id" readonly="true" />
         </div>
-        <div class="tpe-form-control">
+        <div class="tpy-form-control">
             <label data-i18n="editPage.title">Título</label>
             <input type="text" data-link="title" />
         </div>
         {^{if references.length}}
-        <div class="tpe-form-control">
+        <div class="tpy-form-control">
             <label data-i18n="editPage.append">Agregar</label>
             <select data-link="{selectmenu appendAt}">
                 <option value="first" data-i18n="position.start">Al principio</option>

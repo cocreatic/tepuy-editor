@@ -10,5 +10,6 @@ export class CmptTepuyBasic {
         register(components.HtmlBlock, ns);
         register(components.ContentBox, ns);
         register(components.InstructionBox, ns);
+        register(components.InteractiveVideo, ns)
     }
 }

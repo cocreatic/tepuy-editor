@@ -41,6 +41,17 @@ export function loadFile(filename, filetype) {
         fileref.setAttribute("type", "text/css")
         fileref.setAttribute("href", filename)
     }
+    else if (filetype == 'json') {
+        return new Promise((resolve, reject) => {
+            $.getJSON(filename).done((json) => {
+                resolve(json);
+            })
+            .fail((jqxhr, statusText, error) => {
+                console.log(`Failed to load ${filename}. ${statusText} - ${error}`);
+                resolve(undefined);
+            });
+        });
+    }
     
     if (typeof fileref!="undefined") {
         return new Promise((resolve, reject) => {
@@ -84,6 +95,32 @@ export function camelCaseToDash(str) {
 
 export function capitalize(string) {
     return string[0].toUpperCase()+string.slice(1);
+}
+
+export function formatDuration(time) {
+    if (isNaN(time) || time < 1) return '00:00';
+    const sec = Math.floor(time % 60);
+    time = Math.floor(time / 60);
+    let min = time % 60;
+    time = Math.floor(time / 60);
+    let result = '';
+    if (time > 0) {
+        result += time + ':';
+    }
+
+    if (min < 10) result += '0';
+    result += min + ':';
+    if (sec < 10) result += '0';
+    result += sec;
+    return result;
+}
+
+export function durationToNumber(duration) { //duration in seconds
+    const matches = /^(?:(\d)+\.)?(?:(\d{1,2})\:)?(?:(\d{1,2})\:)(\d{1,2})$/.exec(duration);
+    if (!matches) return 0;
+    const [days, hours, min, sec] = matches.slice(1).map(g => isNaN(Number(g)) ? 0 : Number(g));
+    const onemin = 60, onehour = onemin * 60, oneday = onehour * 24;
+    return sec + min * onemin + hours * onehour + days * oneday;
 }
 
 

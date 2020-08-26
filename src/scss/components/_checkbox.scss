@@ -5,7 +5,7 @@ input[type="checkbox"] {
     &+label {
         cursor: pointer;
         &:before {
-            border: 1px solid var(--tpe-active-border-color);
+            border: 1px solid var(--tpy-active-border-color);
             content: "\00a0";
             display: inline-block;
             font: 0.9em sans-serif;
@@ -19,8 +19,8 @@ input[type="checkbox"] {
 
     &:checked +label {
         &:before {
-            background: var(--tpe-state-active-bg);
-            color: var(--tpe-state-active-clr);
+            background: var(--tpy-state-active-bg);
+            color: var(--tpy-state-active-clr);
             content: "\2713";
             text-align: center;
         }

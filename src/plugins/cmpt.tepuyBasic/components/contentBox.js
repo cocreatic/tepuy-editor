@@ -14,6 +14,10 @@ export class ContentBox extends ContainerComponent {
         return 'tepuyBoxText';
     }
 
+    static get iconName() {
+        return 'icon1-1';
+    }
+
     constructor(element) { //All controls must receive the host element as a parameter, if no element or string provided, the element will be created but not added to the DOM
         super(element);
         //Initialize public properties
@@ -41,5 +45,11 @@ export class ContentBox extends ContainerComponent {
         if (prop == 'label') {
             this.$host.find('.title').html(value);
         }
+    }
+
+    appendRuntimeChild(refEl, html, method) {
+        if (method != 'append') return false;
+        refEl.find('.box_body').append(html);
+        return true;
     }
 }

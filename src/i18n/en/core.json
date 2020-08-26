@@ -99,7 +99,11 @@
   },
   "dco": {
     "propertiesTitle": "",
-    "nopreview": ""
+    "nopreview": "",
+    "deleteTitle": "",
+    "errors": {
+      "getspeclist": ""
+    }
   },
   "device": {
     "iphone": "",

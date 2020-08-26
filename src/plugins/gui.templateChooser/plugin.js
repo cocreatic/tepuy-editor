@@ -23,10 +23,6 @@ export class GuiTemplateChooser {
         contentTpl.link(App.ui.$content, this);
         sidebarTpl.link(App.ui.$sidebar, this);
         App.$container.localize();
-
-        //const obj = App.storage.getObjects({})[0];
-        //if (!obj.baseUrl) obj.baseUrl = 'http://localhost/tepuy-repository/plantilla/';
-        //this.openForEdition(obj);
     }
 
     activateTab(tab, oldTab) {
@@ -42,36 +38,58 @@ export class GuiTemplateChooser {
     }
 
     loadNewTab() {
-        var categories = App.storage.getTemplateCategories();
-        var templates = App.storage.getTemplates({});
         this.model = {
-            templates: templates,
+            templates: [],
             activeTemplate: {},
-            categories: categories
+            categories: []
         };
         setTimeout(() => App.ui.$content.localize(), 100);
         $.observable(this).setProperty('template', '#gui-tplchooser-new-content');
+        //Load categories
+        App.storage.getTemplateCategories().then(categories => {
+            $.observable(this.model.categories).refresh(categories);
+        });
+        //Load templates
+        App.storage.getTemplates({}).then(templates => {
+            $.observable(this.model.templates).refresh(templates);
+        });
     }
 
     loadEditTab() {
-        var categories = App.storage.getTemplateCategories();
-        var objects = App.storage.getObjects({});
-
         this.model = {
-            objects: objects,
+            objects: [],
             activeObject: {}
         };
         setTimeout(() => App.ui.$content.localize(), 100);
         $.observable(this).setProperty('template', '#gui-tplchooser-edit-content');
+        //Load Objects
+        App.storage.getObjects({}).then(objects => {
+            $.observable(this.model.objects).refresh(objects);
+        });
     }
 
     applyFilter(e) {
         e.preventDefault();
-        var $keyword = App.ui.$sidebar.find('#keyword');
-        var $categories = App.ui.$sidebar.find("#categories input[type=checkbox]:checked");
-        var cats = $categories.map((i, cat) => cat.value);
-        var templates = App.storage.getTemplates({keyword: $keyword.val(), categories: cats.get()});
-        $.observable(this.model.templates).refresh(templates);
+        if (this.isBusy) return;
+        const $keyword = App.ui.$sidebar.find('#keyword');
+        const $categories = App.ui.$sidebar.find("#categories input[type=checkbox]:checked");
+        const cats = $categories.map((i, cat) => cat.value);
+        this.isBusy = true;
+        App.storage.getTemplates({keyword: $keyword.val(), categories: cats.get()}).then(templates => {
+            $.observable(this.model.templates).refresh(templates);
+        })
+        .finally(() => this.isBusy = false);
+    }
+
+    applyObjectsFilter(e) {
+        e && e.preventDefault();
+        var objects = App.storage.getObjects({});
+        $.observable(this.model.objects).refresh(objects);
+        this.isBusy = true;
+        App.storage.getTemplates({keyword: $keyword.val(), categories: cats.get()}).then(templates => {
+            $.observable(this.model.templates).refresh(templates);
+        })
+        .finally(() => this.isBusy = false);
     }
 
     showDetail(e) {
@@ -97,18 +115,20 @@ export class GuiTemplateChooser {
 
     createObject(e, args) {
         this.closeDetail(true);
-        this.showNewObjectForm();
+        App.storage.getSpecList().then(specs => {
+            this.showNewObjectForm(specs.map(spec => ({ value: spec.id, label: spec.name})));
+        })
+        .catch(err => {
+            App.ui.components.Dialog.message(App.i18n.t('dco.errors.getspeclist'), App.i18n.t('tepuy'));
+            console.log(err);
+        })
+
     }
 
-    showNewObjectForm() {
+    showNewObjectForm(types) {
         const builder = App.ui.components.FormBuilder;
         const validators = App.validation.validators;
 
-        const types = [
-            { value: 'rea', label: 'Recurso educativo abierto' },
-            { value: 'obi', label: 'Objeto informativo' },
-            { value: 'red', label: 'Recurso digital' }
-        ];
         let formConfig = builder.group({
             name: ['text', '', { label: 'dco.name', validators: [ validators.required ]}],
             type: ['radio', 'rea', { label: 'dco.type', validators: [ validators.required ], options: types }],
@@ -136,6 +156,15 @@ export class GuiTemplateChooser {
     }
 
     delete(dco) {
-        console.log(dco);
+        const text = 'dco.deleteConfirmation';
+        const question = App.i18n.t(text, {  }, {interpolation: {escapeValue: false}});
+        const title = App.i18n.t('dco.deleteTitle');
+
+        App.ui.components.Dialog.confirm(question, title).then(result => {
+            if (!result) return;
+            App.storage.delete(dco).then(() => {
+                this.applyObjectsFilter();
+            });
+        });
     }
 }

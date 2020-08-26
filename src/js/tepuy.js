@@ -15,10 +15,11 @@ const dependencies = {
     "mediaelementplayer.css": { type: 'style', src: "vendor/tepuy/components/mediaelementjs/mediaelementplayer.css" },
     "jquery.min.js": { type: 'script', src: "vendor/tepuy/components/jquery/jquery.min.js" },
     "jquery-ui.min.js": { type: 'script', src: "vendor/tepuy/components/jquery/jquery-ui.min.js" },
-    "jquery.ui.touch-punch.min.js": { type: 'script', src: "vendor/tepuy/jquery-mobile/jquery.ui.touch-punch.min.js" },
+    "jquery.ui.touch-punch.min.js": { type: 'script', src: "vendor/tepuy/components/jquery-mobile/jquery.ui.touch-punch.min.js" },
     "jquery.event.move.js": { type: 'script', src: "vendor/tepuy/components/twentytwenty/js/jquery.event.move.js" },
     "jquery.twentytwenty.js": { type: 'script', src: "vendor/tepuy/components/twentytwenty/js/jquery.twentytwenty.js" },
     "mediaelement-and-player.min.js": { type: 'script', src: "vendor/tepuy/components/mediaelementjs/mediaelement-and-player.min.js" },
+    "ivideo.js": { type: 'script', src: "vendor/tepuy/components/interactivevideo/ivideo.js" },
     "jquery.maphilight.min.js": { type: 'script', src: "vendor/tepuy/components/maphilight/jquery.maphilight.min.js" },
     "interact.min.js": { type: 'script', src: "vendor/tepuy/components/interact/interact.min.js" },
     "jpit_api.js": { type: 'script', src: "vendor/tepuy/components/pit/jpit_api.js" },
@@ -39,6 +40,7 @@ const dependencies = {
     "app.js": { type: 'script', src: "vendor/tepuy/js/app.js" },
     "init.js": { type: 'script', src: "vendor/tepuy/js/init.js" },
     "lang.es.js": { type: 'script', src: "vendor/tepuy/js/lang.es.js" },
+    "jquery.tepuy.js": { type: 'script', src: "vendor/tepuy/js/jquery.tepuy.js" },
     "lib.js": { type: 'script', src: "vendor/tepuy/js/lib.js" },
     "mobilelib.js": { type: 'script', src: "vendor/tepuy/js/mobilelib.js" },
     "stories.js": { type: 'script', src: "vendor/tepuy/js/stories.js" },
@@ -73,8 +75,20 @@ export class Tepuy {
         $main.empty().html(this.home.root.host.innerHTML);
 
         //Dependecies
-        $head.children().each((i, it) => {
-            const path = it.src;
+        if (editMode) {
+            $head.children('link[type="text/css"],script').remove();
+            $.each(dependencies, function(i, it) {
+                if (it.type == 'style') {
+                    const media = it.media ? ' media="' + it.media + '"' : '';
+                    $head.append(['<link href="', local, it.src, '" rel="stylesheet" type="text/css"', media, '/>'].join(''));
+                }
+                else {
+                    $head.append(['<script type="text/javascript" src="', local, it.src, '"></script>'].join(''));
+                }
+            });
+        }
+        /*$head.children().each((i, it) => {
+            const path = it.src || it.href;
             if (!path) return true; //just ignore it
             const key = path.split('/').pop();
             const dep = dependencies[key];
@@ -87,7 +101,7 @@ export class Tepuy {
             else if (it.src) {
                 it.src = src;
             }
-        });
+        });*/
 
         const $base = $head.find('base');
         if (!editMode) {
@@ -134,22 +148,18 @@ export class Tepuy {
         }
 
         //Dependecies
-        $head.children().each((i, it) => {
-            const path = it.src;
-            if (!path) return true; //just ignore it
-            const key = path.split('/').pop();
-            const dep = dependencies[key];
-            if (!dep) return true; //just ignore it
-            const src = (editMode ? local : '') + dep.src;
-            if (it.href) {
-                it.href = src;
-                if (dep.media) it.media = dep.media;
-            }
-            else if (it.src) {
-                it.src = src;
-            }
-        });
-
+        if (editMode) {
+            $head.children('link[type="text/css"],script').remove();
+            $.each(dependencies, function(i, it) {
+                if (it.type == 'style') {
+                    const media = it.media ? ' media="' + it.media + '"' : '';
+                    $head.append(['<link href="', local, it.src, '" rel="stylesheet" type="text/css"', media, '/>'].join(''));
+                }
+                else {
+                    $head.append(['<script type="text/javascript" src="', local, it.src, '"></script>'].join(''));
+                }
+            });
+        }
         const $base = $head.find('base');
         if (!editMode) {
             if ($base.length) $base.remove();

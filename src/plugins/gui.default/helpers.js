@@ -94,6 +94,13 @@ export const icon = {
     }
 }
 
+export const svgIcon = {
+    render: function(iconName, ns) {
+        if (!iconName) return '';
+        return ['<svg class="svgicon"><use xlink:href="themes/svg-icons.svg#', iconName, '" /></svg>'].join('');
+    }
+}
+
 export const tree = {
     template: "#gui-default-editable-tree",
     editable: false,
@@ -105,9 +112,9 @@ export const tree = {
     },
     onBind: function(tagCtx){
         if (!(tagCtx.props.root===false)) {
-            this.contents(true, 'ul').addClass('ui-widget tpe-tree');
+            this.contents(true, 'ul').addClass('ui-widget tpy-tree');
         }
-        this.contents(true, '.tpe-tree-node').data('item', this.getData());
+        this.contents(true, '.tpy-tree-node').data('item', this.getData());
     },
     //METHODS
     toggle: function(){
@@ -158,7 +165,7 @@ export const shareList = {
     displayElem: 'div',
     init: function(tagCtx) {
         this.itemTemplate = this.tagCtx.props.itemTemplate ||
-            '#gui-default-sharelist-item'; //<div class="tpe-form-list-item"><span>{^{:email}}</span>{^{:~icon(edit?"share-edit":"share-view")}}';
+            '#gui-default-sharelist-item'; //<div class="tpy-form-list-item"><span>{^{:email}}</span>{^{:~icon(edit?"share-edit":"share-view")}}';
         this.model = { email: '', role: 'edit' };
     },
     onBind: function(tagCtx){

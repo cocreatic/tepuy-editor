@@ -12,5 +12,13 @@
         "title": "Instrucción",
         "type": "Tipo",
         "content": "Contenido"
+    },
+    "interactive-video": {
+        "title": "Video interactivo",
+        "source": "Video Url",
+        "autoplay": "Iniciar automáticamente",
+        "triggerAt": "Mostrar en",
+        "hideAt": "Ocultar en",
+        "waitFor": "Pausar video"
     }
 }

@@ -28,9 +28,15 @@ class App {
     }
 
     init(options) {
+        return loadFile('properties.json', 'json').then(props => {
+            this.properties = props || properties;
+            return this.doInit(options);
+        });
+    }
+
+    doInit(options) {
         //Parse options
         this.parseOptions(options);
-
 
         const pluginPromises = [];
         //Load active plugins

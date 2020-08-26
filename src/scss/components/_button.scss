@@ -2,23 +2,23 @@
     //display: inline-flex;
     //justify-content: center;
     align-items: center;
-    background-color: var(--tpe-button-resting-bg);
-    color: var(--tpe-button-resting-color);
+    background-color: var(--tpy-button-resting-bg);
+    color: var(--tpy-button-resting-color);
     transition: background-color .25s ease-out;
 
     &:hover {
-        background-color: var(--tpe-button-hover-bg);
-        color: var(--tpe-button-hover-color);
+        background-color: var(--tpy-button-hover-bg);
+        color: var(--tpy-button-hover-color);
     }
 
     &:focus {
-        background-color: var(--tpe-button-focus-bg, var(--tpe-button-hover-bg));
-        color: var(--tpe-button-focus-color, var(--tpe-button-hover-color));
+        background-color: var(--tpy-button-focus-bg, var(--tpy-button-hover-bg));
+        color: var(--tpy-button-focus-color, var(--tpy-button-hover-color));
     }
 
     &[disabled] {
-        background-color: var(--tpe-button-disabled-bg);
-        color: var(--tpe-button-disabled-color);
+        background-color: var(--tpy-button-disabled-bg);
+        color: var(--tpy-button-disabled-color);
         pointer-events: none;
     }
 }

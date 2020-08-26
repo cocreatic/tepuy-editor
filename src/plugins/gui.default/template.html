@@ -1,14 +1,14 @@
 <script id="gui-default" type="text/x-template">
   <header>
-      <ul id="tpe-menubar" data-link="{menu menuAction}" class="ui-menu-icons">
+      <ul id="tpy-menubar" data-link="{menu menuAction}" class="ui-menu-icons">
           <li>
             <img class="logo" data-link="src{:'themes/'+theme+'/img/logo_tepuy.png'}" alt="" />
           </li>
           {^{for menu tmpl="#gui-default-menu" ~idPrefix="menu." /}}
           {^{if user}}
-          <li data-id="profile" class="tpe-menu-right">
+          <li data-id="profile" class="tpy-menu-right">
             <div>
-              <div class="custom-item-wrapper"><img class="tpe-avatar" src="{{:user.profile_image}}" alt="">{{:user.name}}</div>
+              <div class="custom-item-wrapper"><img class="tpy-avatar" src="{{:user.profile_image}}" alt="">{{:user.name}}</div>
             </div>
             <ul>
               <li data-id="profile_logout">
@@ -20,9 +20,9 @@
       </ul>
   </header>
   <section>
-      <div id="tpe-sidebar" class="tpe-sidebar" data-link="{resizable _minWidth=200 _handles='e'}"></div>
-      <div id="tpe-content-wrapper" class="tpe-content-wrapper">
-        <div id="tpe-content" class="tpe-content"></div>
+      <div id="tpy-sidebar" class="tpy-sidebar" data-link="{resizable _minWidth=200 _handles='e'}"></div>
+      <div id="tpy-content-wrapper" class="tpy-content-wrapper">
+        <div id="tpy-content" class="tpy-content"></div>
       </div>
   </section>
   <footer>
@@ -45,7 +45,7 @@
 <script id="gui-default-editable-tree" type="text/x-template">
   <ul>
     <li>
-      <div class="tpe-tree-node">
+      <div class="tpy-tree-node">
         {^{if children && children.length}}
             {{!-- If there are child items, show a toggle button to expand/collapse children --}}
               <span data-link="{on ~tag.toggle}" class="toggle">
@@ -57,7 +57,7 @@
         {{/if}}
         {^{if icon}}{{:~icon(icon)}}{{/if}}{^{>(root ? ~tagCtx.props.rootLabel : title)}}
         {{if ~tagCtx.props.toolbarTpl}}
-        <div class="tpe-action-bar ui-widget-content" data-link="{on 'click' 'span' ~tag.doAction}">
+        <div class="tpy-action-bar ui-widget-content" data-link="{on 'click' 'span' ~tag.doAction}">
           {{include tmpl=~tagCtx.props.toolbarTpl /}}
         </div>
         {{/if}}
@@ -74,7 +74,7 @@
 </script>
 
 <script id="gui-default-sharelist" type="text/x-template">
-  <div class="tpe-form-sharelist">
+  <div class="tpy-form-sharelist">
     {^{if ~canEdit && ~tag.model}}
       <div class="editionbar">
         <input type="text" data-link="~tag.model.email" />
@@ -88,9 +88,9 @@
           " data-i18n="commands.add"></button>
       </div>
     {{/if}}
-    <ul class="tpe-form-list">
+    <ul class="tpy-form-list">
       {^{for #data canEdit=~canEdit}}
-        <li class="tpe-form-list-item" data-link="class{merge:!!(#getIndex()%2) toggle='item-alt'}">
+        <li class="tpy-form-list-item" data-link="class{merge:!!(#getIndex()%2) toggle='item-alt'}">
         {{if ~canEdit}}<span class="item-command" data-link="{on ~tag.remove #getIndex()}">{{:~icon('remove')}}</span>{{/if}}
         {^{include ^tmpl=~tag.itemTemplate /}}
         </li>
@@ -104,7 +104,7 @@
 </script>
 
 <script id="gui-default-imageinput" type="text/x-template">
-  <div class="tpe-form-imageinput">
+  <div class="tpy-form-imageinput">
     <div class="image-wrapper">
       {^{if ~tag.src}}
         <img data-link="src{:~tag.src}" alt="" />
@@ -121,14 +121,27 @@
   </div>
 </script>
 
+<script id="gui-default-form-control-error" type="text/x-template">
+  {^{if invalid && errors}}
+  <div class="tpy-validation-error">
+    <ul data-link="id{:'errors-list-'+id}" class="tpy-validation-error-list"><!-- ui-tooltip ui-widget-content ui-widget-shadow ui-corner-all-->
+      {^{for errors}}
+        <li>{{:msg}}</li>
+      {{/for}}
+    </ul>
+    {^{tooltip tmpl='<i class="tpy-error-flag fas fa-exclamation-circle" title=""></i>' contentid="errors-list-"+id /}}
+  </div>
+  {{/if}}
+</script>
+
 <script id="gui-default-form-container" type="text/x-template">
-  <div class="tpe-form-container">
+  <div class="tpy-form-container" data-link="class{merge:formConfig^invalid toggle='invalid'} class{merge:submitted toggle='submitted'}">
     {^{include formConfig ^tmpl=formConfig^template /}}
   </div>
 </script>
 
 <script id="gui-default-form-array" type="text/x-template">
-  <div class="tpe-form form-array">
+  <div class="tpy-form form-array">
     {^{for controls}}
       {^{include ^tmpl=template /}}
     {{/for}}
@@ -136,7 +149,7 @@
 </script>
 
 <script id="gui-default-form-group" type="text/x-template">
-  <div class="tpe-form form-group">
+  <div class="tpy-form form-group">
     {^{if label}}<h2>{^{:~translate(label)}}</h2>{{/if}}
     {^{props controls}}
       {^{include prop ^tmpl=prop^template ~ctrlName=key/}}
@@ -145,7 +158,7 @@
 </script>
 
 <script id="gui-default-form-group-two-columns" type="text/x-template">
-  <div class="tpe-form form-group two-columns">
+  <div class="tpy-form form-group two-columns">
     {^{if label}}<h2>{^{:~translate(label)}}</h2>{{/if}}
     <div class="column-wrapper">
       <div class="column column-one">
@@ -165,30 +178,39 @@
 
 <script id="gui-default-form-text" type="text/x-template">
   {^{if visible()}}
-  <div class="tpe-form-control" data-link="class{merge:settings.small toggle='text-small'}">
-      <label data-link="data-i18n{:label}"></label>
-      <input type="text" data-link="
-        {:value:}
-        readonly{:settings.readonly}
-        maxlength{:settings.maxLength}
-        autofocus{:settings.default||null}
-      "/>
+  <div class="tpy-form-control" data-link="class{merge:settings.small toggle='text-small'} class{merge:invalid toggle='invalid'}">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+    <input type="text" data-link=" 
+      {:value:}
+      readonly{:settings.readonly}
+      maxlength{:settings.maxLength}
+      autofocus{:settings.default||null}
+    "/>
   </div>
   {{/if}}
 </script>
 
 <script id="gui-default-form-boolean" type="text/x-template">
   {^{if visible()}}
-  <div class="tpe-form-control">
-      <label data-link="data-i18n{:label}" for="checkbox1"></label>
-      <input type="checkbox" data-link="value" name="checkbox1" />
+  <div class="tpy-form-control" data-link="class{merge:invalid toggle='invalid'}">
+    <label for="checkbox1">
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+    <input type="checkbox" data-link="value" name="checkbox1" />
   </div>
   {{/if}}
 </script>
 
 <script id="gui-default-form-yesornot" type="text/x-template">
-  <div class="tpe-form-control">
-      <label data-link="data-i18n{:label}"></label>
+  <div class="tpy-form-control" data-link="class{merge:invalid toggle='invalid'}">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
       {^{controlgroup}}
         {^{radiogroup value convert='toYesNo' convertBack='fromYesNo' }}
           {^{radio label=~translate('general.yes') value="yes"/}}
@@ -199,9 +221,12 @@
 </script>
 
 <script id="gui-default-form-radio" type="text/x-template">
-  <div class="tpe-form-control">
-      <label data-link="data-i18n{:label}"></label>
-      <div class="tpe-radiogroup" data-link="{radiogroup value}">
+  <div class="tpy-form-control" data-link="class{merge:invalid toggle='invalid'}">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+      <div class="tpy-radiogroup" data-link="{radiogroup value}">
         {^{for settings.options}}
           <label><input type="radio" value="{{:value}}"/>{{:~translate(label)}}</label>
         {{/for}}
@@ -211,10 +236,13 @@
 
 <script id="gui-default-form-optionlist" type="text/x-template">
   {^{if visible()}}
-  <div class="tpe-form-control">
-      <label data-link="data-i18n{:label}"></label>
-      <div class="tpe-optionlist-wrapper">
-        <select class="tpe-optionlist" data-link="{selectmenu value}">
+  <div class="tpy-form-control" data-link="class{merge:invalid toggle='invalid'}">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+      <div class="tpy-optionlist-wrapper">
+        <select class="tpy-optionlist" data-link="{selectmenu value}">
           {^{for settings.options}}
             <option value="{{:value}}">{{:~translate(label)}}</option>
           {{/for}}
@@ -225,23 +253,50 @@
 </script>
 
 <script id="gui-default-form-sharelist" type="text/x-template">
-  <div class="tpe-form-control">
-    <label data-link="data-i18n{:label}"></label>
+  <div class="tpy-form-control" data-link="class{merge:invalid toggle='invalid'}">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
     <div data-link="{shareList value editable=true}"></div>
   </div>
 </script>
 
 
 <script id="gui-default-form-imageinput" type="text/x-template">
-  <div class="tpe-form-control">
-    <label data-link="data-i18n{:label}"></label>
+  <div class="tpy-form-control" data-link="class{merge:invalid toggle='invalid'}">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
     <div data-link="{imageInput value editable=true}"></div>
   </div>
 </script>
 
 <script id="gui-default-form-html" type="text/x-template">
-  <div class="tpe-form-control">
-    <label data-link="data-i18n{:label}"></label>
+  <div class="tpy-form-control" data-link="class{merge:invalid toggle='invalid'}">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
     {^{htmleditor value /}}
   </div>
 </script>
+
+<script id="gui-default-form-duration" type="text/x-template">
+  {^{if visible()}}
+  <div class="tpy-form-control text-small" data-link="class{merge:invalid toggle='invalid'}">
+    <label>
+      <span data-link="data-i18n{:label}"></span>&nbsp;([h:]mm:ss)
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+    <input type="text" data-link="
+      {:value:}
+      readonly{:settings.readonly}
+      maxlength{:settings.maxLength}
+      autofocus{:settings.default||null}
+    "/>
+  </div>
+  {{/if}}
+</script>
+

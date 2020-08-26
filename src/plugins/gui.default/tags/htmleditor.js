@@ -4,11 +4,11 @@ export const tinymceCtrl = { };
 export const htmleditor = {
 // ============================= JSTREE =============================
     argDefault: false, // Do not default missing arg to #data
-    mainElement: ".tpe-htmleditor",
+    mainElement: ".tpy-htmleditor",
     widgetName: 'tinymce',
     bindFrom: [0],
     linkedCtxParam: ["html"],
-    template: '<div class="tpe-htmleditor" data-link="id{:~tagCtx.id}html{:~tagCtx.args[0]}"></div>',
+    template: '<div class="tpy-htmleditor" data-link="id{:~tagCtx.id}html{:~tagCtx.args[0]}"></div>',
     init: function(tagCtx) {
         var content, elemType,
             tag = this;

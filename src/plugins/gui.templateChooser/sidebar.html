@@ -4,12 +4,12 @@
         <li data-tab-id="tab_new"><a href="#tab_new" data-i18n="sidebar.new" ></a></li>
         <li data-tab-id="tab_edit"><a href="#tab_edit" data-i18n="sidebar.edit"></a></li>
     </ul>
-    <div id="tab_new" class="tpe-filter-box">
+    <div id="tab_new" class="tpy-filter-box">
         <div class="search-box">
             {{:~icon('search')}}
             <input type="text" id="keyword" class="text-box" placeholder="{{:~translate('label.keyword')}}" />
         </div>
-        <div id="categories" class="tpe-check-list" >
+        <div id="categories" class="tpy-check-list" >
             <h2 data-i18n="label.category"></h2>
             {^{for model.categories}}
                 <input type="checkbox" value="{{:}}" id="c_{{:#index}}" />
@@ -22,7 +22,7 @@
         </button>
     </div>
     <div id="tab_edit">
-        //Pendiente de implementar
+        &nbsp; <!--ToDo: Implement searching on objects-->
     </div>
     {{/tabs}}
 </script>

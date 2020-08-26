@@ -1,3 +1,5 @@
+import { durationToNumber, formatDuration } from '../../../js/utils';
+
 export const Validators = (() => {
     const P_HTML_ID = /^[a-zA-Z][\w\.-]*$/;
     const P_HTML_CLASSNAME = /^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$/;
@@ -20,7 +22,7 @@ export const Validators = (() => {
         return (ctrl) => {
             if (isEmptyValue(ctrl.value)) return null;
             return ctrl.value.length <= maxLength ? null : { maxLength: true };
-        }
+        };
     };
 
     const sizeUnit = (ctrl) => {
@@ -42,11 +44,47 @@ export const Validators = (() => {
         }
     }
 
+    const duration = (ctrl) => {
+        if (isEmptyValue(ctrl.value)) return null;
+
+        const matches = /^(\d+:)?(\d\d):(\d\d)$/g.exec(ctrl.value);
+        if (!matches) return { duration: true };
+        const min = parseInt(matches[2]);
+        const sec = parseInt(matches[3]);
+
+        if (isNaN(min) || isNaN(sec) || min > 60 || sec > 60 || min < 0 || sec < 0 ) {
+            return { duration: true };
+        }
+        return null;
+    }
+
+    const maxDuration = (maxDuration) => {
+        return (ctrl) => {
+            if (isEmptyValue(ctrl.value)) return null;
+            const value = durationToNumber(ctrl.value);
+            if (value == 0) {
+                console.log(ctrl.value);
+            }
+            return value > maxDuration ? { maxDuration: true, data: { maxDuration: formatDuration(maxDuration) } } : null;
+        };
+    };
+
+    const greatherThan = (controlName) => {
+        return (ctrl) => {
+            if (isEmptyValue(ctrl.value)) return null;
+            const refCtrl = ctrl.parent && ctrl.parent.controls && ctrl.parent.controls[controlName] && ctrl.parent.controls[controlName];
+            return refCtrl && ctrl.value <= refCtrl.value ? { greatherThan: true, data: { refCtrl } } : null;
+        }
+    }
+
     return {
         required,
         email,
         maxLength,
         sizeUnit,
+        duration,
+        maxDuration,
+        greatherThan,
         pattern,
         patterns: {
             HTMLID: P_HTML_ID,

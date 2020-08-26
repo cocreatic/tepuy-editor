@@ -19,9 +19,19 @@ export class Storage {
         return this._impl.getObjects(filter);
     }
 
+    getSpecList() {
+        this._checkImplementation('getSpecList');
+        return this._impl.getSpecList();
+    }
+
     save(dco) {
         this._checkImplementation('save');
         return this._impl.save(dco);
+    }
+
+    delete(dco) {
+        this._checkImplementation('delete');
+        return this._impl.delete(dco);
     }
 
     download(dco) {

@@ -1,4 +1,4 @@
-#tpe-sidebar {
+#tpy-sidebar {
 
     .ui-tabs {
         /*height: 100%;*/
@@ -10,7 +10,7 @@
     }
 }
 
-#tpe-content {
+#tpy-content {
     display: flex;
     min-height: 100%;
 
@@ -107,8 +107,8 @@
 }
 
 
-.tpe-object-tree {
-    .tpe-toolset-content {
+.tpy-object-tree {
+    .tpy-toolset-content {
         .ui-button {
             width: 100px;
             margin: 2px auto;
@@ -116,18 +116,18 @@
     }
 }
 
-.tpe-about-dialog {
+.tpy-about-dialog {
     .image-wrapper {
         display: flex;
         img { margin: auto; width: 120px }
     }
 }
 
-.ui-dialog-content.tpe-component-editor {
+.ui-dialog-content.tpy-component-editor {
     padding-bottom: 0;
 }
 
-.tpe-component-lookup {
+.tpy-component-lookup {
     height: 100%;
     display: flex;
     flex-flow: column;
@@ -135,7 +135,7 @@
 
     .filter-container {
         padding-bottom: 10px;
-        border-bottom: solid 2px var(--tpe-state-default-bdr);
+        border-bottom: solid 2px var(--tpy-state-default-bdr);
         .search-box {
             display: flex;
             align-items: center;
@@ -155,7 +155,7 @@
         }
     }
 
-    .tpe-check-list {
+    .tpy-check-list {
         display: flex;
         justify-content: flex-start;
         
@@ -164,13 +164,13 @@
         }
     }
 
-    .tpe-component-list-viewer {
+    .tpy-component-list-viewer {
         min-height: 300px;
         display: flex;
         flex: 1;
         align-items: flex-start;
         justify-content: center;
-        .tpe-component-list {
+        .tpy-component-list {
             flex: 1 0 29%;
             height: 100%;
             overflow-y: auto;
@@ -178,7 +178,7 @@
             margin: 0;
             box-sizing: border-box;
 
-            .tpe-list-item {
+            .tpy-list-item {
                 display: grid;
                 grid-template-columns: 30px auto;
                 grid-template-rows: 50% 50%;
@@ -190,14 +190,21 @@
                 }
 
                 &.ui-selected {
-                    background: var(--tpe-state-selected-bg); // #F39814;
-                    color: var(--tpe-state-selected-clr);
+                    background: var(--tpy-state-selected-bg); // #F39814;
+                    color: var(--tpy-state-selected-clr);
                 }
 
                 .cmpt-thumbnail {
                     grid-row: 1 / span 2;
                     grid-column: 1;
                     font-size: 2em;
+                    display: flex;
+
+                    .svgicon {
+                        width: 24px;
+                        height: 24px;
+                        margin: auto;
+                    }
                 }
                 .label {
                     grid-column: 2;
@@ -210,11 +217,11 @@
                 }
             }
         }
-        .tpe-component-viewer {
+        .tpy-component-viewer {
             flex: 1 0 70%;
             height: 100%;
             overflow-y: auto;
-            border-left: solid 2px var(--tpe-state-default-bdr);
+            border-left: solid 2px var(--tpy-state-default-bdr);
             padding: 5px;
             box-sizing: border-box;
         }
@@ -295,7 +302,7 @@
         font-size: 1.5em;
         padding: 10px;
         border: dashed 1px #ccc;
-        color: var(--tpe-active-border-color);
+        color: var(--tpy-active-border-color);
         text-align: center;
     }
 }

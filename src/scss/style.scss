@@ -1,13 +1,13 @@
-.tpe-editor-default {
-    //background-color: var(--tpe-content-bg);
+.tpy-editor-default {
+    //background-color: var(--tpy-content-bg);
     display: flex;
-    font-family: var(--tpe-font-family);
+    font-family: var(--tpy-font-family);
     height: 100%;
 
     @import 'vendor/jquery-ui';
     @import 'vendor/jquery-ui-overwrites';
 
-    .tpe-content-wrapper {
+    .tpy-content-wrapper {
         height: 100%;
         overflow: auto;
         flex: 1;
@@ -18,9 +18,9 @@
 
     //Jquery UI Customs
     .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
-        background-color: var(--tpe-state-active-bg);
-        color: var(--tpe-state-active-clr);
-        border: none; //solid 1px var(--tpe-state-active-bg);
+        background-color: var(--tpy-state-active-bg);
+        color: var(--tpy-state-active-clr);
+        border: none; //solid 1px var(--tpy-state-active-bg);
         &:focus {
             outline: none;
         }

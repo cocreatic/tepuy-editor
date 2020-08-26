@@ -138,7 +138,13 @@
     "width": "Ancho de la ventana",
     "height": "Alto de la ventana",
     "imagePreview": "Imagen de previsualización",
-    "nopreview": "Sin asignar"
+    "nopreview": "Sin asignar",
+    "deleteTitle": "Eliminar objeto",
+    "deleteConfirmation": "¿Está seguro de eliminar el objeto seleccionado? <br/>No se podrá recuperar luego la información que contiene.",
+    "errors": {
+      "getspeclists": "Ha ocurrido un error al obtener la lista de especificaciones",
+      "getspeclist": ""
+    }
   },
   "permissions": {
     "edit": "Puede editar",
@@ -200,6 +206,16 @@
       "componentRequired": "Por favor seleccione un tipo de componente para continuar",
       "invalidInformation": "La información proporcionada esta incompleta o no es válida. Por favor verifique antes de continuar."
     }
+  },
+  "validation-errors": {
+    "required": "Este campo es requerido.",
+    "email": "Se require una dirección de correco válida.",
+    "maxLength": "El texto no puede tener mas de {{maxLength}} carácteres.",
+    "sizeUnit": "Se espera una unidad de medida que puede ser un número, 'auto' o un porcentaje ##%.",
+    "maxDuration": "No se puede exceder la duración máxima de {{maxDuration}}.",
+    "pattern": "El valor del campo no se ajusta al patrón esperado.",
+    "duration": "El valor ingresado no es una duración válida. Debe ingrear el valor en el formato [h:]mm:ss.",
+    "greatherThan": "El valor del campo debe ser mayor que el valor del campo $t({{refCtrl.label}})."
   },
   "tepuy": "Tepuy Editor"
 }

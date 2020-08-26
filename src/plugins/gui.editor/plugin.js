@@ -310,6 +310,8 @@ export class GuiEditor {
     }
 
     loadPageInEditor(page, section) {
+        console.log(page);
+        console.log(section);
         const pageIndex = App.data.dco.pages.indexOf(page);
         const sectionIndex = page.sections.indexOf(section);
         this.tepuyApp.loadPage(pageIndex, sectionIndex);
@@ -317,27 +319,27 @@ export class GuiEditor {
 
     registerEditHandlers() {
         const _$ = this.editorWindow.$;
-        _$(this.editorWindow.document).on('click', '[data-cmpt-type] .tepuy-action', (ev) => {
+        _$(this.editorWindow.document).on('click', '[data-cmpt-type] .tpy-action', (ev) => {
             const $target = _$(ev.target); //Need to use jQuery form the frame window so it has all the tepuy plugins added
             const data = $target.data();
-            if (/^add/.test(data.tepuyAction)) {
-                this.appendComponentDialog(data, $target, data.tepuyAction);
+            if (/^add/.test(data.tpyAction)) {
+                this.appendComponentDialog(data, $target, data.tpyAction);
             }
-            else if (data.tepuyAction == 'remove') {
+            else if (data.tpyAction == 'remove') {
                 this.removeComponent(data, $target);
             }
-            else if (/^move-(up|down)$/.test(data.tepuyAction)) {
+            else if (/^move-(up|down)$/.test(data.tpyAction)) {
                 this.moveComponent(data, $target);
             }
-            else if (data.tepuyAction == 'edit') {
+            else if (data.tpyAction == 'edit') {
                 this.editComponent(data, $target);
             }
         }).on('mouseover', '[data-cmpt-type]', function(e) {
             e.stopImmediatePropagation();
-            _$('.tepuy-edit-toolbar.'+this.id).show();
+            _$('.tpy-edit-toolbar.'+this.id).show();
         }).on('mouseout', '[data-cmpt-type]', function(e) {
             e.stopImmediatePropagation();
-            _$('.tepuy-edit-toolbar.'+this.id).hide();
+            _$('.tpy-edit-toolbar.'+this.id).hide();
         }).on('tepuy.scorm-playing', (ev) => {
             ev.preventDefault();
             const page = App.data.dco.pages[0];
@@ -347,27 +349,29 @@ export class GuiEditor {
 
     appendComponentDialog(data, $target, action) {
         const $cmpt = $target.closest('[data-cmpt-type]');
-        const id = $cmpt.get(0).id;
+        const cmptEl = $cmpt.get(0);
+        const id = cmptEl.id;
         let ed = this.componentEditor;
         if (!ed) {
-            ed = this.componentEditor = new ComponentEditor();
+            ed = this.createComponentEditor($target);
         }
         ed.setTitle(App.i18n.t('component.addTitle'));
         ed.setAcceptText(App.i18n.t('commands.add'));
+        //Find the parent by id then append the selected node
+        let parent = App.data.dco.getComponent(id, this.editor.container);
+        const options = { refEl: $cmpt };
+        if (action == 'add-before') {
+            options.position = 'before';
+            parent = parent.parent;
+        }
+        else if (action == 'add-after') {
+            options.position = 'after';
+            parent = parent.parent;
+        }
+        ed.parent = parent; //Set the parent so it can be used to get properties required on their children        
         ed.show().then((child) => {
-            //Find the parent by id then append the selected node
-            let component = App.data.dco.getComponent(id, this.editor.container);
-            const options = { refEl: $cmpt };
-            if (action == 'add-before') {
-                options.position = 'before';
-                component = component.parent;
-            }
-            else if (action == 'add-after') {
-                options.position = 'after';
-                component = component.parent;
-            }
-            component.appendChild(child, options);
-            component.parser.registerComponent(child, this.editor.container); //Required for the dco.getComponent() method to work with new added components
+            parent.appendChild(child, options);
+            parent.parser.registerComponent(child, this.editor.container); //Required for the dco.getComponent() method to work with new added components
             App.data.dco.updateHtml(this.editor.container);
         }, (err) => {
             if (err == null) return; //Dialog cancelled
@@ -381,23 +385,31 @@ export class GuiEditor {
 
         let ed = this.componentEditor;
         if (!ed) {
-            ed = this.componentEditor = new ComponentEditor();
+            ed = this.createComponentEditor($target);
         }
 
         ed.setTitle(App.i18n.t('component.editTitle'));
         ed.setAcceptText(App.i18n.t('commands.accept'));
-
         const component = App.data.dco.getComponent($cmpt.get(0).id, this.editor.container);
         component.$host = $cmpt;
-
+        ed.parent = component.parent;
         ed.show(component).then((cmpt) => {
             //update Html
             component.parser.updateComponentRegistration(this.editor.container, id, cmpt.id);
             App.data.dco.updateHtml(this.editor.container);
+            ed.parent && ed.parent.onChildUpdated(cmpt);
         }, (err) => {
             if (err == null) return; //Dialog cancelled
             //ToDo: handle error.
         });
+    }
+
+    createComponentEditor($refEl) {
+        const refEl = $refEl.get(0);
+        const docEl = refEl.ownerDocument;
+        const refW = (docEl.defaultView || docEl.parentWindow);
+        const jQuery = refW && refW.jQuery || refW.$ || $refEl.find(':root'); //Get the jQuery object.
+        return (this.componentEditor = new ComponentEditor(jQuery));
     }
 
     removeComponent(data, $target) {
@@ -419,14 +431,14 @@ export class GuiEditor {
     }
 
     moveComponent(data, $target) {
-        const direction = data.tepuyAction.replace('move-', '');
+        const direction = data.tpyAction.replace('move-', '');
         const $cmpt = $target.closest('[data-cmpt-type]');
         const id = $cmpt.get(0).id;
         const component = App.data.dco.getComponent(id, this.editor.container);
         component.$host = $cmpt;
         const parent = component.parent;
 
-        if (data.tepuyAction == 'move-up') {
+        if (data.tpyAction == 'move-up') {
             parent.moveUp(component);
         }
         else {

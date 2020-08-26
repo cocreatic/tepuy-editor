@@ -1,13 +1,14 @@
 import { App } from '../../js/app';
+import { Validators } from './components/validators';
 
-import { helpers, converters, tree, shareList, imageInput, icon } from './helpers';
+import { helpers, converters, tree, shareList, imageInput, icon, svgIcon } from './helpers';
 import { jstree } from './tags/jstree';
 import { selectableList } from './tags/selectableList';
 import { htmleditor } from './tags/htmleditor';
+import { tooltip } from './tags/tooltip';
 
 import { FormManager, FormBuilder, FormArray, FormControl, FormGroup } from './components/formManager';
 import { Dialog } from './components/dialog';
-import { Validators } from './components/validators';
 
 let layoutInitialized = false;
 
@@ -23,7 +24,7 @@ export class GuiDefault {
 
     initialize() {
         $.views.helpers(helpers);
-        $.views.tags({ editableTree: tree, shareList, imageInput, icon, jstree, selectableList, htmleditor });
+        $.views.tags({ editableTree: tree, shareList, imageInput, icon, jstree, selectableList, htmleditor, svgIcon, tooltip });
         $.views.converters(converters);
         this.initializeGuiApi();
         App.invokeHook('gui_menu_initialize');
@@ -42,7 +43,6 @@ export class GuiDefault {
                 Dialog
             }
         };
-
         App.validation = { validators: {...Validators }};
     }
 
@@ -62,9 +62,9 @@ export class GuiDefault {
         this.user = App.data.user;
         this.theme = App.options.theme;
         template.link(App.$container, this);
-        let $menu = App.ui.$menu = $('#tpe-menubar');
-        App.ui.$sidebar = $('#tpe-sidebar');
-        App.ui.$content = $('#tpe-content');
+        let $menu = App.ui.$menu = $('#tpy-menubar');
+        App.ui.$sidebar = $('#tpy-sidebar');
+        App.ui.$content = $('#tpy-content');
 
         $menu.menu({
             position: { my: 'left top', at: 'left bottom' },
@@ -77,7 +77,7 @@ export class GuiDefault {
                 }
             }
         });
-        $(App.$container).addClass("tpe-editor tpe-editor-default").localize(); //ToDo: Change default to the theme name
+        $(App.$container).addClass("tpy-editor tpy-editor-default").localize(); //ToDo: Change default to the theme name
         layoutInitialized = true;
     }
 

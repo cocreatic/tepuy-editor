@@ -11,6 +11,10 @@ export class HtmlBlock extends Component {
         return ComponentType.TEXTBLOCK;
     }
 
+    static get iconName() {
+        return 'icon1-1';
+    }
+
     constructor(element) { //All controls must receive the host element as a parameter, if no element or string provided, the element will be created but not added to the DOM
         super(element);
         this.setPropertyValue('content', element ? element.innerHTML : '&nbsp;'); //Required because during super, innerHTML is not cloned

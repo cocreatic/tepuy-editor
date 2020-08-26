@@ -3,7 +3,7 @@
 </script>
 
 <script id="gui-tplchooser-new-content" type="text/x-template">
-    <div id="tpe-object-container" data-link="{on 'click' '.card' showDetail}">
+    <div id="tpy-object-container" data-link="{on 'click' '.card' showDetail}">
         {^{for model.templates}}
         <div class="card" data-id="{{:id}}">
             <div class="image-wrapper">
@@ -15,7 +15,7 @@
             </div>
             <div class="card-footer">
                 {{if createdAt}}
-                <spam data-i18n="template.lastMod"></spam><em>{{:createdAt}}</em>
+                <span data-i18n="template.lastMod"></span><em>{{:createdAt}}</em>
                 {{else}}<span>&nbsp;</span>
                 {{/if}}
             </div>
@@ -45,7 +45,7 @@
 </script>
 
 <script id="gui-tplchooser-edit-content" type="text/x-template">
-    <div id="tpe-object-container"> <!-- data-link="{on 'click' '.card' showDetail}"-->
+    <div id="tpy-object-container"> <!-- data-link="{on 'click' '.card' showDetail}"-->
         {^{for model.objects ~open=openForEdition ~delete=delete }}
         <div class="card" data-id="{{:id}}">
             <div class="image-wrapper">
@@ -55,7 +55,7 @@
             <div class="card-body">
                 <p>{{:~translate('type.'+type)}}</p>
                 {{if createdAt}}
-                <p><spam data-i18n="template.lastMod"></spam><em>{{:createdAt}}</em></p>
+                <p><span data-i18n="template.lastMod"></span><em>{{:createdAt}}</em></p>
                 {{else}}<span>&nbsp;</span>
                 {{/if}}
             </div>

@@ -1,8 +1,8 @@
-#tpe-menubar {
+#tpy-menubar {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: var(--tpe-header-bg);
+    background-color: var(--tpy-header-bg);
     display: flex;
 
     &> li { /* Menubar buttons */
@@ -15,11 +15,11 @@
             border-bottom: solid 2px transparent;
 
             &:hover, &:focus {
-                border-bottom: solid 2px var(--tpe-active-border-color);
+                border-bottom: solid 2px var(--tpy-active-border-color);
             }
             &.ui-state-active, &.ui-state-focus {
                 background-color: transparent;
-                color: var(--tpe-active-state-color);
+                color: var(--tpy-active-state-color);
             }
         }
     }
@@ -80,7 +80,7 @@
         }
     }
 
-    .tpe-menu-right {
+    .tpy-menu-right {
         margin-left: auto;
         &> div {
             display: flex;
@@ -91,7 +91,7 @@
     &.ui-menu {
         .ui-state-active, .ui-state-focus {
             //background-color: transparent;
-            //color: var(--tpe-active-state-color);
+            //color: var(--tpy-active-state-color);
             //margin: 0;
         }
     }

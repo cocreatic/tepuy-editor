@@ -1,5 +1,5 @@
 import { App } from '../../../js/app';
-import { privateMap, _, getSafe } from '../../../js/utils';
+import { privateMap, _, getSafe, newid } from '../../../js/utils';
 import { Dialog } from './dialog';
 
 export const VALID = 'VALID';
@@ -84,6 +84,7 @@ export class FormManager {
 
 export class AbstractControl {
     constructor(template, settings) {
+        this.id = newid();
         privateMap.set(this, {
             status: INVALID,
             validators: getSafe(settings, 'validators', null),
@@ -97,12 +98,15 @@ export class AbstractControl {
                 settings.depends.map(dep => ['parent.value.', dep].join('')) : 
                 [['parent.value.', settings.depends].join('')];
         }
+
+        this._onDependencyValueChanged = this._onDependencyValueChanged.bind(this);
+
         $.observe(this, 'value', () => this.updateValidity());
     }
 
-    get parent() {
+    /*get parent() {
         return _(this).parent;
-    }
+    }*/
 
     get valid() {
         return _(this).status === VALID;
@@ -150,7 +154,23 @@ export class AbstractControl {
     }
 
     setParent(parent) {
-        _(this).parent = parent;
+        if (this.parent) {
+            $.unobserve(this.parent, this._onDependencyValueChanged);
+        }
+        this.parent = parent;
+        //_(this).parent = parent;
+        const settings = _(this).settings;
+        if (settings && settings.validityDepends) {
+            const dependencies = Array.isArray(settings.validityDepends) ?
+                settings.validityDepends.map(dep => ['value.', dep].join('')) : 
+                [['value.', settings.depends].join('')];
+
+            $.observe.apply($, [this.parent, ...dependencies, this._onDependencyValueChanged]);
+        }
+    }
+
+    _onDependencyValueChanged() {
+        this.updateValidity();
     }
 
     setValidator(validator) {
@@ -171,16 +191,16 @@ export class AbstractControl {
         validators.forEach(fn => {
             let result = fn(this);
             if (result) {
+                const key = Object.keys(result)[0];
+                const langKey = result.ns ? result.ns+':' : '' + `validation-errors.${key}`;
+                result.msg = result[key] === true ? App.i18n.t(langKey, result.data) : result[key];
                 errors.push(result);
-                //_(this).status = INVALID;
             }
         });
 
         if (!errors.length) {
-            //this.status = VALID;
             return null;
         }
-        //_(this).status = INVALID;
         return errors;
     }
 
@@ -202,7 +222,15 @@ export class AbstractControl {
 
     updateValidity() {
         $.observable(this).setProperty('errors', this.runValidator());
+        const [valid, invalid, enabled, disabled] = [this.valid, this.invalid, this.enabled, this.disabled];
         _(this).status = this._calculateStatus();
+        //Raise property change trigger ($.observable)
+        (valid != this.valid) && $.observable(this)._trigger(this, {change: "set", path: 'valid', value: this.valid, oldValue: valid, remove: undefined});
+        (invalid != this.invalid) && $.observable(this)._trigger(this, {change: "set", path: 'invalid', value: this.invalid, oldValue: invalid, remove: undefined});
+        (enabled != this.enabled) && $.observable(this)._trigger(this, {change: "set", path: 'enabled', value: this.enabled, oldValue: enabled, remove: undefined});
+        (disabled != this.disabled) && $.observable(this)._trigger(this, {change: "set", path: 'disabled', value: this.disabled, oldValue: disabled, remove: undefined});
+
+        //
         if (this.parent) {
             this.parent.updateValue();
         }
@@ -230,6 +258,7 @@ export class FormGroup extends AbstractControl {
         _(this).controls = controls;
         Object.keys(controls).forEach(key => {
             controls[key].setParent(this);
+            controls[key].updateValidity();
         });
         this.updateValue();
     }
@@ -312,8 +341,8 @@ export class FormArray extends AbstractControl {
     constructor(controls, settings) {
         super(getSafe(settings, 'template', FormBuilder.templates.array.default), settings);
         _(this).controls = controls;
-        controls.forEach(ctrl => {
-            this.registerControl(ctrl);
+        controls.forEach((ctrl, i) => {
+            this.registerControl(ctrl, i);
         });
         this.updateValue();
     }
@@ -326,8 +355,9 @@ export class FormArray extends AbstractControl {
         return _(this).controls[index];
     }
 
-    registerControl(control) {
+    registerControl(control, i) {
         control.setParent(this);
+        control.key = i;
         //$.observe(control, 'value', () => this.updateValue());
     }
 
@@ -429,6 +459,9 @@ export class FormBuilder {
             },
             html: {
                 default: '#gui-default-form-html'
+            },
+            duration: {
+                default: '#gui-default-form-duration'
             }
         };
     }
@@ -470,11 +503,16 @@ export class FormBuilder {
     static html(value, settings) {
         return FormBuilder.control(FormBuilder.templates.html.default, value, settings);
     }
-    
+
+    static duration(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.duration.default, value, settings);
+    }
+
     static group(controlsConfig, settings){
         const controls = {};
         Object.keys(controlsConfig).forEach(name => {
             controls[name] = FormBuilder._createControl(controlsConfig[name]);
+            controls[name].key = name;
         });
         return new FormGroup(controls, settings);
     }

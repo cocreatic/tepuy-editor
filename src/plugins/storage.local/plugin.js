@@ -52,11 +52,11 @@ export class StorageLocal {
     }
 
     getTemplateCategories() {
-        return categories;
+        return Promise.resolve(categories);
     }
 
     getTemplates(filter) {
-        return [empty, ...templates.filter(item => {
+        return Promise.resolve([empty, ...templates.filter(item => {
             var matchCat = null;
             if (filter.categories && filter.categories.length) {
                 matchCat = filter.categories.indexOf(item.category) >= 0;
@@ -69,11 +69,21 @@ export class StorageLocal {
             }
 
             return (matchKeyword == null || matchKeyword) && (matchCat == null || matchCat);
-        })];
+        })]);
     }
 
     getObjects(filter) {
-        return getCollection('objects', []);
+        return Promise.resolve(getCollection('objects', []));
+    }
+
+    getSpecList() {
+        const specs = [
+            { id: 'rea', name: 'Recurso educativo abierto' },
+            { id: 'obi', name: 'Objeto informativo' },
+            { id: 'red', name: 'Recurso digital' }
+        ];
+
+        return Promise.resolve(specs);
     }
 
     save(dco) {
@@ -91,6 +101,20 @@ export class StorageLocal {
         }
         updateStoreKey('objects', objects);
         return Promise.resolve(dco);
+    }
+
+    delete(dco) {
+        if (!dco.id) return;
+        let objects = getCollection('objects');
+        let index = objects.findIndex(o => o.id == dco.id);
+        console.log(index);
+        console.log(dco);
+        if (index >= 0) {
+            objects.splice(index, 1);
+            updateStoreKey('objects', objects);
+            return Promise.resolve(dco);
+        }
+        return Promise.resolve(false);
     }
 
     download(dco) {

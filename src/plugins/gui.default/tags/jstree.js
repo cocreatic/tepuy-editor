@@ -1,9 +1,9 @@
 export const jstree = {
 // ============================= JSTREE =============================
     argDefault: false, // Do not default missing arg to #data
-    mainElement: ".tpe-jstree",
+    mainElement: ".tpy-jstree",
     widgetName: 'jstree',
-    template: '<div class="tpe-jstree"></div>',
+    template: '<div class="tpy-jstree"></div>',
     init: function(tagCtx) {
         var content, elemType,
             tag = this;
@@ -71,7 +71,7 @@ export const jstree = {
 
         // Register toolbar
         if (config.toolbar) {
-            const template = $.templates('<div class="tpe-jstree-node-toolbar">' +
+            const template = $.templates('<div class="tpy-jstree-node-toolbar">' +
                 '{{props items}}' +
                 '<span data-action="{{:prop.id}}"><i class="{{:prop.icon}}" style="pointer-events:none"></i></span>' +
                 '{{/props}}' +
@@ -82,9 +82,9 @@ export const jstree = {
                 const $nodeEl = mainElem.find('.jstree-node[id='+node.id+']');
                 const $anchor = $nodeEl.find('.jstree-anchor');
 
-                if ($nodeEl.is('.tpe-toolbar-active')) return;
+                if ($nodeEl.is('.tpy-toolbar-active')) return;
 
-                $nodeEl.addClass('tpe-toolbar-active');
+                $nodeEl.addClass('tpy-toolbar-active');
                 const items = config.toolbar.items(node);
                 const pos = $anchor.position();
                 const height = $anchor.outerHeight();
@@ -104,7 +104,7 @@ export const jstree = {
                     const $node = $(this).closest('.jstree-node');
                     const $anchor = $node.children('.jstree-anchor');
                     if (!$anchor.is('.jstree-hovered')) {  //The toolbar can pass hover to an external node without dehover current node, if this is the case, remove the toolbar
-                        $nodeEl.removeClass('tpe-toolbar-active');
+                        $nodeEl.removeClass('tpy-toolbar-active');
                         $(this).remove();
                         $anchor.width('');
                     }
@@ -116,9 +116,9 @@ export const jstree = {
 
             mainElem.on('dehover_node.jstree', function(ev, data) {
                 const $nodeEl = mainElem.find('.jstree-node[id='+data.node.id+']');
-                const $toolbar = $nodeEl.children('.tpe-jstree-node-toolbar');
+                const $toolbar = $nodeEl.children('.tpy-jstree-node-toolbar');
                 if (!$toolbar.is(':hover')) { //The node can be dehover because the tollbar took hover, so ignore it in this case
-                    $nodeEl.removeClass('tpe-toolbar-active');
+                    $nodeEl.removeClass('tpy-toolbar-active');
                     $toolbar.remove();
                     $nodeEl.children('.jstree-anchor').width('');
                 }

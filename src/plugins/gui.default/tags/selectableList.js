@@ -11,7 +11,7 @@ export const selectableList = {
         this.template = [
             '{^{if ~tagCtx.index === 0}}<', this.listTag, '>',
             '{^{for ~items}}',
-            '<', this.itemTag, ' class="tpe-list-item" ',
+            '<', this.itemTag, ' class="tpy-list-item" ',
             'data-link="{class{merge:!!(#getIndex()%2) toggle=\'item-alt\'}{class{merge:(~selectedIndex==#index) toggle=\'ui-selected\'}">',
             '{^{include tmpl=#content/}}</', this.itemTag, '>',
             '{{/for}}',
@@ -25,7 +25,7 @@ export const selectableList = {
         const selectedIndex = +(tag.ctxPrm("selectedIndex"));
         if (selectedIndex < 0 && tagCtx.args[0].length) this.setSelected(0);
         displayElem.attr('tabindex', '0') //Required so key events are received during focus
-        .on('click', '.tpe-list-item', function() {
+        .on('click', '.tpy-list-item', function() {
             const view = $.view(this);
             const index = view.index;
             if (tag.selected != index) {

@@ -32,88 +32,93 @@ $xl-screen: 1140px;
 
 :root {
     /* Widget Common Varibles */
-    --tpe-font-family: #{$font-family};
-    --tpe-widget-color: #{contrast-color($my-palette, 'gray', 200)};
-    --tpe-header-bg: #{color($my-palette, 'gray', 200)};
-    --tpe-header-border-color: #{color($my-palette, 'gray', 400)};
-    --tpe-content-bg: #{color($my-palette, 'gray', 300)};
-    --tpe-active-bg: #{color($my-palette, 'gray', 800)};
-    --tpe-active-border-color: #{color($my-palette, 'gray', 900)};
-    --tpe-state-active-bg: #{$active-state-bg};
-    --tpe-state-active-color: #{$active-state-color};
-    --tpe-component-area-bg: #{color($my-palette, 'gray', 50)};
-    --tpe-panel-border: solid 1px #{color($my-palette, 'gray', 400)};
-    --tpe-panel-content-bg: #{$widget-content-bg};
-    --tpe-button-resting-bg: #{$resting-bg};
-    --tpe-button-resting-color: #{$resting-color};
-    --tpe-button-hover-bg: #{$hover-bg};
-    --tpe-button-hover-color: #{$hover-color};
-    --tpe-button-focus-bg: #{$hover-bg};
-    --tpe-button-focus-color: #{$hover-color};
-    --tpe-button-disabled-bg: #{$disabled-bg};
-    --tpe-button-disabled-color: #{$disabled-color};
-    --tpe-list-alt-bg: #{color($my-palette, 'gray', 300)};
+    --tpy-font-family: #{$font-family};
+    --tpy-widget-color: #{contrast-color($my-palette, 'gray', 200)};
+    --tpy-header-bg: #{color($my-palette, 'gray', 200)};
+    --tpy-header-border-color: #{color($my-palette, 'gray', 400)};
+    --tpy-content-bg: #{color($my-palette, 'gray', 300)};
+    --tpy-active-bg: #{color($my-palette, 'gray', 800)};
+    --tpy-active-border-color: #{color($my-palette, 'gray', 900)};
+    --tpy-state-active-bg: #{$active-state-bg};
+    --tpy-state-active-color: #{$active-state-color};
+    --tpy-component-area-bg: #{color($my-palette, 'gray', 50)};
+    --tpy-panel-border: solid 1px #{color($my-palette, 'gray', 400)};
+    --tpy-panel-content-bg: #{$widget-content-bg};
+    --tpy-button-resting-bg: #{$resting-bg};
+    --tpy-button-resting-color: #{$resting-color};
+    --tpy-button-hover-bg: #{$hover-bg};
+    --tpy-button-hover-color: #{$hover-color};
+    --tpy-button-focus-bg: #{$hover-bg};
+    --tpy-button-focus-color: #{$hover-color};
+    --tpy-button-disabled-bg: #{$disabled-bg};
+    --tpy-button-disabled-color: #{$disabled-color};
+    --tpy-list-alt-bg: #{color($my-palette, 'gray', 300)};
 
     /* JQuery-UI Common variables theming */
-    --tpe-widget-widget-content-clr: #c5c5c5;
+    --tpy-widget-widget-content-clr: #c5c5c5;
 
-    --tpe-widget-header-bg: #e9e9e9;
-    --tpe-widget-header-bdr: #dddddd;
-    --tpe-widget-header-clr: #333333;
+    --tpy-widget-header-bg: #e9e9e9;
+    --tpy-widget-header-bdr: #dddddd;
+    --tpy-widget-header-clr: #333333;
 
-    --tpe-widget-content-bg: #ffffff;
-    --tpe-widget-content-bdr: #dddddd;
-    --tpe-widget-content-clr: #333333;
+    --tpy-widget-content-bg: #ffffff;
+    --tpy-widget-content-bdr: #dddddd;
+    --tpy-widget-content-clr: #333333;
 
-    --tpe-state-default-bg: #f6f6f6;
-    --tpe-state-default-bdr: #cccccc;
-    --tpe-state-default-clr: #454545;
+    --tpy-state-default-bg: #f6f6f6;
+    --tpy-state-default-bdr: #cccccc;
+    --tpy-state-default-clr: #454545;
 
-    --tpe-state-hover-bg: #ededed;
-    --tpe-state-hover-bdr: #cccccc;
-    --tpe-state-hover-clr: #2b2b2b;
+    --tpy-state-hover-bg: #ededed;
+    --tpy-state-hover-bdr: #cccccc;
+    --tpy-state-hover-clr: #2b2b2b;
 
-    --tpe-state-active-bg: #{$active-state-bg}; //#007fff;
-    --tpe-state-active-bdr: #{color($my-palette, 'gray', 900)}; //#003eff;
-    --tpe-state-active-clr: #{$active-state-color}; //#ffffff;
+    --tpy-state-active-bg: #{$active-state-bg}; //#007fff;
+    --tpy-state-active-bdr: #{color($my-palette, 'gray', 900)}; //#003eff;
+    --tpy-state-active-clr: #{$active-state-color}; //#ffffff;
 
-    --tpe-state-selected-bg: linear-gradient(to bottom, #beebff 0%, #a8e4ff 100%); //#fffa90;
-    --tpe-state-selected-bdr: #dad55e;
-    --tpe-state-selected-clr: #454545;
+    --tpy-state-selected-bg: linear-gradient(to bottom, #beebff 0%, #a8e4ff 100%); //#fffa90;
+    --tpy-state-selected-bdr: #dad55e;
+    --tpy-state-selected-clr: #454545;
 
-    --tpe-state-error-bg: #fddfdf;
-    --tpe-state-error-bdr: #f1a899;
-    --tpe-state-error-clr: #5f3f3f;
+    --tpy-state-error-bg: #fddfdf;
+    --tpy-state-error-bdr: #f1a899;
+    --tpy-state-error-clr: #5f3f3f;
 
-    --tpe-border-radius: 3px;
-    --tpe-widget-shadow: 0px 0px 5px #666666;
-    --tpe-widget-overlay-bg: #aaaaaa;
-    --tpe-widget-overlay-opacity: .003;
-    --tpe-second-priority-opacity: .7;
+    --tpy-border-radius: 3px;
+    --tpy-widget-shadow: 0px 0px 5px #666666;
+    --tpy-widget-overlay-bg: #aaaaaa;
+    --tpy-widget-overlay-opacity: .003;
+    --tpy-second-priority-opacity: .7;
     /* Icons */
-    --tpe-icon-content-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
-    --tpe-icon-content-filter: brightness(0.267); //hue-rotate(0deg);
-    --tpe-icon-header-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
-    --tpe-icon-header-filter: brightness(0.267);
-    --tpe-icon-hover-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
-    --tpe-icon-hover-filter: brightness(0.333);
-    --tpe-icon-active-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
-    --tpe-icon-active-filter: none;
-    --tpe-icon-selected-sprite: url("vendor/assets/jquery-ui/images/ui-icons_777620_256x240.png");
-    --tpe-icon-selected-filter: hue-rotate(59deg) saturate(58%) brightness(0.267);
-    --tpe-icon-error-sprite: url("vendor/assets/jquery-ui/images/ui-icons_cc0000_256x240.png");
-    --tpe-icon-error-filter: hue-rotate(59deg) saturate(58%) brightness(0.267);
-    --tpe-icon-button-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
-    --tpe-icon-button-filter: brightness(0.467);
+    --tpy-icon-content-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
+    --tpy-icon-content-filter: brightness(0.267); //hue-rotate(0deg);
+    --tpy-icon-header-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
+    --tpy-icon-header-filter: brightness(0.267);
+    --tpy-icon-hover-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
+    --tpy-icon-hover-filter: brightness(0.333);
+    --tpy-icon-active-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
+    --tpy-icon-active-filter: none;
+    --tpy-icon-selected-sprite: url("vendor/assets/jquery-ui/images/ui-icons_777620_256x240.png");
+    --tpy-icon-selected-filter: hue-rotate(59deg) saturate(58%) brightness(0.267);
+    --tpy-icon-error-sprite: url("vendor/assets/jquery-ui/images/ui-icons_cc0000_256x240.png");
+    --tpy-icon-error-filter: hue-rotate(59deg) saturate(58%) brightness(0.267);
+    --tpy-icon-button-sprite: url("vendor/assets/jquery-ui/images/ui-icons_ffffff_256x240.png");
+    --tpy-icon-button-filter: brightness(0.467);
+    --tpy-icon-fill: #014675;
 }
 
 html {
     height: 100%;
-    background-color: var(--tpe-content-bg);
+    background-color: var(--tpy-content-bg);
 }
 
 body {
     font-size: 14px;
     margin: 0;
     height: 100%;
+}
+
+svg path, svg circle {
+    fill: #262626 !important;
 }

@@ -2,10 +2,10 @@ import { t as _t } from 'i18next';
 import { privateMap, _, checkAbstractImplementation, camelCaseToDash, newid } from './utils';
 
 export const ComponentType = {
-    CONTAINER: 'container',
     CONTENT: 'content',
     ACTIVITY: 'activity',
-    TEXTBLOCK: 'textblock'
+    TEXTBLOCK: 'textblock',
+    MEDIA: 'media'
 };
 
 
@@ -130,9 +130,10 @@ export class Component {
         _(this).host.id = value;
         if (this.$host) {
             this.$host.get(0).id = value;
-            this.$host.find('.tepuy-edit-toolbar.'+oldid).each((i, it) => {
+            this.$host.find('.tpy-edit-toolbar.'+oldid).each((i, it) => {
                 $(it).removeClass(oldid).addClass(value);
-            })
+            });
+            this.$host.find(`[data-parent-id=${oldid}]`).attr('data-parent-id', value);
         }
     }
 
@@ -173,12 +174,23 @@ export class Component {
     }
 
     getProperty(propName) {
-        return this.properties.find(p => p.name == propName);
+        const filter = p => p.name == propName;
+        let prop = this.properties.find(filter);
+        if (!prop && this.parent && this.parent.childProperties) {
+            if (!this.parentProperties) {
+                this.parentProperties = this.parent.childProperties.map(p => Object.assign({}, p)); //Clone the parent properties
+            }
+            prop = this.parentProperties.find(filter);
+        }
+        return prop;
     }
 
     getPropertyValue(propName) {
         const property = this.getProperty(propName);
         if (!property) return null;
+        if (!('value' in property)) {
+            this.resolvePropertyValue(property);
+        }
         return property.value;
     }
 
@@ -195,7 +207,7 @@ export class Component {
         for(;i--;) {
             const propName = keys[i];
             value = properties[propName];
-            const property = this.properties.find(p => p.name == propName);
+            let property = this.getProperty(propName);
             if (!property) continue;
 
             if (property.attr) { //Property is stored as an attribute.
@@ -205,7 +217,7 @@ export class Component {
                 this.host[property.prop] = value;
                 if (this.$host) { //Update the actual host also
                     if (property.prop == 'innerHTML') {
-                        this.$host.children(':not(.tepuy-edit-toolbar)').remove();
+                        this.$host.children(':not(.tpy-edit-toolbar)').remove();
                         this.$host.prepend(value);
                     }
                     else
@@ -223,7 +235,24 @@ export class Component {
         }
     }
 
-    remove() {
+    resolvePropertyValue(property) {
+        if (property.attr) { //Property is stored as an attribute.
+            property.value = this.getAttribute(property.attr);
+        }
+        else if (property.prop) {
+            property.value = this.host[property.prop];
+        }
+        else { //Property is stored as a class
+            for(let opt of property.options) {
+                if (this.host.classList.contains(opt)) {
+                    property.value = opt;
+                    return;
+                }
+            }
+        }
+    }
+
+    remove() {        
         return this.parent && this.parent.removeChild(this);
     }
 
@@ -238,10 +267,11 @@ export class Component {
     }
 
     addEditToolbar() {
-        this.host.classList.add('tepuy-edit'); //, 'mouse-over');
-        //this.setAttribute('data-ref', '.tepuy-edit-toolbar.'+this.id);
+        this.host.classList.add('tpy-edit'); //, 'mouse-over');
+        const siblingsAllowed = !this.host.classList.contains('tpy-no-sibligs-allowed');
+        //this.setAttribute('data-ref', '.tpy-edit-toolbar.'+this.id);
         var toolbar = document.createElement('div');
-        toolbar.classList.add('tepuy-edit-toolbar', 'toolbar-top', this.id);
+        toolbar.classList.add('tpy-edit-toolbar', 'toolbar-top', this.id);
         toolbar.style.display = 'none'; //Make it non visible
         const actions = [
             {action:'add-before', icon:'ion-plus-circled'},
@@ -251,25 +281,24 @@ export class Component {
             {action:'remove', icon:'ion-trash-a'}
         ];
         for(let i = 0; i < actions.length; i++) {
+            if (!siblingsAllowed && !/(edit|remove)/.test(actions[i].action)) continue;
             const item = document.createElement('i');
-            item.setAttribute('data-tepuy-action', actions[i].action);
-            item.classList.add(actions[i].icon, 'tepuy-action');
+            item.setAttribute('data-tpy-action', actions[i].action);
+            item.classList.add(actions[i].icon, 'tpy-action');
             //const enabled = actions[i].enabled;
             //if (typeof enabled === 'boolean' && !enabled) item.classList.add('disabled');
             toolbar.appendChild(item);
         }
         this.host.appendChild(toolbar);
         toolbar = toolbar.cloneNode(true);
-        toolbar.querySelector('[data-tepuy-action="add-before"]').setAttribute('data-tepuy-action', 'add-after');
+        siblingsAllowed && toolbar.querySelector('[data-tpy-action="add-before"]').setAttribute('data-tpy-action', 'add-after');
         toolbar.classList.remove('toolbar-top');
         toolbar.classList.add('toolbar-bottom');
         this.host.appendChild(toolbar);
     }
 
     removeEditToolbar() {
-        //this.host.classList.remove('mouse-over');
-        //this.setAttribute('data-ref', null);
-        $(this.host).children('.tepuy-edit-toolbar').remove();
+        $(this.host).children('.tpy-edit-toolbar').remove();
     }
 }
 
@@ -281,7 +310,7 @@ export class ContainerComponent extends Component {
     }
 
     get type() {
-        return ComponentType.CONTAINER;
+        return ComponentType.CONTENT;
     }
 
     insert(component, index = 0) {
@@ -309,23 +338,53 @@ export class ContainerComponent extends Component {
             index = position == 'before' ? index : index + 1;
             method = position;
         }
-        else {
-            refEl && refEl.find('.tepuy-button.tepuy-action').remove();
+        else if (this.canHideAppendButton) {
+            refEl && refEl.find('.tpy-button.tpy-action').hide();
         }
+        this.onBeforeAppendChild(component, index); 
         this.children.splice(index||0, 0, component);
         component.parent = this;
         component.index = index||0;
         if (refEl) {
-            refEl[method](component.html(true)); //Add the element to the current DOM
+            //Add the element to the current DOM
+            const html = component.html(true);
+            if (!this.appendRuntimeChild(refEl, html, method)) {
+                refEl[method](html);
+            }
             if (component.constructor.tepuyPluginName) refEl.parent().find('#'+component.id)[component.constructor.tepuyPluginName](); //Run the component plugin name on the just added html
+            this.afterRuntimeChildAdded(component, refEl);
         }
     }
+
+    get canHideAppendButton() {
+        return true;
+    }
+
+    onBeforeAppendChild(component, index) {}
+
+    onChildUpdated(component) {}
+    
+    appendRuntimeChild(refEl, html, method) {
+        return false;
+    }
+
+    afterRuntimeChildAdded(component, refEl) {}
+
+    onChildRemoved(child, index){}
 
     removeChild(component) {
         let index = this.children.indexOf(component);
         if (index >= 0) {
-            component.$host && component.$host.remove(); //Remove from the DOM
-            return this.children.splice(index, 1);
+            const removed = this.children.splice(index, 1);
+            if (component.$host) {
+                const $parent = component.$host.parent().closest('[data-cmpt-type]');
+                component.$host.remove(); //Remove from the DOM
+                if (!this.children.length) {
+                    $parent.find('.tpy-button.tpy-action').show();
+                }
+            }
+            //this.onChildRemoved(component, index);
+            return removed;
         }        
     }
 
@@ -374,6 +433,14 @@ export class ContainerComponent extends Component {
         }); //Set the parent property        
     }
 
+    appendAddChildButton() {
+        //if (this.children.length) return;
+        const text = _t('commands.addComponent');
+        const $button = $('<button class="ui-widget tpy-button tpy-action" data-tpy-action="add"></button>');
+        $button.html(text+'<i class="ion-plus-circled"></i>');
+        $button.appendTo($(this.host)).toggle(this.children.length == 0 || !this.canHideAppendButton);
+    }
+
     render(editMode) {
         const innerHTML = [];
         for(let child of this.children) {
@@ -381,18 +448,13 @@ export class ContainerComponent extends Component {
         }
         this.host.innerHTML = innerHTML.join('');
         if (editMode) {
-            this.host.classList.add('tepuy-edit');
-            if (!this.children.length) {
-                const text = _t('commands.addComponent');
-                const $button = $('<button class="ui-widget tepuy-button tepuy-action" data-tepuy-action="add"></button>');
-                $button.html(text+'<i class="ion-plus-circled"></i>');
-                $(this.host).append($button);
-            }
+            this.host.classList.add('tpy-edit');
+            this.appendAddChildButton();
             this.addEditToolbar();
         }
         else {
-            this.host.classList.remove('tepuy-edit');
-            $(this.host).find('.tepuy-button.tepuy-action').remove();
+            this.host.classList.remove('tpy-edit');
+            $(this.host).find('.tpy-button.tpy-action').remove();
             this.removeEditToolbar();
         }
         return this.host.outerHTML;
@@ -502,7 +564,7 @@ export class Section extends ContainerComponent {
     append(component, target, $currentEl) {
         this.children.push(component);
         if ($currentEl) {
-            const $addButton = $currentEl.find('.tepuy-button.tepuy-action').remove();
+            const $addButton = $currentEl.find('.tpy-button.tpy-action').hide();
             //if (!this.children.length) $el.empty();
             const html = component.html(true);
             $currentEl.append(html);
