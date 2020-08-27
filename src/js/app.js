@@ -28,7 +28,7 @@ class App {
     }
 
     init(options) {
-        return loadFile('properties.json', 'json').then(props => {
+        return loadFile((options.basePath||'') + 'properties.json', 'json').then(props => {
             this.properties = props || properties;
             return this.doInit(options);
         });
@@ -48,7 +48,7 @@ class App {
                 this.registerPlugin(tepuyEditor, objectName, type, name);
             }
             else {
-                pluginPromises.push(loadFile(`plugins/${plugin.id}/plugin.js`, 'js').then(loaded => {
+                pluginPromises.push(loadFile(`${(options.basePath||'')}plugins/${plugin.id}/plugin.js`, 'js').then(loaded => {
                     if (loaded) {
                         const ns = window[objectName];
                         this.registerPlugin(ns, objectName, type, name);
