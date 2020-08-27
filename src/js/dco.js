@@ -21,10 +21,10 @@ export class Dco {
         this.manifest = Object.assign({}, defaultConfig, manifest);
 
         //this.home = new Page({id: 'home', title: 'Inicio' });
-        this.addExtra({id: 'extra1', title: 'Extra 1'});
+        /*this.addExtra({id: 'extra1', title: 'Extra 1'});
         this.addExtra({id: 'extra2', title: 'Extra 2'});
         this.addExtra({id: 'extra3', title: 'Extra 3'});
-        this.addExtra({id: 'extra4', title: 'Extra 4'});
+        this.addExtra({id: 'extra4', title: 'Extra 4'});*/
     }
 
     static createNew(template, properties, storage) {
@@ -61,6 +61,10 @@ export class Dco {
     getHtml(container, editMode=true) {
         const suffix = capitalize(container);
         return this.parser['get'+suffix]({editMode, baseUrl: this.manifest.baseUrl});
+    }
+
+    getDocument(container) {
+        return this.parser[container+'Doc'];
     }
 
     updateHtml(container) {

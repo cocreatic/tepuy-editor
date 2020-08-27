@@ -27,6 +27,9 @@ export class GuiEditor {
 
         //Guarantee this context
         this.editProperties = this.editProperties.bind(this);
+        this.onDocumentChanged = this.onDocumentChanged.bind(this);
+
+        $(document).on('tpy:document-changed', this.onDocumentChanged); //New components are create in this document
     }
 
     initialize(template) {
@@ -116,7 +119,7 @@ export class GuiEditor {
         if (/(add|move)/.test(result.action)){
             container = 'content'; //Only content allows moving operations
         }
-        App.data.dco.updateHtml(container);
+        this.onDocumentChanged();
         if (result.action == 'add' && !this.editor.isIndex) {
             const node = this.contentTreeManager.getSelection();
             this.renderHead(node).then(() => this.render(node));
@@ -264,6 +267,10 @@ export class GuiEditor {
             const template = TemplateManager.get('pageViewStyles');
             $head.append(template.render());
             this.registerEditHandlers();
+            $(App.data.dco.getDocument(this.editor.container))
+                .trigger('tpy:editor-loaded', [this.editorWindow])
+                .off('tpy:document-changed') //prevent multiple registration of the same event
+                .on('tpy:document-changed', this.onDocumentChanged);
             this.editor.resolve();
         });
         return promise;
@@ -310,8 +317,6 @@ export class GuiEditor {
     }
 
     loadPageInEditor(page, section) {
-        console.log(page);
-        console.log(section);
         const pageIndex = App.data.dco.pages.indexOf(page);
         const sectionIndex = page.sections.indexOf(section);
         this.tepuyApp.loadPage(pageIndex, sectionIndex);
@@ -372,7 +377,7 @@ export class GuiEditor {
         ed.show().then((child) => {
             parent.appendChild(child, options);
             parent.parser.registerComponent(child, this.editor.container); //Required for the dco.getComponent() method to work with new added components
-            App.data.dco.updateHtml(this.editor.container);
+            this.onDocumentChanged();
         }, (err) => {
             if (err == null) return; //Dialog cancelled
             //ToDo: handle error.
@@ -396,7 +401,7 @@ export class GuiEditor {
         ed.show(component).then((cmpt) => {
             //update Html
             component.parser.updateComponentRegistration(this.editor.container, id, cmpt.id);
-            App.data.dco.updateHtml(this.editor.container);
+            this.onDocumentChanged();
             ed.parent && ed.parent.onChildUpdated(cmpt);
         }, (err) => {
             if (err == null) return; //Dialog cancelled
@@ -425,7 +430,7 @@ export class GuiEditor {
             if (component) {
                 component.parser.unregisterComponent(component);
                 component.remove(); //Remove the node from the tree
-                App.data.dco.updateHtml(this.editor.container);
+                this.onDocumentChanged();
             }
         });
     }
@@ -444,9 +449,12 @@ export class GuiEditor {
         else {
             parent.moveDown(component);
         }
-        App.data.dco.updateHtml(this.editor.container);
+        this.onDocumentChanged();
     }
 
+    onDocumentChanged() {
+        App.data.dco.updateHtml(this.editor.container);
+    }
 
     resize($viewer) {
         let height = $viewer.get(0).contentWindow.document.documentElement.scrollHeight + 'px';

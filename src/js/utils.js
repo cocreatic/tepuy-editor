@@ -123,5 +123,10 @@ export function durationToNumber(duration) { //duration in seconds
     return sec + min * onemin + hours * onehour + days * oneday;
 }
 
+export function round(number, decimals) {
+    if (decimals < 0 || decimals > 10) throw 'decimals must be between 0 and 10'; 
+    const factor = 10 ^ decimals;
+    return Math.round(number * factor) / factor;
+}
 
 

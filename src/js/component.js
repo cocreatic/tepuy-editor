@@ -110,6 +110,15 @@ export class Component {
             if (!prop) continue;
             this.setPropertyValue(optionkeys[i], options[optionkeys[i]]);
         }
+
+        $(this.host.ownerDocument).one('tpy:editor-loaded', (ev, edWindow) => {
+            this.$ = edWindow.$; 
+            const $el = this.$('#'+this.id);
+            if ($el.length) {
+                this.$host = $el.first();
+            }
+            this.onEditorLoaded();
+        });
     }
 
     get cmptType() {
@@ -154,6 +163,7 @@ export class Component {
     }
 
     initialize() {} //Abstract
+    onEditorLoaded() {} //Abstract
 
     getAttribute(name, defaultValue = '') {
         return this.host.getAttribute(name) || defaultValue;

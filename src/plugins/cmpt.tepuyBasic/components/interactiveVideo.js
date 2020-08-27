@@ -1,7 +1,9 @@
 import { Component, ComponentType, ContainerComponent } from '../../../js/component';
-import { _, formatDuration } from '../../../js/utils';
+import { _, formatDuration, round } from '../../../js/utils';
 import { deepClone } from 'lodash';
 import { App } from '../../../js/app';
+
+const MAX_DECIMALS = 2;
 
 export class InteractiveVideo extends ContainerComponent {
     static get legacySelector() {
@@ -38,7 +40,9 @@ export class InteractiveVideo extends ContainerComponent {
         this.childProperties = [
             {name: 'triggerAt', type: 'duration', attr: 'data-ivideo-show', editSettings: { label: 'cmpt.tepuyBasic:interactive-video.triggerAt' }},
             {name: 'stopAt', type: 'duration', attr: 'data-ivideo-hide', editSettings: { label: 'cmpt.tepuyBasic:interactive-video.hideAt' }},
-            {name: 'wait', type: 'boolean', attr: 'data-wait', editSettings: { label: 'cmpt.tepuyBasic:interactive-video.waitFor' }}
+            {name: 'wait', type: 'boolean', attr: 'data-wait', editSettings: { label: 'cmpt.tepuyBasic:interactive-video.waitFor' }},
+            {name: 'posTop', type: 'text', attr: 'data-pos-top', editSettings: { visible: false }},
+            {name: 'posLeft', type: 'text', attr: 'data-pos-left', editSettings: { visible: false }}
         ];
     }
 
@@ -80,6 +84,37 @@ export class InteractiveVideo extends ContainerComponent {
         return false;
     }
 
+    setChildPosition(e, ui) {
+        const cmpt = this;
+        cmpt.host.setAttribute('data-pos-top', round(ui.position.top, MAX_DECIMALS));
+        cmpt.host.setAttribute('data-pos-left', round(ui.position.left, MAX_DECIMALS));
+        $(cmpt.host.ownerDocument).trigger('tpy:document-changed');
+    }
+
+    setChildSize(e, ui) {
+        const cmpt = this;
+        cmpt.host.setAttribute('data-pos-top', round(ui.position.top, MAX_DECIMALS));
+        cmpt.host.setAttribute('data-pos-left', round(ui.position.left, MAX_DECIMALS));
+        cmpt.host.setAttribute('data-size-width', round(ui.size.width, MAX_DECIMALS));
+        cmpt.host.setAttribute('data-size-height', round(ui.size.height, MAX_DECIMALS));
+        $(cmpt.host.ownerDocument).trigger('tpy:document-changed');
+    }
+
+    onEditorLoaded() {
+        const registerHandler = (child) => {
+            if (child.$host) {
+                child.$host
+                    .on('tpy:drag-completed', this.setChildPosition.bind(child))
+                    .on('tpy:resize-completed', this.setChildSize.bind(child));
+            }
+            else {
+                setTimeout(registerHandler.bind(null, child), 100);
+            }
+        }
+
+        this.children.forEach(registerHandler);
+    }
+
     onBeforeAppendChild(component, index) {
         component.host.classList.add('tpy-no-sibligs-allowed');
     }
@@ -101,6 +136,8 @@ export class InteractiveVideo extends ContainerComponent {
     }
 
     afterRuntimeChildAdded(component, $refEl) {
+        $refEl.on('tpy:drag-completed', this.setChildPosition.bind(component));
+        $refEl.on('tpy:resize-completed', this.setChildSize.bind(component));
         component.host.style.display = 'none'; //Hide it by default
         const ivideo = $refEl.data('ivideo');
         ivideo.refreshInteractions();
