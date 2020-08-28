@@ -146,7 +146,8 @@ class App {
             defaultNS: 'core',
             backend: {
                 loadPath: (lngs, namespaces) => {
-                    return (this.basePath || '') + namespaces.indexOf('core') >= 0 ? 'i18n/{{lng}}/{{ns}}.json' : 'plugins/{{ns}}/i18n/{{lng}}.json';
+                    const path = namespaces.indexOf('core') >= 0 ? 'i18n/{{lng}}/{{ns}}.json' : 'plugins/{{ns}}/i18n/{{lng}}.json';
+                    return (this.options.basePath || '') + path;
                 }
             }
         }, (err, t) => {
