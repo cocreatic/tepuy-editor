@@ -40,7 +40,7 @@ class App {
 
         const pluginPromises = [];
         //Load active plugins
-        for(let plugin of properties.plugins) {
+        for(let plugin of this.properties.plugins) {
             if (!plugin.active) continue;
             const [type, name] = plugin.id.split('.');
             const objectName = [type, name].map(p => p[0].toUpperCase() + p.substr(1)).join('');
@@ -146,7 +146,7 @@ class App {
             defaultNS: 'core',
             backend: {
                 loadPath: (lngs, namespaces) => {
-                    return namespaces.indexOf('core') >= 0 ? 'i18n/{{lng}}/{{ns}}.json' : 'plugins/{{ns}}/i18n/{{lng}}.json';
+                    return (this.basePath || '') + namespaces.indexOf('core') >= 0 ? 'i18n/{{lng}}/{{ns}}.json' : 'plugins/{{ns}}/i18n/{{lng}}.json';
                 }
             }
         }, (err, t) => {
