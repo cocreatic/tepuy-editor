@@ -53,6 +53,10 @@ export class Dco {
         return this.parser.content.floating;
     }
 
+    get shareList() {
+        return this.manifest.shareWith;
+    }
+
     update(properties) {
         this.manifest = Object.assign(this.manifest, properties);
         return this.save();

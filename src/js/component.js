@@ -5,7 +5,7 @@ export const ComponentType = {
     CONTENT: 'content',
     ACTIVITY: 'activity',
     TEXTBLOCK: 'textblock',
-    MEDIA: 'media'
+    MEDIA: 'multimedia'
 };
 
 

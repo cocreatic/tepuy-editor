@@ -40,7 +40,14 @@
             {{/if}}
         </div>
         <div id="tab-4" data-i18n="sidebar.activityLog"></div>
-        <div id="tab-5" data-i18n="sidebar.share"></div>
+        <div id="tab-5">
+            <h3 class="ui-widget ui-widget-header" data-i18n="sidebar.share"></h3>
+            {^{if shareConfig}}
+            <div class="tpy-form-container" data-link="class{merge:shareConfig^invalid toggle='invalid'} class{merge:submitted toggle='submitted'}">
+                {^{include shareConfig ^tmpl=shareConfig^template /}}
+            </div>
+            {{/if}}
+        </div>
     </div>
     <div id="tpy-modal-edit-dlg" title="{{:~translate(dlgTitle)}}"></div>
 </script>

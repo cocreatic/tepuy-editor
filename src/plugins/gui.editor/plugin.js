@@ -55,6 +55,10 @@ export class GuiEditor {
         let id = tab.data().tabId;
         this.activeTab = id;
         switch(id) {
+            case SHARE_TAB:
+                this.displayShareList();
+                this.loadContentTab();
+                break;
             case CONTENT_TAB:
                 this.loadContentTab();
                 break;
@@ -155,6 +159,17 @@ export class GuiEditor {
         this.resourceTreeManager = new ResourceTreeManager();
         this.contentModel.resourceManager = this.resourceTreeManager;
         return this.resourceTreeManager.getConfig();
+    }
+
+    displayShareList() {
+        const builder = App.ui.components.FormBuilder;
+        const validators = App.validation.validators;
+
+        let formConfig = builder.group({
+            shareWith: ['shareList', [], { label: 'dco.shareList', validators: [] }]
+        });
+        $.observable(this.sidebarModel).setProperty('shareConfig', formConfig);
+        App.ui.$sidebar.localize();
     }
 
     //Menu handlers
