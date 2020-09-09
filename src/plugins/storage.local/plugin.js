@@ -87,7 +87,7 @@ export class StorageLocal {
     }
 
     save(dco) {
-        let objects = getCollection('objects');
+        let objects = getCollection('objects', []);
         if (!dco.id) {
             dco.id = 'dco_' + (new Date().getTime());
         }
