@@ -147,8 +147,6 @@ export function round(number, decimals) {
 
 // Source: http://pixelscommander.com/en/javascript/javascript-file-download-ignore-content-type/
 const downloadFn = function(sUrl, sFilename) {
-    console.log(sUrl);
-    console.log(sFilename);
     //iOS devices do not support downloading. We have to inform user about this.
     if (/(iP)/g.test(navigator.userAgent)) {
        //alert('Your device does not support files downloading. Please try again in desktop browser.');
@@ -158,7 +156,6 @@ const downloadFn = function(sUrl, sFilename) {
 
     //If in Chrome or Safari - download via virtual link click
     if (downloadFn.isChrome || downloadFn.isSafari) {
-        console.log('isChrome or Safari');
         //Creating new link node.
         var link = document.createElement('a');
         link.href = sUrl;
@@ -172,10 +169,8 @@ const downloadFn = function(sUrl, sFilename) {
             link.setAttribute('target','_blank');
         }
 
-        console.log(link.download);
         //Dispatching click event.
         if (document.createEvent) {
-            console.log('document.createEvent found');
             var e = document.createEvent('MouseEvents');
             e.initEvent('click', true, true);
             link.dispatchEvent(e);
@@ -187,7 +182,6 @@ const downloadFn = function(sUrl, sFilename) {
     if (sUrl.indexOf('?') === -1) {
         sUrl += '?download';
     }
-    console.log('opening new window');
     window.open(sUrl, '_blank');
     return true;
 }
