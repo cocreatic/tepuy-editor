@@ -229,6 +229,12 @@ export class ContentTreeManager {
             model.title = page.title;
             model.accept = this.acceptPage.bind(this);
         }
+        else if (data.parent == '_floating') {
+            const section = App.data.dco.getFloating(data.id);
+            model.id = section.id;
+            model.title = section.title;
+            model.accept = this.acceptSection.bind(this);
+        }
         else {
             const page = App.data.dco.getPage(data.parent);
             const section = page.getSection(data.id);

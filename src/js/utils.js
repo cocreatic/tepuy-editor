@@ -93,6 +93,22 @@ export function camelCaseToDash(str) {
     return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
+export function filenamify(string, options = {}) {
+    if (typeof string !== 'string') {
+        throw new TypeError('String expected');
+    }
+
+    const replacement = options.replacement == undefined ? '_' : options.replacement; 
+    const slug = options.slugchar || '_';
+
+    let result = string.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); //remove diacritics
+    if (!(options.slugify === false)) {
+        result = result.replace(/ /g, slug);
+    }
+
+    return result.replace(/[\/<>:"\\|?*]/g, replacement);
+}
+
 export function capitalize(string) {
     return string[0].toUpperCase()+string.slice(1);
 }
@@ -129,4 +145,54 @@ export function round(number, decimals) {
     return Math.round(number * factor) / factor;
 }
 
+// Source: http://pixelscommander.com/en/javascript/javascript-file-download-ignore-content-type/
+const downloadFn = function(sUrl, sFilename) {
+    console.log(sUrl);
+    console.log(sFilename);
+    //iOS devices do not support downloading. We have to inform user about this.
+    if (/(iP)/g.test(navigator.userAgent)) {
+       //alert('Your device does not support files downloading. Please try again in desktop browser.');
+       window.open(sUrl, '_blank');
+       return false;
+    }
 
+    //If in Chrome or Safari - download via virtual link click
+    if (downloadFn.isChrome || downloadFn.isSafari) {
+        console.log('isChrome or Safari');
+        //Creating new link node.
+        var link = document.createElement('a');
+        link.href = sUrl;
+
+        if (link.download !== undefined) {
+            //Set HTML5 download attribute. This will prevent file from opening if supported.
+            var fileName = sFilename || sUrl.substring(sUrl.lastIndexOf('/') + 1, sUrl.length);
+            link.download = fileName;
+        }
+        else {
+            link.setAttribute('target','_blank');
+        }
+
+        console.log(link.download);
+        //Dispatching click event.
+        if (document.createEvent) {
+            console.log('document.createEvent found');
+            var e = document.createEvent('MouseEvents');
+            e.initEvent('click', true, true);
+            link.dispatchEvent(e);
+            return true;
+        }
+    }
+
+    // Force file download (whether supported by server).
+    if (sUrl.indexOf('?') === -1) {
+        sUrl += '?download';
+    }
+    console.log('opening new window');
+    window.open(sUrl, '_blank');
+    return true;
+}
+
+downloadFn.isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+downloadFn.isSafari = navigator.userAgent.toLowerCase().indexOf('safari') > -1;
+
+export { downloadFn as downloadFile };

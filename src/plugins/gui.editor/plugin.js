@@ -5,6 +5,7 @@ import { TemplateManager } from './templateManager';
 import { ContentTreeManager } from './contentTreeManager';
 import { ResourceTreeManager } from './resourceTreeManager';
 import { ComponentEditor } from './componentEditor';
+import { downloadFile, filenamify } from '../../js/utils';
 
 const templateMap = {
     sidebar: 'script#gui-editor-sidebar',
@@ -82,7 +83,7 @@ export class GuiEditor {
         //Register callbacks
         App.registerHook('gui_menu_file_properties', this.editProperties.bind(this));
         App.registerHook('gui_menu_file_metadata', this.notimplemented.bind(this));
-        App.registerHook('gui_menu_file_download', this.notimplemented.bind(this));
+        App.registerHook('gui_menu_file_download', this.downloadObject.bind(this));
         App.registerHook('gui_menu_file_exit', this.close.bind(this));
         App.registerHook('gui_menu_view_preview', this.notimplemented.bind(this));
         App.registerHook('gui_menu_view_responsive', this.responsiveView.bind(this));
@@ -459,5 +460,15 @@ export class GuiEditor {
     resize($viewer) {
         let height = $viewer.get(0).contentWindow.document.documentElement.scrollHeight + 'px';
         $viewer.css({height: height});
+    }
+
+    downloadObject() {
+        App.data.dco.download().then(url => {
+            setTimeout(() => {
+                downloadFile(url, filenamify(App.data.dco.name) + '.zip');
+            }, 10);
+        }, err => {
+            App.ui.components.Dialog.message(App.i18n.t('dco.downloadFailure'), App.i18n.t('tepuy'));
+        });
     }
 }

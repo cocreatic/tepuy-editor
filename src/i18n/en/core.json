@@ -84,7 +84,9 @@
     "yes": "",
     "not": "",
     "notitle": "",
-    "keyword": ""
+    "keyword": "",
+    "exitConfirmation": "",
+    "exitTitle": ""
   },
   "label": {
     "category": "",
@@ -103,7 +105,8 @@
     "deleteTitle": "",
     "errors": {
       "getspeclist": ""
-    }
+    },
+    "downloadFailure": ""
   },
   "device": {
     "iphone": "",
@@ -136,5 +139,6 @@
       "invalidInformation": ""
     }
   },
-  "tepuy": ""
+  "tepuy": "",
+  "exitConfirmation": ""
 }

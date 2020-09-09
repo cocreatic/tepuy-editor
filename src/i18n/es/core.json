@@ -61,7 +61,9 @@
     "yes": "Si",
     "not": "No",
     "notitle": "Sin título",
-    "keyword": "Palabra clave"
+    "keyword": "Palabra clave",
+    "exitTitle": "Tepuy Editor - Salir",
+    "exitConfirmation": "¿Esta seguro que desea salir?"
   },
   "detail": {
     "description": "Descripción"
@@ -143,8 +145,10 @@
     "deleteConfirmation": "¿Está seguro de eliminar el objeto seleccionado? <br/>No se podrá recuperar luego la información que contiene.",
     "errors": {
       "getspeclists": "Ha ocurrido un error al obtener la lista de especificaciones",
-      "getspeclist": ""
-    }
+      "getspeclist": "",
+      "downloadFailure": "Ha ocurrido un error y no se puede descargar el archivo en este momento. Por favor intente mas tarde."
+    },
+    "downloadFailure": ""
   },
   "permissions": {
     "edit": "Puede editar",
@@ -217,5 +221,6 @@
     "duration": "El valor ingresado no es una duración válida. Debe ingrear el valor en el formato [h:]mm:ss.",
     "greatherThan": "El valor del campo debe ser mayor que el valor del campo $t({{refCtrl.label}})."
   },
-  "tepuy": "Tepuy Editor"
+  "tepuy": "Tepuy Editor",
+  "exitConfirmation": ""
 }

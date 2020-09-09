@@ -144,5 +144,4 @@ export class GuiDefault {
         $.observable(menuItem).setProperty('enabled', enabled);
         $.observable(menuItem).setProperty('visible', visible);
     }
-
 }

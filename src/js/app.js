@@ -12,7 +12,8 @@ import { Component } from './component';
 const defaultOptions = {
     container: "#tepuy-editor",
     defaultView: 'home', //home|editor
-    theme: 'light'
+    theme: 'light',
+    exitUrl: 'https://cocreatic.org/'
 }
 
 class App {
@@ -31,6 +32,8 @@ class App {
         return loadFile((options.basePath||'') + 'properties.json', 'json').then(props => {
             this.properties = props || properties;
             return this.doInit(options);
+        }, (err) => {
+            this.properties = properties;
         });
     }
 
@@ -160,9 +163,13 @@ class App {
     }
 
     exit(){
-        if (confirm('¿Esta seguro que desea salir?')) {
-            window.location.href = 'https://cocreatic.org/';
-        }
+        const question = this.i18n.t('general.exitConfirmation');
+        const title = this.i18n.t('general.exitTitle');
+        this.ui.components.Dialog.confirm(question, title).then(result => {
+            if (result) {
+                window.location.href = this.options.exitUrl;
+            }
+        });
      }
 }
 

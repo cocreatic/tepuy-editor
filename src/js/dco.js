@@ -41,8 +41,16 @@ export class Dco {
         return this.manifest.id;
     }
 
+    get name() {
+        return this.manifest.name;
+    }
+
     get pages() {
         return this.parser.content.pages;
+    }
+
+    get floating() {
+        return this.parser.content.floating;
     }
 
     update(properties) {
@@ -61,6 +69,10 @@ export class Dco {
     getHtml(container, editMode=true) {
         const suffix = capitalize(container);
         return this.parser['get'+suffix]({editMode, baseUrl: this.manifest.baseUrl});
+    }
+
+    download() {
+        return this.storage.download(this.manifest);
     }
 
     getDocument(container) {
@@ -125,6 +137,10 @@ export class Dco {
         }
         let oPage = this.pages.splice(index, 1)[0];
         this.pages.splice(toIndex, 0, oPage);
+    }
+
+    getFloating(id) {
+        return this.floating.find(s => s.id == id);
     }
 
     deletePage(id) {

@@ -118,6 +118,7 @@ export class StorageLocal {
     }
 
     download(dco) {
+        return Promise.resolve('plugins/storage.local/plantilla.zip'); // https://workupload.com/start/c2kh9NB'
     }
 
     share(dco) {

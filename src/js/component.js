@@ -26,16 +26,17 @@ export class Component {
     }
 
     static get registry() {
+        if (!Component._registry) {
+            Component._registry = {};
+        }
         return Component._registry;
     }
 
     static registerComponent(component, ns) {
-        if (!Component._registry) {
-            Component._registry = {};
-        }
+        const registry = Component.registry;
         //const existing = Component._registry.find(c => c.id == component.id);
-        if (Component._registry[component.id]) return; //should this generate an error?
-        Component._registry[component.id] = { ctor: component, ns };
+        if (registry[component.id]) return; //should this generate an error?
+        registry[component.id] = { ctor: component, ns };
     }
 
     static resolveComponents(element) {
