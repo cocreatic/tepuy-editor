@@ -106,7 +106,9 @@
     "errors": {
       "getspeclist": ""
     },
-    "downloadFailure": ""
+    "downloadFailure": "",
+    "removeAccessConfirmation": "",
+    "removeAccessTitle": ""
   },
   "device": {
     "iphone": "",

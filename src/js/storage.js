@@ -84,6 +84,21 @@ export class Storage {
         return this._impl.share(dco);
     }
 
+    grantAccess(dco, user) {
+        this._checkImplementation('grantAccess');
+        return this._impl.grantAccess(dco, user);
+    }
+
+    revokeAccess(dco, user) {
+        this._checkImplementation('revokeAccess');
+        return this._impl.revokeAccess(dco, user);
+    }
+
+    updateAccess(dco, user) {
+        this._checkImplementation('updateAccess');
+        return this._impl.updateAccess(dco, user);
+    }
+
      /*
     "Private" methods
     */

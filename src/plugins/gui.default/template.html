@@ -100,7 +100,10 @@
 </script>
 
 <script id="gui-default-sharelist-item" type="text/x-template">
-  {^{:~icon(role=='edit'?"share-edit":"share-view")}}<span class="item-content">{^{:email}}</span>
+  {^{on ~tag.toggleRole #getIndex()}}
+    {^{:~icon(role=='edit'?"share-edit":"share-view")}}
+  {{/on}}
+  <span class="item-content" data-link="title{:email}">{^{:email}}</span>
 </script>
 
 <script id="gui-default-imageinput" type="text/x-template">
@@ -258,7 +261,7 @@
       <span data-link="data-i18n{:label}"></span>
       {{include tmpl="#gui-default-form-control-error"/}}
     </label>
-    <div data-link="{shareList value editable=true}"></div>
+    <div class="tpy-share-list" data-link="{shareList value editable=true deleteConfirmation=settings.askForDeleteConfirmation}"></div>
   </div>
 </script>
 

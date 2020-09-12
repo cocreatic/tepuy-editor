@@ -157,42 +157,6 @@ export const tree = {
     dataBoundOnly: true
 };
 
-export const shareList = {
-    template: '#gui-default-sharelist',
-    editable: true,
-    bindTo: ["editable"],
-    linkedCtxParam: ["canEdit"],
-    displayElem: 'div',
-    init: function(tagCtx) {
-        this.itemTemplate = this.tagCtx.props.itemTemplate ||
-            '#gui-default-sharelist-item'; //<div class="tpy-form-list-item"><span>{^{:email}}</span>{^{:~icon(edit?"share-edit":"share-view")}}';
-        this.model = { email: '', role: 'edit' };
-    },
-    onBind: function(tagCtx){
-    },
-    //Methods
-    add: function() {
-        let contact = {...this.model};
-        if (!contact.email || !contact.role) {
-            return;
-        }
-        $.observable(this.tagCtx.contentView.data).insert(contact);
-        $.observable(this.model).setProperty('email', '');
-    },
-    remove: function(index) {
-        $.observable(this.tagCtx.contentView.data).remove(index);
-    },
-    invalidContact: function() {
-        const ctrl = { value: this.model.email };
-        return Validators.required(ctrl) || Validators.email(ctrl);
-    },
-    onUpdate: false,
-    dataBoundOnly: true
-};
-shareList.invalidContact.depends = ["model.email"];
-
-
-
 function Uploader() {
     let resolveFn;
     let open = false;

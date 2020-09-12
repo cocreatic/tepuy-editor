@@ -8,6 +8,17 @@
             }
         }
     }
+
+    .tpy-share-list {
+        width: 100%;
+        .tpy-form-list-item {
+            .item-content {
+                margin-right: 1.8em;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+    }
 }
 
 #tpy-content {

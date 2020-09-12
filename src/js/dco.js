@@ -70,6 +70,18 @@ export class Dco {
         return this.storage.delete(this.manifest);
     }
 
+    grantAccess(user) {
+        return this.storage.grantAccess(this.manifest, user);
+    }
+
+    revokeAccess(user) {
+        return this.storage.revokeAccess(this.manifest, user);
+    }
+
+    updateAccess(user) {
+        return this.storage.updateAccess(this.manifest, user);
+    }
+
     getHtml(container, editMode=true) {
         const suffix = capitalize(container);
         return this.parser['get'+suffix]({editMode, baseUrl: this.manifest.baseUrl});

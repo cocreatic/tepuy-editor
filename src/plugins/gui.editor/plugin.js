@@ -164,11 +164,27 @@ export class GuiEditor {
     displayShareList() {
         const builder = App.ui.components.FormBuilder;
         const validators = App.validation.validators;
+        const shareList = App.data.dco.shareList.slice();
 
         let formConfig = builder.group({
-            shareWith: ['shareList', [], { label: 'dco.shareList', validators: [] }]
+            shareWith: ['shareList', shareList, { label: 'dco.shareList', validators: [], askForDeleteConfirmation: true }]
         });
         $.observable(this.sidebarModel).setProperty('shareConfig', formConfig);
+        $.observe(shareList, function(ev, data) {
+            if (data.items) {
+                const item = data.items[0];
+                const user = { email: item.email, role: item.role };
+                if (data.change == 'insert') {
+                    App.data.dco.grantAccess(user);
+                }
+                else if (data.change == 'remove') {
+                    App.data.dco.revokeAccess(user);
+                }
+            }
+            else if (data.email) {
+                App.data.dco.updateAccess({ email: data.email, role: data.role });
+            }
+        });
         App.ui.$sidebar.localize();
     }
 

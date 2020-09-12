@@ -217,4 +217,39 @@ export class StorageLocal {
         const key = 'content_'+dco.id;
         updateStoreKey(key, content);
     }
+
+    grantAccess(dco, user) {
+        let objects = getCollection('objects', []);
+        let index = objects.findIndex(o => o.id == dco.id);
+        if (index < 0) {
+            return Promise.reject('dco.objectNotFound');
+        }
+        objects[index].shareWith.push(user);
+        updateStoreKey('objects', objects);
+        return Promise.resolve(true);
+    }
+
+    revokeAccess(dco, user) {
+        let objects = getCollection('objects', []);
+        let index = objects.findIndex(o => o.id == dco.id);
+        if (index < 0) {
+            return Promise.reject('dco.objectNotFound');
+        }
+        let index2 = objects[index].shareWith.findIndex(it => it.email == user.email);
+        objects[index].shareWith.splice(index2, 1);
+        updateStoreKey('objects', objects);
+        return Promise.resolve(true);
+    }
+
+    updateAccess(dco, user) {
+        let objects = getCollection('objects', []);
+        let index = objects.findIndex(o => o.id == dco.id);
+        if (index < 0) {
+            return Promise.reject('dco.objectNotFound');
+        }
+        let index2 = objects[index].shareWith.findIndex(it => it.email == user.email);
+        objects[index].shareWith[index2] = user;
+        updateStoreKey('objects', objects);
+        return Promise.resolve(true);
+    }
 }

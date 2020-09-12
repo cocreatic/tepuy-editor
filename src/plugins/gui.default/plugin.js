@@ -1,7 +1,9 @@
 import { App } from '../../js/app';
 import { Validators } from './components/validators';
 
-import { helpers, converters, tree, shareList, imageInput, icon, svgIcon } from './helpers';
+import { helpers, converters, tree, imageInput, icon, svgIcon } from './helpers';
+
+import { shareList } from './tags/shareList';
 import { jstree } from './tags/jstree';
 import { selectableList } from './tags/selectableList';
 import { htmleditor } from './tags/htmleditor';
