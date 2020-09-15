@@ -61,8 +61,13 @@ export class GuiDefault {
 
     buildLayout() {
         const template = $.templates("script#gui-default");
+        this.profile_menu = [];
         this.user = App.data.user;
         this.theme = App.options.theme;
+        if (App.options.exit) {
+            const exitText = App.options.exit.text || App.i18n.t('menu.profile_logout');
+            this.profile_menu.push({ id: 'profile_logout', icon: 'profile_logout', text: exitText });
+        }
         template.link(App.$container, this);
         let $menu = App.ui.$menu = $('#tpy-menubar');
         App.ui.$sidebar = $('#tpy-sidebar');

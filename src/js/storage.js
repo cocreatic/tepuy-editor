@@ -24,6 +24,11 @@ export class Storage {
         return this._impl.getSpecList();
     }
 
+    getSpec(id) {
+        this._checkImplementation('getSpec');
+        return this._impl.getSpec(id);
+    }
+
     save(dco) {
         this._checkImplementation('save');
         return this._impl.save(dco);

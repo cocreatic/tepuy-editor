@@ -62,8 +62,8 @@
     "not": "No",
     "notitle": "Sin título",
     "keyword": "Palabra clave",
-    "exitTitle": "Tepuy Editor - Salir",
-    "exitConfirmation": "¿Esta seguro que desea salir?"
+    "exitTitle": "Tepuy Editor - {{action}}",
+    "exitConfirmation": "¿Está seguro que desea {{action}}?"
   },
   "detail": {
     "description": "Descripción"
@@ -115,7 +115,8 @@
     "delete": "Eliminar",
     "update": "Actualizar",
     "addFile": "",
-    "addFolder": ""
+    "addFolder": "",
+    "publish": "Publicar"
   },
   "resources": {
     "root": "Carpeta principal",
@@ -150,7 +151,8 @@
       "getspeclist": "",
       "downloadFailure": "Ha ocurrido un error y no se puede descargar el archivo en este momento. Por favor intente mas tarde."
     },
-    "downloadFailure": ""
+    "downloadFailure": "",
+    "metadataWindowTitle": "Metadatos y publicación"
   },
   "permissions": {
     "edit": "Puede editar",
@@ -223,6 +225,5 @@
     "duration": "El valor ingresado no es una duración válida. Debe ingrear el valor en el formato [h:]mm:ss.",
     "greatherThan": "El valor del campo debe ser mayor que el valor del campo $t({{refCtrl.label}})."
   },
-  "tepuy": "Tepuy Editor",
-  "exitConfirmation": ""
+  "tepuy": "Tepuy Editor"
 }

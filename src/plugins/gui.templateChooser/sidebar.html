@@ -12,8 +12,8 @@
         <div id="categories" class="tpy-check-list" >
             <h2 data-i18n="label.category"></h2>
             {^{for model.categories}}
-                <input type="checkbox" value="{{:}}" id="c_{{:#index}}" />
-                <label for="c_{{:#index}}">{{:}}</label>
+                <input type="checkbox" value="{{:value}}" id="c_{{:#index}}" />
+                <label for="c_{{:#index}}">{{:text}}</label>
             {{/for}}
         </div>
 

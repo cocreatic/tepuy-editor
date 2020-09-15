@@ -5,15 +5,17 @@
             <img class="logo" data-link="src{:'themes/'+theme+'/img/logo_tepuy.png'}" alt="" />
           </li>
           {^{for menu tmpl="#gui-default-menu" ~idPrefix="menu." /}}
-          {^{if user}}
+          {^{if user && profile_menu.length }}
           <li data-id="profile" class="tpy-menu-right">
             <div>
               <div class="custom-item-wrapper"><img class="tpy-avatar" src="{{:user.profile_image}}" alt="">{{:user.name}}</div>
             </div>
             <ul>
-              <li data-id="profile_logout">
-                <div><div class="custom-item-wrapper">{{:~icon('profile_logout')}}{{:~translate('menu.profile_logout')}}</div></div>
+              {^{for profile_menu}}
+              <li data-id="{{:id}}">
+                <div><div class="custom-item-wrapper">{^{:~icon(icon)}}{^{:text}}</div></div>
               </li>
+              {{/for}}
             </ul>
           </li>
           {{/if}}

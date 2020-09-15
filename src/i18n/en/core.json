@@ -22,7 +22,8 @@
     "update": "",
     "edit": "",
     "addFile": "",
-    "addFolder": ""
+    "addFolder": "",
+    "publish": ""
   },
   "sidebar": {
     "content": "",
@@ -108,7 +109,8 @@
     },
     "downloadFailure": "",
     "removeAccessConfirmation": "",
-    "removeAccessTitle": ""
+    "removeAccessTitle": "",
+    "metadataWindowTitle": ""
   },
   "device": {
     "iphone": "",
@@ -141,6 +143,5 @@
       "invalidInformation": ""
     }
   },
-  "tepuy": "",
-  "exitConfirmation": ""
+  "tepuy": ""
 }

@@ -1,4 +1,5 @@
 import { templates } from './templates';
+import { specs } from './specs';
 
 const empty = {
     id:'0',
@@ -52,14 +53,14 @@ export class StorageLocal {
     }
 
     getTemplateCategories() {
-        return Promise.resolve(categories);
+        return Promise.resolve('123'.split('').map(id => ({value: id, text: 'Category ' + id})));
     }
 
     getTemplates(filter) {
         return Promise.resolve([empty, ...templates.filter(item => {
             var matchCat = null;
             if (filter.categories && filter.categories.length) {
-                matchCat = filter.categories.indexOf(item.category) >= 0;
+                matchCat = filter.categories.indexOf(item.categoryId) >= 0;
             }
 
             var matchKeyword = null;
@@ -84,6 +85,10 @@ export class StorageLocal {
         ];
 
         return Promise.resolve(specs);
+    }
+
+    getSpec(id) {
+        return Promise.resolve(specs[id]);
     }
 
     save(dco) {

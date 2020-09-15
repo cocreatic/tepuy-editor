@@ -13,7 +13,9 @@ const defaultOptions = {
     container: "#tepuy-editor",
     defaultView: 'home', //home|editor
     theme: 'light',
-    exitUrl: 'https://cocreatic.org/'
+    exit: {
+        action: 'https://cocreatic.org/'
+    }
 }
 
 class App {
@@ -163,11 +165,18 @@ class App {
     }
 
     exit(){
-        const question = this.i18n.t('general.exitConfirmation');
-        const title = this.i18n.t('general.exitTitle');
+        const exitOptions = this.options.exit;
+        const action = exitOptions.text == undefined ? this.i18n.t('menu.profile_logout') : exitOptions.text;
+        const question = this.i18n.t('general.exitConfirmation', {action});
+        const title = this.i18n.t('general.exitTitle', {action});
         this.ui.components.Dialog.confirm(question, title).then(result => {
             if (result) {
-                window.location.href = this.options.exitUrl;
+                if (typeof exitOptions.action === 'string') {
+                    window[exitOptions.target === 'top' ? 'top' : 'self'].location.href = exitOptions.action;
+                }
+                else {
+                    exitOptions.action.apply(null, []);
+                }
             }
         });
      }

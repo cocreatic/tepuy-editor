@@ -18,7 +18,10 @@
       tepuyEditor.App.init({
         //defaultView: 'editor',
         theme: 'light', //
-        exitUrl: 'http://cocreatic.org/'
+        exit: {
+          action: 'http://cocreatic.org/',
+          target: top
+        }
       });
     </script>
   </body>
