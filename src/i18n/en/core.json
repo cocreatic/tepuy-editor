@@ -113,7 +113,9 @@
     "downloadFailure": "",
     "removeAccessConfirmation": "",
     "removeAccessTitle": "",
-    "metadataWindowTitle": ""
+    "metadataWindowTitle": "",
+    "publishTitle": "",
+    "publishNotification": ""
   },
   "device": {
     "iphone": "",

@@ -155,7 +155,9 @@
       "missingInformation": "Falta diligenciar campos requeridos o algunos campos tienen información inválida. Por favor verifique antes de continuar."
     },
     "downloadFailure": "",
-    "metadataWindowTitle": "Metadatos y publicación"
+    "metadataWindowTitle": "Metadatos y publicación",
+    "publishTitle": "",
+    "publishNotification": "El objeto ha sido publicado con éxito"
   },
   "permissions": {
     "edit": "Puede editar",

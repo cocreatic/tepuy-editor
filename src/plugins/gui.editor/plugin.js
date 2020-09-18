@@ -194,7 +194,6 @@ export class GuiEditor {
         if (!ed) {
             ed = new MetadataEditor();
         }
-
         ed.show();
     }
 

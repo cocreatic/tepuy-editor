@@ -62,6 +62,11 @@ export class Dco {
         return this.save();
     }
 
+    publish(metadata) {
+        this.manifest.metadata = metadata;
+        return this.save();
+    }
+
     save() {
         return this.storage.save(this.manifest);
     }

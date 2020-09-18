@@ -440,16 +440,29 @@ export class MetadataEditor {
 
     submit() {
         if (!this.updateMetadata()) return;
-        App.data.dco.update({metadata: this.metadata});
+        App.data.dco.update({metadata: this.metadata}).catch((reason) => {
+            //ToDo: Handle this error properly
+            console.log('Update failed');
+            console.log(reason);
+        });
         return;
-//        priv.resolve(this.selected); //Resolve with the selected component.
-//        this.form = null;
-//        this.selected = null;
-//        priv.dlg.close();
     }
 
     publish() {
         this.cancel();
+        if (!this.updateMetadata()) return;
+        let text = 'dco.publishConfirmation';
+        const question = App.i18n.t(text, {  }, {interpolation: {escapeValue: false}});
+        const title = App.i18n.t('dco.publishTitle');
+
+        App.ui.components.Dialog.confirm(question, title).then(result => {
+            if (!result) return;
+
+            App.data.dco.publish({metadata: this.metadata}).then(response => {
+                text = App.i18n.t('dco.publishNotification', {  }, {interpolation: {escapeValue: false}}) 
+                App.ui.components.Dialog.message(text, title);
+            });
+        });
     }
 
     cancel() {
