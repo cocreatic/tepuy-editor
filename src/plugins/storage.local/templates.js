@@ -8,8 +8,8 @@ export const templates = [{
     category:'Category 1',
     license:'GPL',
     createdBy:"Fulanito",
-    url: "http://localhost/rutatic_salud/plantilla/",
-    baseUrl: 'https://tepuy.bambuco.co/rutatic/plantilla/'
+    //url: "http://localhost/rutatic_salud/plantilla/",
+    baseUrl: 'http://boa.nuestroscursos.net/api/c/repositorio-de-pruebas/resources/MURGMzk4NUYtMEM5Ny00RjI1LThDNTUtNTQ5QjRFNzI0QTNGQGJvYS51ZGVhLmVkdS5jbw==/!/'
 }, {
     id:'2',
     preview:'https://picsum.photos/400/100?t=2',
@@ -20,8 +20,8 @@ export const templates = [{
     category:'Category 2',
     license:'GPL',
     createdBy:"Jesús Otero",
-    url: "http://localhost/rutatic_salud/plantilla/",
-    baseUrl: 'https://tepuy.bambuco.co/rutatic/plantilla/'
+    //url: "http://localhost/rutatic_salud/plantilla/",
+    baseUrl: 'http://boa.nuestroscursos.net/api/c/repositorio-de-pruebas/resources/MURGMzk4NUYtMEM5Ny00RjI1LThDNTUtNTQ5QjRFNzI0QTNGQGJvYS51ZGVhLmVkdS5jbw==/!/'
 }, {
     id:'4',
     preview:'https://picsum.photos/400/100?t=3',
@@ -32,8 +32,8 @@ export const templates = [{
     category:'Category 3',
     license:'GPL',
     createdBy:"Fulanito",
-    url: "http://localhost/rutatic_salud/plantilla/",
-    baseUrl: 'https://tepuy.bambuco.co/rutatic/plantilla/'
+    //url: "http://localhost/rutatic_salud/plantilla/",
+    baseUrl: 'http://boa.nuestroscursos.net/api/c/repositorio-de-pruebas/resources/MURGMzk4NUYtMEM5Ny00RjI1LThDNTUtNTQ5QjRFNzI0QTNGQGJvYS51ZGVhLmVkdS5jbw==/!/'
 }, {
     id:'5',
     preview:'https://picsum.photos/400/100?t=4',
@@ -44,6 +44,6 @@ export const templates = [{
     category:'Category 3',
     license:'GPL',
     createdBy:"Jesús Otero",
-    url: "http://localhost/rutatic_salud/plantilla/",
-    baseUrl: 'http://localhost/tepuy-repository/plantilla/'
+    //url: "http://localhost/rutatic_salud/plantilla/",
+    baseUrl: 'http://boa.nuestroscursos.net/api/c/repositorio-de-pruebas/resources/MURGMzk4NUYtMEM5Ny00RjI1LThDNTUtNTQ5QjRFNzI0QTNGQGJvYS51ZGVhLmVkdS5jbw==/!/'
 }];

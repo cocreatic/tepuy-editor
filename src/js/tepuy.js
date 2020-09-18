@@ -10,7 +10,7 @@ const dependencies = {
     "jpit_crossword.css": { type: 'style', src: "vendor/tepuy/components/pit/css/jpit_crossword.css" },
     "jpit_zoom.css": { type: 'style', src: "vendor/tepuy/components/pit/css/jpit_zoom.css" },
     "circle.min.css": { type: 'style', src: "vendor/tepuy/components/csscircle/circle.min.css" },
-    "scormplayer.css": { type: 'style', src: "vendor/tepuy/css/scormplayer.css" },
+    "scormplayer.css": { type: 'style', src: undefined }, //"vendor/tepuy/css/scormplayer.css" },
     "twentytwenty.css": { type: 'style', src: "vendor/tepuy/components/twentytwenty/css/twentytwenty.css", media: 'screen' },
     "mediaelementplayer.css": { type: 'style', src: "vendor/tepuy/components/mediaelementjs/mediaelementplayer.css" },
     "jquery.min.js": { type: 'script', src: "vendor/tepuy/components/jquery/jquery.min.js" },
@@ -76,11 +76,18 @@ export class Tepuy {
 
         //Dependecies
         if (editMode) {
-            $head.children('link[type="text/css"],script').remove();
+            const srcs = {};
+            $head.children('link[type="text/css"],script').each((i, it) => {
+                const src = it.src || it.href;
+                const id = src.split('/').pop();
+                srcs[id] = {src: src.replace(local, ''), rel: it.rel, type: it.type };
+            }).remove();
+
             $.each(dependencies, function(i, it) {
                 if (it.type == 'style') {
                     const media = it.media ? ' media="' + it.media + '"' : '';
-                    $head.append(['<link href="', local, it.src, '" rel="stylesheet" type="text/css"', media, '/>'].join(''));
+                    const source = it.src == undefined ? srcs[i].src : local + it.src;
+                    $head.append(['<link href="', source, '" rel="stylesheet" type="text/css"', media, '/>'].join(''));
                 }
                 else {
                     $head.append(['<script type="text/javascript" src="', local, it.src, '"></script>'].join(''));

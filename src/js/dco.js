@@ -28,9 +28,7 @@ export class Dco {
     }
 
     static createNew(template, properties, storage) {
-        let dco = new Dco(template, storage);
-        delete dco.manifest.id;
-        return dco.update(properties);
+        return storage.createObject({templateId: template.id, ...properties });
     }
 
     static delete(manifest, storage) {
