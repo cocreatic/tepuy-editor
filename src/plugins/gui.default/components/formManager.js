@@ -124,6 +124,11 @@ export class AbstractControl {
         return _(this).status !== DISABLED;
     }
 
+
+    get required() {
+        return this.settings.required;
+    }
+
     get template() {
         return _(this).template;
     }
@@ -150,7 +155,7 @@ export class AbstractControl {
     }
 
     setValue(value) {
-        $.observable(this).setProperty('value', value);
+        $.observable(this).setProperty({ value });
     }
 
     setParent(parent) {
@@ -432,6 +437,9 @@ export class FormBuilder {
             text: {
                 default: '#gui-default-form-text'
             },
+            number: {
+                default: '#gui-default-form-text'
+            },
             radio: {
                 default: '#gui-default-form-radio'
             },
@@ -462,6 +470,12 @@ export class FormBuilder {
             },
             duration: {
                 default: '#gui-default-form-duration'
+            },
+            longDuration: {
+                default: '#gui-default-form-longduration'
+            },
+            vcard: {
+                default: '#gui-default-form-vcard'
             }
         };
     }
@@ -474,6 +488,10 @@ export class FormBuilder {
 
     static text(value, settings) {
         return FormBuilder.control(FormBuilder.templates.text.default, value, settings);
+    }
+
+    static number(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.number.default, value, settings);
     }
 
     static radio(value, settings) {
@@ -508,6 +526,14 @@ export class FormBuilder {
         return FormBuilder.control(FormBuilder.templates.duration.default, value, settings);
     }
 
+    static longDuration(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.longDuration.default, value, settings);
+    }
+
+    static vcard(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.vcard.default, value, settings);
+    }
+
     static group(controlsConfig, settings){
         const controls = {};
         Object.keys(controlsConfig).forEach(name => {
@@ -518,8 +544,20 @@ export class FormBuilder {
     }
 
     static array(controlsConfig, settings) {
-        const controls = controlsConfig.map(c => FormBuilder._createControl(c));
+        let controls;
+        if (Array.isArray(controlsConfig)) {
+            controls = controlsConfig.map((c, i) => {
+                return FormBuilder._createControl(c)
+            });
+        }
+        else {
+            controls = [FormBuilder._createControl(controlsConfig)];
+        }
         return new FormArray(controls, settings);
+    }
+
+    static collection(controlsConfigFn, value, settings) {
+        let controls = [];
     }
 
     static _createControl(config) {
@@ -531,9 +569,15 @@ export class FormBuilder {
             const type = config[0];
             const value = config.length > 1 ? config[1] : null;
             const settings = config.length > 2 ? config[2] : null;
+            if (!FormBuilder[type]) {
+                throw TypeError('Missing control type ' + type);
+            }
             return FormBuilder[type](value, settings);
         }
         else {
+//            if (!FormBuilder[config.type]) {
+//                throw TypeError('Missing control type ' + config.type);
+//            }
             return FormBuilder[config.type](config.value, config.settings);
         }
     }

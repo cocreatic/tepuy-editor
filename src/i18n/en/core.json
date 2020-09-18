@@ -23,7 +23,8 @@
     "edit": "",
     "addFile": "",
     "addFolder": "",
-    "publish": ""
+    "publish": "",
+    "close": ""
   },
   "sidebar": {
     "content": "",
@@ -87,7 +88,8 @@
     "notitle": "",
     "keyword": "",
     "exitConfirmation": "",
-    "exitTitle": ""
+    "exitTitle": "",
+    "loading": ""
   },
   "label": {
     "category": "",
@@ -105,7 +107,8 @@
     "nopreview": "",
     "deleteTitle": "",
     "errors": {
-      "getspeclist": ""
+      "getspeclist": "",
+      "missingInformation": ""
     },
     "downloadFailure": "",
     "removeAccessConfirmation": "",

@@ -5,6 +5,7 @@ import { TemplateManager } from './templateManager';
 import { ContentTreeManager } from './contentTreeManager';
 import { ResourceTreeManager } from './resourceTreeManager';
 import { ComponentEditor } from './componentEditor';
+import { MetadataEditor } from './metadataEditor';
 import { downloadFile, filenamify } from '../../js/utils';
 
 const templateMap = {
@@ -86,7 +87,7 @@ export class GuiEditor {
 
         //Register callbacks
         App.registerHook('gui_menu_file_properties', this.editProperties.bind(this));
-        App.registerHook('gui_menu_file_metadata', this.notimplemented.bind(this));
+        App.registerHook('gui_menu_file_metadata', this.openMetadataEditor.bind(this));
         App.registerHook('gui_menu_file_download', this.downloadObject.bind(this));
         App.registerHook('gui_menu_file_exit', this.close.bind(this));
         App.registerHook('gui_menu_view_preview', this.notimplemented.bind(this));
@@ -186,6 +187,15 @@ export class GuiEditor {
             }
         });
         App.ui.$sidebar.localize();
+    }
+
+    openMetadataEditor() {
+        let ed = this.metadataEditor;
+        if (!ed) {
+            ed = new MetadataEditor();
+        }
+
+        ed.show();
     }
 
     //Menu handlers

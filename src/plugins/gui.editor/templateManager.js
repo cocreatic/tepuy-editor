@@ -5,7 +5,8 @@ const templateMap = {
     editSection: 'script#gui-editor-edit-section',
     pageView: 'script#gui-editor-page',
     pageViewStyles: 'script#gui-editor-page-styles',
-    componentLookup: 'script#gui-editor-component-lookup'
+    componentLookup: 'script#gui-editor-component-lookup',
+    metadataEditor: 'script#gui-editor-metadata-editor'
 }
 
 export const TemplateManager = {

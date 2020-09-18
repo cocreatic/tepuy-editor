@@ -8,6 +8,7 @@ import { jstree } from './tags/jstree';
 import { selectableList } from './tags/selectableList';
 import { htmleditor } from './tags/htmleditor';
 import { tooltip } from './tags/tooltip';
+import { formCollection } from './tags/formCollection';
 
 import { FormManager, FormBuilder, FormArray, FormControl, FormGroup } from './components/formManager';
 import { Dialog } from './components/dialog';
@@ -26,7 +27,7 @@ export class GuiDefault {
 
     initialize() {
         $.views.helpers(helpers);
-        $.views.tags({ editableTree: tree, shareList, imageInput, icon, jstree, selectableList, htmleditor, svgIcon, tooltip });
+        $.views.tags({ editableTree: tree, shareList, imageInput, icon, jstree, selectableList, htmleditor, svgIcon, tooltip, formCollection });
         $.views.converters(converters);
         this.initializeGuiApi();
         App.invokeHook('gui_menu_initialize');

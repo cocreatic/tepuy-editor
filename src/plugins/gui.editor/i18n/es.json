@@ -1,2 +1,892 @@
 {
+    "meta": {
+        "types": {
+            "duration": {
+                "years": {
+                    "label": "Años"
+                },
+                "months": {
+                    "label": "Meses"
+                },
+                "days": {
+                    "label": "Días"
+                },
+                "hours": {
+                    "label": "Horas"
+                },
+                "minutes": {
+                    "label": "Minutos"
+                },
+                "seconds": {
+                    "label": "Segundos"
+                }
+            },
+            "vcard": {
+                "name": {
+                    "label": "Nombre(s)"
+                },
+                "lastname": {
+                    "label": "Apellido(s)"
+                },
+                "company": {
+                    "label": "Organización"
+                },
+                "email": {
+                    "label": "Correo"
+                }
+            }
+        },
+        "fields": {
+            "general": {
+                "label": "General",
+                "title": {
+                    "label": "Titulo",
+                    "help": "Defina un nombre que identifique el objeto. Puede hacerlo en varios idiomas"
+                },
+                "identifier": {
+                    "label": "Identificador",
+                    "catalog": {
+                        "label": "Catálogo"
+                    },
+                    "entry": {
+                        "label": "Entrada"
+                    }
+                },
+                "language": {
+                    "label": "Lenguaje",
+                    "help": "Defina el idioma del objeto. Si éste no posee contenido escrito (imagen) seleccione \"ninguno\"."
+                },
+                "description": {
+                    "label": "Descripción"
+                },
+                "keywords": {
+                    "label": "Palabras clave"
+                },
+                "coverage": {
+                    "label": "Cubrimiento"
+                },
+                "structure": {
+                    "label": "Estructura"
+                },
+                "aggregation_level": {
+                    "label": "Nivel de agregación"
+                }
+            },
+            "lifecycle": {
+                "label": "Ciclo de vida",
+                "version": {
+                    "label": "Versión"
+                },
+                "contribution": {
+                    "label": "Contribuciones",
+                    "entity": {
+                        "label": "Entidad"
+                    },
+                    "rol": {
+                        "label": "Rol"
+                    },
+                    "date": {
+                        "label": "Fecha"
+                    }
+                }
+            },
+            "technical": {
+                "label": "Técnico",
+                "format": {
+                    "label": "Formato"
+                },
+                "location": {
+                    "label": "Ubicación"
+                },
+                "requirements": {
+                    "label": "Requerimientos",
+                    "type": {
+                        "label": "Tipo"
+                    },
+                    "name": {
+                        "label": "Nombre"
+                    },
+                    "minversion": {
+                        "label": "Versión mínima"
+                    },
+                    "maxversion": {
+                        "label": "Versión máxima"
+                    }
+                },
+                "installation_remarks": {
+                    "label": "Instrucciones de instalación"
+                },
+                "other_platform_requirements": {
+                    "label": "Otros requisitos de la plataforma"
+                },
+                "duration": {
+                    "label": "Duración"
+                },
+                "alternate_media": {
+                    "label": "Medios alternativos"
+                }
+            },
+            "educational": {
+                "label": "Educacional",
+                "interactivity_type": {
+                    "label": "Tipo de interactividad"
+                },
+                "learning_resource_type": {
+                    "label": "Tipo de recurso de aprendizaje"
+                },
+                "interactivity_level": {
+                    "label": "Nivel de interactividad"
+                },
+                "semantic_density": {
+                    "label": "Densidad semántica"
+                },
+                "intended_end_user_role": {
+                    "label": "Usuario final"
+                },
+                "context": {
+                    "label": "Contexto"
+                },
+                "typical_age_range": {
+                    "label": "Rango de edad"
+                },
+                "difficulty": {
+                    "label": "Dificultad"
+                },
+                "typical_learning_time": {
+                    "label": "Tiempo requerido"
+                },
+                "description": {
+                    "label": "Descripción"
+                },
+                "language": {
+                    "label": "Lenguaje"
+                }
+            },
+            "rights": {
+                "label": "Derechos",
+                "cost": {
+                    "label": "Costo"
+                },
+                "copyright": {
+                    "label": "Derechos de autor"
+                },
+                "description": {
+                    "label": "Descripción"
+                }
+            },
+            "annotation": {
+                "label": "Anotaciones",
+                "entity": {
+                    "label": "Entidad"
+                },
+                "date": {
+                    "label": "Fecha"
+                },
+                "description": {
+                    "label": "Descripción"
+                }
+            },
+            "clasification": {
+                "label": "Clasificación",
+                "purpose": {
+                    "label": "Próposito"
+                },
+                "description": {
+                    "label": "Descripción"
+                },
+                "taxon_path": {
+                    "label": "Rutas taxónomicas",
+                    "source": {
+                        "label": "Fuente"
+                    },
+                    "id": {
+                        "label": "Ruta"
+                    }
+                }
+            }
+        }
+    },
+    "optionset": {
+        "aggregation-levels": {
+            "1": "Nivel 1",
+            "2": "Nivel 2",
+            "3": "Nivel 3",
+            "4": "Nivel 4"
+        },
+        "structures": {
+            "atomic": "Atómico",
+            "collection": "Colección",
+            "networked": "En red",
+            "hierarchical": "Jerárquico",
+            "linear": "Lineal"
+        },
+        "roles": {
+            "author": "Autor",
+            "content provider": "Proveedor de contenidos",
+            "editor": "Editor",
+            "educational validator": "Validador educativo",
+            "adviser": "Asesor",
+            "graphical designer": "Diseñador gráfico",
+            "initiator": "Emisor",
+            "instructional designer": "Diseñador instruccional",
+            "publisher": "Publicador",
+            "script writer": "Escritor de scripts",
+            "subject matter expert": "Experto temático",
+            "technical implementer": "Implementador técnico",
+            "technical validator": "Validador técnico",
+            "terminator": "Receptor",
+            "unknown": "Desconocido",
+            "validator": "Revisor"
+        },
+        "languages": {
+            "none": "Ninguno",
+            "ab": "Abjaso",
+            "aa": "Afar",
+            "af": "Afrikaans",
+            "ay": "Aimara",
+            "ak": "Akano",
+            "sq": "Albanés",
+            "de": "Alemán",
+            "am": "Amárico",
+            "ar": "Árabe",
+            "an": "Aragonés",
+            "hy": "Armenio",
+            "as": "Asamés",
+            "av": "Avar",
+            "ae": "Avéstico",
+            "az": "Azerí",
+            "bm": "Bambara",
+            "ba": "Baskir",
+            "bn": "Bengalí",
+            "bh": "Bhojpurí",
+            "be": "Bielorruso",
+            "my": "Birmano",
+            "bi": "Bislama",
+            "bs": "Bosnio",
+            "br": "Bretón",
+            "bg": "Búlgaro",
+            "ks": "Cachemiro",
+            "km": "Camboyano",
+            "kn": "Canarés",
+            "ca": "Catalán",
+            "ch": "Chamorro",
+            "ce": "Checheno",
+            "cs": "Checo",
+            "ny": "Chichewa",
+            "zh": "Chino",
+            "za": "Chuan",
+            "cv": "Chuvasio",
+            "si": "Cingalés",
+            "ko": "Coreano",
+            "kw": "Córnico",
+            "co": "Corso",
+            "cr": "Cree",
+            "hr": "Croata",
+            "da": "Danés",
+            "dz": "Dzongkha",
+            "cu": "Eslavo",
+            "sk": "Eslovaco",
+            "sl": "Esloveno",
+            "es": "Español",
+            "eo": "Esperanto",
+            "et": "Estonio",
+            "eu": "Euskera",
+            "ee": "Ewe",
+            "fo": "Feroés",
+            "fi": "Finés",
+            "fj": "Fiyiano",
+            "fr": "Francés",
+            "fy": "Frisón",
+            "ff": "Fula",
+            "gd": "Gaélico",
+            "cy": "Galés",
+            "gl": "Gallego",
+            "ka": "Georgiano",
+            "el": "Griego",
+            "kl": "Groenlandés",
+            "gn": "Guaraní",
+            "gu": "Guyaratí",
+            "ht": "Haitiano",
+            "ha": "Hausa",
+            "he": "Hebreo",
+            "hz": "Herero",
+            "hi": "Hindi",
+            "ho": "Hiri",
+            "hu": "Húngaro",
+            "io": "Ido",
+            "ig": "Igbo",
+            "id": "Indonesio",
+            "en": "Inglés",
+            "ia": "Interlingua",
+            "iu": "Inuktitut",
+            "ik": "Inupiaq",
+            "ga": "Irlandés",
+            "is": "Islandés",
+            "it": "Italiano",
+            "ja": "Japonés",
+            "jv": "Javanés",
+            "kr": "Kanuri",
+            "kk": "Jazajo",
+            "ki": "Kikuyu",
+            "ky": "Kirguís",
+            "rn": "Kirundi",
+            "kv": "Komi",
+            "kg": "Kongo",
+            "kj": "Kuanyama",
+            "ku": "Kurdo",
+            "lo": "Lao",
+            "la": "Latín",
+            "lv": "Letón",
+            "li": "Limburgués",
+            "ln": "Lingala",
+            "lt": "Lituano",
+            "lu": "Luba",
+            "lg": "Luganda",
+            "lb": "Luxemburgués",
+            "mk": "Macedonio",
+            "ml": "Malayalam",
+            "ms": "Malayo",
+            "dv": "Maldivo",
+            "mg": "Malgache",
+            "mt": "Maltés",
+            "gv": "Manés",
+            "mi": "Maorí",
+            "mr": "Maratí",
+            "mh": "Marshalés",
+            "mo": "Moldavo",
+            "mn": "Mongol",
+            "na": "Nauruano",
+            "nv": "Navajo",
+            "nd": "Ndebele",
+            "nr": "Ndebele",
+            "ng": "Ndonga",
+            "nl": "Neerlandés",
+            "ne": "Nepalí",
+            "no": "Noruego",
+            "nb": "Noruego",
+            "nn": "Nyorsk",
+            "ie": "Occidental",
+            "oc": "Occitano",
+            "oj": "Ojibwa",
+            "or": "Oriya",
+            "om": "Oromo",
+            "os": "Osético",
+            "pi": "Pali",
+            "pa": "Panyabí",
+            "ps": "Pastú",
+            "fa": "Persa",
+            "pl": "Polaco",
+            "pt": "Portugués",
+            "qu": "Quechua",
+            "rm": "Retorrománico",
+            "rw": "Ruandés",
+            "ro": "Rumano",
+            "ru": "Ruso",
+            "se": "Sami",
+            "sm": "Samoano",
+            "sg": "Sango",
+            "sa": "Sánscrito",
+            "sc": "Sardo",
+            "sr": "Serbio",
+            "st": "Sesotho",
+            "tn": "Tetsuana",
+            "sn": "Shona",
+            "sd": "Sindhi",
+            "so": "Somalí",
+            "sw": "Suajili",
+            "ss": "Suazi",
+            "sv": "Sueco",
+            "su": "Sundanés",
+            "tl": "tagalo",
+            "ty": "Tahitiano",
+            "th": "Tailandés",
+            "ta": "Tamil",
+            "tt": "Tártaro",
+            "tg": "Tayiko",
+            "te": "Telugú",
+            "bo": "Tibetano",
+            "ti": "Tigriña",
+            "to": "Tongano",
+            "ts": "Tsonga",
+            "tr": "Turco",
+            "tk": "Turcomano",
+            "tw": "Twi",
+            "uk": "Ucraniano",
+            "ug": "Uigur",
+            "ur": "Urdu",
+            "uz": "Uzbeko",
+            "wa": "Valón",
+            "ve": "Venda",
+            "vi": "Vietnamita",
+            "vo": "Volapük",
+            "wl": "Walisiano",
+            "wo": "wolof",
+            "xh": "Xhosa",
+            "ii": "Yi",
+            "yi": "Yídish",
+            "yo": "Yoruba",
+            "zu": "Zulú",
+            "way": "Wayuunaki",
+            "ebc": "êbêra chamí",
+            "kri": "Kriol",
+            "min": "Mɨnɨka",
+            "gun": "Gunadule",
+            "yep": "Ye´pa mha´sã"
+        },
+        "requirements_types": {
+            "browser": "Navegador de internet",
+            "operating system": "Sistema operativo"
+        },
+        "interactivity_types": {
+            "active": "Activa",
+            "expositive": "Expositiva",
+            "mixed": "Mixta"
+        },
+        "learning_resource_types": {
+            "self assessment": "Auto-evaluación",
+            "problem statement": "Caso de estudio",
+            "lecture": "Conferencia",
+            "questionnaire": "Cuestionario",
+            "diagram": "Diagrama",
+            "exercise": "Ejercicio",
+            "exam": "Examen",
+            "experiment": "Experimento",
+            "figure": "Figura",
+            "graph": "Gráfico",
+            "index": "Índice",
+            "slide": "Presentación",
+            "simulation": "Simulación",
+            "table": "Tabla",
+            "narrative text": "Texto narrativo",
+            "thematic unit": "Unidad temática",
+            "didactic sequence": "Secuencia didáctica"
+        },
+        "interactivity_levels": {
+            "very low": "Muy bajo",
+            "low": "Bajo",
+            "medium": "Medio",
+            "high": "Alto",
+            "very high": "Muy alto"
+        },
+        "alternatemedia": {
+            "spoken": "Hablado",
+            "written": "Escrito",
+            "signs": "Señas",
+            "other_language": "Otro idioma",
+            "visual": "Visual"
+        },
+        "user_roles": {
+            "manager": "Administrador",
+            "learner": "Aprendiz",
+            "author": "Autor",
+            "teacher": "Profesor"
+        },
+        "learning_contexts": {
+            "higher education": "Educación superior",
+            "training": "Entrenamiento",
+            "school": "Escuela",
+            "other": "Otro"
+        },
+        "difficulty_levels": {
+            "very easy": "Muy fácil",
+            "easy": "Fácil",
+            "medium": "Intermedia",
+            "difficult": "Difícil",
+            "very difficult": "Muy difícil"
+        },
+        "costtypes": {
+            "yes": "Este recurso tiene un costo",
+            "no": "Este recurso no tiene ningún costo"
+        },
+        "copyrights": {
+            "cc0": "Dominio público",
+            "cc by 1_0": "Creative Commons Atribución 1.0",
+            "cc by-sa 1_0": "Creative Commons Atribución, Compartir igual 1.0",
+            "cc by-nd 1_0": "Creative Commons Atribución, Sin derivadas 1.0",
+            "cc by-nc 1_0": "Creative Commons Atribución, No comercial 1.0",
+            "cc by-nc-sa 1_0": "Creative Commons Atribución, No comercial, Compartir igual 1.0",
+            "cc by 2_0": "Creative Commons Atribución 2.0",
+            "cc by-sa 2_0": "Creative Commons Atribución, Compartir igual 2.0",
+            "cc by-nd 2_0": "Creative Commons Atribución, Sin derivadas 2.0",
+            "cc by-nc 2_0": "Creative Commons Atribución, No comercial 2.0",
+            "cc by-nc-sa 2_0": "Creative Commons Atribución, No comercial, Compartir igual 2.0",
+            "cc by-nc-nd 2_0": "Creative Commons Atribución, No comercial, Sin derivadas 2.0",
+            "cc by 2_5": "Creative Commons Atribución 2.5",
+            "cc by-sa 2_5": "Creative Commons Atribución, Compartir igual 2.5",
+            "cc by-nd 2_5": "Creative Commons Atribución, Sin derivadas 2.5",
+            "cc by-nc 2_5": "Creative Commons Atribución, No comercial 2.5",
+            "cc by-nc-sa 2_5": "Creative Commons Atribución, No comercial, Compartir igual 2.5",
+            "cc by-nc-nd 2_5": "Creative Commons Atribución, No comercial, Sin derivadas 2.5",
+            "cc by 3_0": "Creative Commons Atribución 3.0",
+            "cc by-sa 3_0": "Creative Commons Atribución, Compartir igual 3.0",
+            "cc by-nd 3_0": "Creative Commons Atribución, Sin derivadas 3.0",
+            "cc by-nc 3_0": "Creative Commons Atribución, No comercial 3.0",
+            "cc by-nc-sa 3_0": "Creative Commons Atribución, No comercial, Compartir igual 3.0",
+            "cc by-nc-nd 3_0": "Creative Commons Atribución, No comercial, Sin derivadas 3.0",
+            "cc by 4_0": "Creative Commons Atribución 4.0",
+            "cc by-sa 4_0": "Creative Commons Atribución, Compartir igual 4.0",
+            "cc by-nd 4_0": "Creative Commons Atribución, Sin derivadas 4.0",
+            "cc by-nc 4_0": "Creative Commons Atribución, No comercial 4.0",
+            "cc by-nc-sa 4_0": "Creative Commons Atribución, No comercial, Compartir igual 4.0",
+            "cc by-nc-nd 4_0": "Creative Commons Atribución, No comercial, Sin derivadas 4.0"
+        },
+        "taxon_path_NBC": {
+            ">1>": "AGRONOMIA VETERINARIA Y AFINES",
+            ">1>12>": "ZOOTECNIA",
+            ">1>13>": "MEDICINA VETERINARIA",
+            ">2>": "BELLAS ARTES",
+            ">2>24>": "ARTES PLASTICAS, VISUALES Y AFINES",
+            ">2>25>": "ARTES REPRESENTATIVAS",
+            ">2>26>": "PUBLICIDAD Y AFINES",
+            ">2>27>": "DISEÑO",
+            ">2>28>": "MÚSICA",
+            ">2>270>": "OTROS PROGRAMAS ASOCIADOS A BELLAS ARTES",
+            ">3>": "CIENCIAS DE LA EDUCACION",
+            ">3>313>": "EDUCACION",
+            ">4>": "CIENCIAS DE LA SALUD",
+            ">4>440>": "BACTERIOLOGIA",
+            ">4>441>": "ENFERMERIA",
+            ">4>442>": "TERAPIAS",
+            ">4>444>": "INSTRUMENTACION QUIRURGICA",
+            ">4>445>": "MEDICINA",
+            ">4>446>": "NUTRICION Y DIETETICA",
+            ">4>447>": "ODONTOLOGIA",
+            ">4>448>": "OPTOMETRIA, OTROS PROGRAMAS DE CIENCIAS DE LA SALUD",
+            ">4>450>": "SALUD PUBLICA",
+            ">5>": "CIENCIAS SOCIALES Y HUMANAS",
+            ">5>553>": "ANTROPOLOGIA, ARTES LIBERALES",
+            ">5>555>": "BIBLIOTECOLOGIA, OTROS DE CIENCIAS SOCIALES Y HUMANAS",
+            ">5>556>": "CIENCIA POLITICA, RELACIONES INTERNACIONALES",
+            ">5>557>": "COMUNICACIÓN SOCIAL, PERIODISMO Y AFINES",
+            ">5>558>": "DEPORTES, EDUCACION FISICA Y RECREACION",
+            ">5>559>": "DERECHO Y AFINES",
+            ">5>561>": "FORMACION RELACIONADA CON EL CAMPO MILITAR O POLICIAL",
+            ">5>562>": "GEOGRAFIA, HISTORIA",
+            ">5>564>": "LENGUAS MODERNAS, LITERATURA, LINGUISTICA Y AFINES",
+            ">5>566>": "PSICOLOGIA",
+            ">5>568>": "FILOSOFIA, TEOLOGIA Y AFINES",
+            ">5>569>": "SOCIOLOGIA, TRABAJO SOCIAL Y AFINES",
+            ">6>": "ECONOMIA, ADMINISTRACION, CONTADURIA Y AFINES",
+            ">6>69>": "ADMINISTRACION",
+            ">6>611>": "ECONOMIA",
+            ">6>612>": "CONTADURIA PUBLICA",
+            ">8>": "INGENIERIA, ARQUITECTURA, URBANISMO Y AFINES",
+            ">8>818>": "ARQUITECTURA",
+            ">8>819>": "INGENIERIA BIOMEDICA Y AFINES",
+            ">8>820>": "INGENIERIA AMBIENTAL, SANITARIA Y AFINES",
+            ">8>821>": "INGENIERIA ADMNISTRATIVA Y AFINES",
+            ">8>822>": "INGENIERIA AGRICOLA, FORESTAL Y AFINES",
+            ">8>823>": "INGENIERIA AGROINDUSTRIAL, ALIMENTOS Y AFINES",
+            ">8>824>": "INGENIERIA AGRONOMICA, PECUARIA Y AFINES",
+            ">8>825>": "INGENIERIA CIVIL Y AFINES",
+            ">8>826>": "INGENIERIA DE MINAS, METALURGIA Y AFINES",
+            ">8>827>": "INGENIERIA DE SISTEMAS, TELEMATICA Y AFINES",
+            ">8>828>": "INGENIERIA ELECTRICA Y AFINES",
+            ">8>829>": "INGENIERIA ELECTRONICA, TELECOMUNICACIONES Y AFINES",
+            ">8>830>": "INGENIERIA INDUSTRIAL Y AFINES",
+            ">8>831>": "INGENIERIA MECANICA Y AFINES",
+            ">8>832>": "INGENIERIA QUIMICA Y AFINES",
+            ">8>833>": "OTRAS INGENIERIAS",
+            ">9>": "MATEMATICAS Y CIENCIAS NATURALES",
+            ">9>934>": "BIOLOGIA, MICROBIOLOGIA Y AFINES",
+            ">9>935>": "FISICA",
+            ">9>936>": "GEOLOGIA, OTROS PROGRAMAS DE CIENCIAS NATURALES",
+            ">9>937>": "MATEMATICAS, ESTADISTICA Y AFINES",
+            ">9>939>": "QUIMICA Y AFINES",
+            "1": "Veterinaria, agronomía y afines",
+            "2": "Agronomía",
+            "3": "Medicina veterinaria",
+            "4": "Zootecnia",
+            "5": "Bellas artes",
+            "6": "Artes visuales y plásticas y afines",
+            "7": "Artes plásticas",
+            "8": "Artes representativas",
+            "9": "Diseño",
+            "10": "Gráfico",
+            "11": "Industrial",
+            "12": "Joyas",
+            "13": "Modas",
+            "14": "Textil",
+            "15": "Música",
+            "16": "Otros programas asociados con Bellas Artes",
+            "17": "Publicidad y afines",
+            "18": "Ciencias de la educación",
+            "19": "Educación",
+            "20": "Ciencias Naturales-Matemáticas-Tecnología e informática",
+            "21": "Ciencias sociales, humanas y religiosas y afines",
+            "22": "Educación artística-Educación física, Recreación y deporte",
+            "23": "Educación básica",
+            "24": "Educación básica y media",
+            "25": "Educación media",
+            "26": "Educación para otras modalidades",
+            "27": "Educación preescolar",
+            "28": "Educación técnica",
+            "29": "Formación para la educación",
+            "30": "Ciencias de la Salud",
+            "31": "Bacteriología",
+            "32": "Enfermeria",
+            "33": "Instrumentación quirúrgica",
+            "34": "Medicina",
+            "35": "Alergología",
+            "36": "Anestesia",
+            "37": "Cabeza y Cuello",
+            "38": "Cardiología",
+            "39": "Cardiotoráxica",
+            "40": "Cardiovascular",
+            "41": "Cirugía",
+            "42": "Coloproctología",
+            "43": "Columna",
+            "44": "Córnea",
+            "45": "Cuidados intensivos",
+            "46": "Dermatología",
+            "47": "Dolor",
+            "48": "Ecocardiología",
+            "49": "Endocrinología",
+            "50": "Fisiatría",
+            "51": "Fisiología",
+            "52": "Gastroenterología",
+            "53": "Gastrointestinal",
+            "54": "Genética",
+            "55": "Geriatría",
+            "56": "Ginecobstetricia",
+            "57": "Glaucoma",
+            "58": "Hematología",
+            "59": "Hemodiniana",
+            "60": "Imagen corporal",
+            "61": "Imagenología",
+            "62": "Infectología",
+            "63": "Intervencionista",
+            "64": "Laboratorio Clínico",
+            "65": "Laparoscopia",
+            "66": "Mama",
+            "67": "Mano",
+            "68": "Medicina aerosespacial",
+            "69": "Urgencias",
+            "70": "Medicina del deporte",
+            "71": "Medicina del trabajo",
+            "72": "Medicina estética",
+            "73": "Medicina familiar",
+            "74": "Medicina forense",
+            "75": "Medicina interna",
+            "76": "Medicina nuclear",
+            "77": "Nefrología",
+            "78": "Neonatología",
+            "79": "Neumología",
+            "80": "Neurocirugía",
+            "81": "Neurofisiología",
+            "82": "Neurología",
+            "83": "Oftalmología",
+            "84": "Oncología",
+            "85": "Oncología y Hematología",
+            "86": "Ortopedia",
+            "87": "Otología",
+            "88": "Otorrinonaringología",
+            "89": "Patología",
+            "90": "Pediatría",
+            "91": "Plástica",
+            "92": "Psiquiatría",
+            "93": "Psiquiatría",
+            "94": "Radioterapia",
+            "95": "Reproducción humana",
+            "96": "Reumatología",
+            "97": "Rodilla",
+            "98": "Tórax",
+            "99": "Toxicología",
+            "100": "Translplantes",
+            "101": "Urología",
+            "102": "Vascular",
+            "103": "Nutrición y dietética",
+            "104": "Odontología",
+            "105": "Cirugía oral maxilofacial",
+            "106": "Endodoncia",
+            "107": "Estomatología, Patología oral y afines",
+            "108": "Implantología",
+            "109": "Laboratorio dental",
+            "110": "Odontopediatría",
+            "111": "Ortodoncia",
+            "112": "Periodoncia",
+            "113": "Prostodoncia",
+            "114": "Rehabilitación oral",
+            "115": "Optometría, otros programas de las Ciencias de la Salud",
+            "116": "Optometría",
+            "117": "Otros programas de las Ciencias de la Salud",
+            "118": "Salud pública",
+            "119": "Epidemiología",
+            "120": "Salud ambiental",
+            "121": "Salud comunitaria",
+            "122": "Salud familiar",
+            "123": "Salud mental",
+            "124": "Salud ocupacional",
+            "125": "Terapias",
+            "126": "Fisioterapia",
+            "127": "Fonoaudiología",
+            "128": "Terapia ocupacional",
+            "129": "Terapia respiratoria",
+            "130": "Ciencias sociales y humanas",
+            "131": "Antropología y Artes liberales",
+            "132": "Antropología",
+            "133": "Artes liberales",
+            "134": "Bibliotecología, otros campos de Ciencias sociales y humanas",
+            "135": "Bibliotecología",
+            "136": "Otros campos de Ciencias sociales y humanas",
+            "137": "Ciencias Políticas y Relaciones Internacionales",
+            "138": "Comunicación Social, Periodismo y afines",
+            "139": "Periodismo",
+            "140": "Deportes, Educación Física y Recreación",
+            "141": "Derecho y afines",
+            "142": "Criminalística",
+            "143": "Seguros",
+            "144": "Filosofía, Teología y afines",
+            "145": "Filosofía",
+            "146": "Teología y afines",
+            "147": "Formación relacionada con el campo militar o policial",
+            "148": "Geografía e Historia",
+            "149": "Geografía",
+            "150": "Historia",
+            "151": "Lenguas Modernas, Literatura, Lingüística y afines",
+            "152": "Lenguas modernas",
+            "153": "Literatura, Lingüística y afines",
+            "154": "Psicología",
+            "155": "Sociología, Trabajo Social y afines",
+            "156": "Familia",
+            "157": "Gerontología",
+            "158": "Sociología",
+            "159": "Trabajo social",
+            "160": "Economía, Administración, Contaduría y afines",
+            "161": "Administración",
+            "162": "Control interno",
+            "163": "Finanzas",
+            "164": "Formulación, evaluación y gestión de proyectos",
+            "165": "Mercados",
+            "166": "Negocios internacionales",
+            "167": "Recursos humanos",
+            "168": "Sector público",
+            "169": "Sector turístico",
+            "170": "Contaduría pública",
+            "171": "Auditoría de sistemas",
+            "172": "Auditoría en salud",
+            "173": "Economía",
+            "174": "Comercio exterior",
+            "175": "Formulación, evaluación y gestión de proyectos",
+            "176": "Ingeniería, Arquitectura, Urbanismo y afines",
+            "177": "Arquitectura y afines",
+            "178": "Ingeniería administrativa y afines",
+            "179": "Ingeniería agrícola, forestal y afines",
+            "180": "Ingeniería agrícola",
+            "181": "Ingeniería forestal",
+            "182": "Ingeniería agroindustrial, Alimentos y afines",
+            "183": "Alimentos",
+            "184": "Ingeniería agronómica, pecuaria y afines",
+            "185": "Ingeniería agronómica",
+            "186": "Ingeniería pecuaria",
+            "187": "Ingeniería sanitaria ambiental y afines",
+            "188": "Administración Ambiental",
+            "189": "Ingeniería biomédica y afines",
+            "190": "Ingeniería civíl  y afines",
+            "191": "Ingeniería de minas, Metalúrgica y afines",
+            "192": "Ingeniería de sistemas, telemática y afines",
+            "193": "Administración de Sistemas de Información",
+            "194": "Ingeniería Eléctrica y afines",
+            "195": "Ingeniería Electrónica, Telecomunicaciones y afines",
+            "196": "Ingeniería de Telecomunicaciones",
+            "197": "Ingeniería Industrial y afines",
+            "198": "Calidad",
+            "199": "Higiene y Seguridad Industrial",
+            "200": "Logística",
+            "201": "Ingeniería Mecánica y afines",
+            "202": "Ingeniería Química y afines",
+            "203": "Otras Ingenierías",
+            "204": "Sistemas de Información Geográfica",
+            "205": "Matemáticas y Ciencias Naturales",
+            "206": "Biología, Microbiología y afines",
+            "207": "Botánica",
+            "208": "Diversidad Vegetal",
+            "209": "Especias",
+            "210": "Plantas Alimenticias",
+            "211": "Plantas Alucinógenas",
+            "212": "Plantas Maderables",
+            "213": "Plantas Medicinales",
+            "214": "Plantas Ornamentales",
+            "215": "Plantas Tóxicas",
+            "216": "Zoología",
+            "217": "Herpetología",
+            "218": "Física",
+            "219": "Geología y Otros Programas de Ciencias Naturales",
+            "220": "Geología",
+            "221": "Otros Programas de Ciencias Naturales",
+            "222": "Matemáticas, Estadística y afines",
+            "223": "Estadística",
+            "224": "Matemáticas",
+            "225": "Química y afines",
+            "226": "Farmacia"
+        },
+        "formats": {
+            "application/ecmascript": "Ecma Script",
+            "application/flash-video": "Video de Flash",
+            "application/illustrator": "Proyecto de Adobe Illustrator",
+            "application/javascript": "Javascript file",
+            "application/msword": "Documento de word",
+            "application/pdf": "Documento PDF",
+            "application/postscript ps": "Documento Postcript",
+            "application/rtf": "Documento de texto enriquecido",
+            "application/vnd.corel-draw": "Proyecto de Corel Draw",
+            "application/vnd.ms-excel": "Hoja de cálculo de Microsoft Excel",
+            "application/vnd.ms-powerpoint": "Presentación de Microsoft PowerPoint",
+            "application/x-asax": "Archivo de aplicación ASP.NET",
+            "application/x-ascx": "ASP.NET Web Control",
+            "application/x-ashx": "ASP.NET Web Handler",
+            "application/x-asmx": "ASP.NET Web Service",
+            "application/x-asp": "Active Server Page",
+            "application/x-bittorrent": "Archivo torrent",
+            "application/x-bzip": "Archivo bzip",
+            "application/x-bzip-compressed-tar": "Archivo comprimido de bzip",
+            "application/x-cd-image": "Imagen de disco (ISO)",
+            "application/x-chm": "Archivo de ayuda de Microsoft",
+            "application/x-config": "Archivo de configuración (.config)",
+            "application/x-executable": "Aplicación de windows",
+            "application/x-font-ttf": "Fuente TrueType",
+            "application/x-jar": "Archivo JAR",
+            "application/x-java": "Clase de Java",
+            "application/x-master-page": "ASP.NET Master Page",
+            "application/x-php": "PHP Script",
+            "application/x-rar": "Archivo RAR",
+            "application/x-rar-compressed": "Archivo comprimido RAR",
+            "application/x-ruby": "Ruby Script",
+            "application/x-shellscript": "Shell Script",
+            "application/x-shockwave-flash": "Shockwave Flash",
+            "application/x-web-config": "Archivo de configuración Web ASP.NET",
+            "application/x-wsdl": "Archivo de descripción de Web Service",
+            "application/x-x509-ca-cert": "Certificado de seguridad X509",
+            "application/xhtml+xml": "Archivo HTML extendible",
+            "application/zip": "Archivo ZIP",
+            "audio/ac3": "Audio AC3",
+            "audio/midi": "Audio Midi",
+            "audio/mpeg": "Audio MP3",
+            "audio/x-mp3-playlist": "Lista de reproducción MP3",
+            "image/bmp": "Bitmap",
+            "image/gif": "Imagen GIF",
+            "image/jpeg": "Imagen JPG",
+            "image/png": "Imagen PNG",
+            "image/svg+xml": "Archivo SVG",
+            "image/tiff": "Archiv TIFF",
+            "text/css": "Hoja de estilo",
+            "text/html": "Página HTML",
+            "text/mathml": "Archivo MathML",
+            "text/plain": "Documento de texto",
+            "text/x-comma-separated-values": "Archivo CSV",
+            "text/x-java": "Codigo fuente de Java",
+            "text/x-log": "Archivo de Log",
+            "text/x-readme": "Archivo Leame",
+            "text/x-sql": "Archivo SQL",
+            "text/x-vb": "Archivo Visual Basic",
+            "text/x-xsl": "Hoja de transformación XSLT",
+            "text/xml": "Archivo XML",
+            "video/3gpp": "Video 3gpp",
+            "video/mp4": "Video MP4",
+            "video/mpeg": "Video MPEG",
+            "video/x-ms-asf": "Video ASF",
+            "video/x-ms-wmv": "Video WMV",
+            "video/x-msvideo": "Video AVI"
+        }
+    }
 }

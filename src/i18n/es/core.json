@@ -63,7 +63,8 @@
     "notitle": "Sin título",
     "keyword": "Palabra clave",
     "exitTitle": "Tepuy Editor - {{action}}",
-    "exitConfirmation": "¿Está seguro que desea {{action}}?"
+    "exitConfirmation": "¿Está seguro que desea {{action}}?",
+    "loading": "Cargando..."
   },
   "detail": {
     "description": "Descripción"
@@ -116,7 +117,8 @@
     "update": "Actualizar",
     "addFile": "",
     "addFolder": "",
-    "publish": "Publicar"
+    "publish": "Publicar",
+    "close": "Cerrar"
   },
   "resources": {
     "root": "Carpeta principal",
@@ -149,7 +151,8 @@
     "errors": {
       "getspeclists": "Ha ocurrido un error al obtener la lista de especificaciones",
       "getspeclist": "",
-      "downloadFailure": "Ha ocurrido un error y no se puede descargar el archivo en este momento. Por favor intente mas tarde."
+      "downloadFailure": "Ha ocurrido un error y no se puede descargar el archivo en este momento. Por favor intente mas tarde.",
+      "missingInformation": "Falta diligenciar campos requeridos o algunos campos tienen información inválida. Por favor verifique antes de continuar."
     },
     "downloadFailure": "",
     "metadataWindowTitle": "Metadatos y publicación"

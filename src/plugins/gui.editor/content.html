@@ -121,7 +121,7 @@
 
 <script id="gui-editor-component-lookup" type="text/x-template">
     {^{if mode=='loading' }}
-    <div class="loading">Loading...</div>
+    <div class="loading" data-i18n="general.loading">Cargando...</div>
     {{else mode=='lookup' }}
     <div class="tpy-component-lookup">
         <div class="filter-container">
@@ -171,12 +171,39 @@
     {{/if}}
 </script>
 
+<script id="gui-editor-metadata-editor" type="text/x-template">
+    {^{if mode=='loading' }}
+    <div class="loading" data-i18n="general.loading">Cargando...</div>
+    {{else mode=='edit'}}
+    <div class="metadata-editor">
+        <div class="align-right">
+            {^{include language ^tmpl=language^template ~ctrlName="language" id="language" /}}
+        </div>
+        <div class="tpy-form-container" data-link="class{merge:form.invalid toggle='invalid'} class{merge:form.submitted toggle='submitted'}">
+            <div id="categories" class="tpy-form form-group">
+                <ul>
+                    {^{props form.controls}}
+                        <li data-link="data-tab-id{:'tab-'+key} class{merge:prop.invalid toggle='invalid'}">
+                            <a data-link="href{:'#tab-'+key} data-i18n{:prop.label}">{{:~translate(prop.label)}}</a>
+                        </li>
+                    {{/props}}
+                </ul>
+                {^{props form.controls}}
+                <div data-link="id{:'tab-'+key}">
+                    {^{include prop ^tmpl=prop^template ~ctrlName=key id=prop.id /}}
+                </div>
+                {{/props}}
+            </div>
+        </div>
+    </div>
+    {{/if}}
+</script>
+
 <script id="gui-editor-page-index" type="text/x-template">
     <script type="text/javascript">
-        
-
     </script>
 </script>
+
 <script id="gui-editor-page-styles" type="text/x-template">
     <style>
         [data-cmpt-type] {
