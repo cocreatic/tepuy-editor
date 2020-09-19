@@ -119,6 +119,7 @@ export class Tepuy {
 
 
         if (!$base.length && baseUrl) {
+            baseUrl = baseUrl.replace(/^http[s]*:/, window.location.protocol);
             $doc.find('head').prepend('<base href="' + baseUrl + '" />');
         }
         //$doc.find('head').children('script[src*="scorm"]').remove(); //ToDo: Need to indentify adding/removing only required scripts
@@ -177,6 +178,7 @@ export class Tepuy {
         $body.attr('data-model', 'page');
         //$body.data('model', 'page'); //To prevent the dialog when loading content;
         if (!$base.length && baseUrl) {
+            baseUrl = baseUrl.replace(/^http[s]*:/, window.location.protocol);
             $head.prepend('<base href="' + baseUrl + '" />');
         }
         $head.children('script[src*="scorm"]').remove(); //ToDo: Need to indentify adding/removing only required scripts
