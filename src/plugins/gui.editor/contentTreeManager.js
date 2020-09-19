@@ -7,11 +7,11 @@ export class ContentTreeManager {
         this.selectionHandler = selectionHandler;
     }
 
-    getConfig() {
-        return this.initializeJsTree();
+    getConfig(canEdit) {
+        return this.initializeJsTree(canEdit);
     }
     
-    initializeJsTree() {
+    initializeJsTree(canEdit) {
         const jtData = (node, callback) => {
             App.data.dco.objectTree().then(oTree => {
                 const pages = [];
@@ -85,6 +85,7 @@ export class ContentTreeManager {
 
         const contextmenu = {
             items: (node) => {
+                if (!canEdit) return {};
                 const type = node.type;
                 const actions = {};
                 if (type != 'section') {
