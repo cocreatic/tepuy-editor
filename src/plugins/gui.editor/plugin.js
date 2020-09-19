@@ -295,7 +295,7 @@ export class GuiEditor {
             this.editor.isIndex = false;
             this.editor.container = 'content';
         }
-        const html = App.data.dco.getHtml(this.editor.container);
+        const html = App.data.dco.getHtml(this.editor.container, this.canEdit);
         let promise = new Promise((resolve, reject) => {
             this.editor.resolve = resolve;
             this.editor.reject = reject;

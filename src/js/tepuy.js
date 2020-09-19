@@ -59,23 +59,24 @@ export class Tepuy {
         });
     }
 
-    getIndex({editMode = true, baseUrl}) {
+    getIndex({editMode, baseUrl}) {
         const doc = this.indexDoc;
         if (!doc) return this.manifest.index;
         const $doc = $(doc);
         const $head = $doc.find('head');
         const $body = $doc.find('body');
         const local = [window.location.protocol, '//', window.location.host, window.location.pathname].join('');
+        const prod = editMode == undefined;
         //Register dependency
 
         $body.data(this.home.config);
         $body.data('autoload', !editMode && this.home.config.autoload); //Make sure autoload is false when in editMode
         const $main = $body.find('main').first();
-        this.home.root.html(editMode);
+        this.home.root.html(editMode === true);
         $main.empty().html(this.home.root.host.innerHTML);
 
         //Dependecies
-        if (editMode) {
+        if (!prod) {
             const srcs = {};
             $head.children('link[type="text/css"],script').each((i, it) => {
                 const src = it.src || it.href;
@@ -111,7 +112,7 @@ export class Tepuy {
         });*/
 
         const $base = $head.find('base');
-        if (!editMode) {
+        if (prod) {
             if ($base.length) $base.remove();
             return b64EncodeUnicode(doc.documentElement.outerHTML);
         }
@@ -139,23 +140,24 @@ export class Tepuy {
         return $(doc).find('body');
     }
 
-    getContent({editMode = true, baseUrl}) {
+    getContent({editMode, baseUrl}) {
         const doc = this.contentDoc;
         if (!doc) return this.manifest.content;
         const $doc = $(doc);
         const $head = $doc.find('head');
         const $body = $doc.find('body');
         const local = [window.location.protocol, '//', window.location.host, window.location.pathname].join('');
+        const prod = editMode == undefined;
         $body.data(this.content.config);
         const $main = $body.find('main').first();
         $main.empty();
 
         for(let i = 0; i < this.content.pages.length; i++) {
-            $main.append(this.content.pages[i].html(editMode));
+            $main.append(this.content.pages[i].html(editMode === true));
         }
 
         //Dependecies
-        if (editMode) {
+        if (!prod) {
             $head.children('link[type="text/css"],script').remove();
             $.each(dependencies, function(i, it) {
                 if (it.type == 'style') {
@@ -168,7 +170,7 @@ export class Tepuy {
             });
         }
         const $base = $head.find('base');
-        if (!editMode) {
+        if (prod) {
             if ($base.length) $base.remove();
             return b64EncodeUnicode(doc.documentElement.outerHTML);
         }

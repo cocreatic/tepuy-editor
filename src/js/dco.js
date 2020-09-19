@@ -80,7 +80,7 @@ export class Dco {
         return this.storage.updateAccess(this.manifest, user);
     }
 
-    getHtml(container, editMode=true) {
+    getHtml(container, editMode) {
         const suffix = capitalize(container);
         return this.parser['get'+suffix]({editMode, baseUrl: this.manifest.baseUrl});
     }
@@ -95,7 +95,7 @@ export class Dco {
 
     updateHtml(container) {
         const suffix = capitalize(container);
-        return this.storage['update'+suffix](this.manifest, this.parser['get'+suffix]({editMode: false}));
+        return this.storage['update'+suffix](this.manifest, this.parser['get'+suffix]({}));
     }
 
     objectTree() {
