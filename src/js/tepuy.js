@@ -10,7 +10,7 @@ const dependencies = {
     "jpit_crossword.css": { type: 'style', src: "vendor/tepuy/components/pit/css/jpit_crossword.css" },
     "jpit_zoom.css": { type: 'style', src: "vendor/tepuy/components/pit/css/jpit_zoom.css" },
     "circle.min.css": { type: 'style', src: "vendor/tepuy/components/csscircle/circle.min.css" },
-    "scormplayer.css": { type: 'style', src: "vendor/tepuy/css/scormplayer.css" },
+    "scormplayer.css": { type: 'style', src: undefined }, //"vendor/tepuy/css/scormplayer.css" },
     "twentytwenty.css": { type: 'style', src: "vendor/tepuy/components/twentytwenty/css/twentytwenty.css", media: 'screen' },
     "mediaelementplayer.css": { type: 'style', src: "vendor/tepuy/components/mediaelementjs/mediaelementplayer.css" },
     "jquery.min.js": { type: 'script', src: "vendor/tepuy/components/jquery/jquery.min.js" },
@@ -59,28 +59,36 @@ export class Tepuy {
         });
     }
 
-    getIndex({editMode = true, baseUrl}) {
+    getIndex({editMode, baseUrl}) {
         const doc = this.indexDoc;
         if (!doc) return this.manifest.index;
         const $doc = $(doc);
         const $head = $doc.find('head');
         const $body = $doc.find('body');
         const local = [window.location.protocol, '//', window.location.host, window.location.pathname].join('');
+        const prod = editMode == undefined;
         //Register dependency
 
         $body.data(this.home.config);
         $body.data('autoload', !editMode && this.home.config.autoload); //Make sure autoload is false when in editMode
         const $main = $body.find('main').first();
-        this.home.root.html(editMode);
+        this.home.root.html(editMode === true);
         $main.empty().html(this.home.root.host.innerHTML);
 
         //Dependecies
-        if (editMode) {
-            $head.children('link[type="text/css"],script').remove();
+        if (!prod) {
+            const srcs = {};
+            $head.children('link[type="text/css"],script').each((i, it) => {
+                const src = it.src || it.href;
+                const id = src.split('/').pop();
+                srcs[id] = {src: src.replace(local, ''), rel: it.rel, type: it.type };
+            }).remove();
+
             $.each(dependencies, function(i, it) {
                 if (it.type == 'style') {
                     const media = it.media ? ' media="' + it.media + '"' : '';
-                    $head.append(['<link href="', local, it.src, '" rel="stylesheet" type="text/css"', media, '/>'].join(''));
+                    const source = it.src == undefined ? srcs[i].src : local + it.src;
+                    $head.append(['<link href="', source, '" rel="stylesheet" type="text/css"', media, '/>'].join(''));
                 }
                 else {
                     $head.append(['<script type="text/javascript" src="', local, it.src, '"></script>'].join(''));
@@ -104,13 +112,14 @@ export class Tepuy {
         });*/
 
         const $base = $head.find('base');
-        if (!editMode) {
+        if (prod) {
             if ($base.length) $base.remove();
             return b64EncodeUnicode(doc.documentElement.outerHTML);
         }
 
 
         if (!$base.length && baseUrl) {
+            baseUrl = baseUrl.replace(/^http[s]*:/, window.location.protocol);
             $doc.find('head').prepend('<base href="' + baseUrl + '" />');
         }
         //$doc.find('head').children('script[src*="scorm"]').remove(); //ToDo: Need to indentify adding/removing only required scripts
@@ -132,23 +141,24 @@ export class Tepuy {
         return $(doc).find('body');
     }
 
-    getContent({editMode = true, baseUrl}) {
+    getContent({editMode, baseUrl}) {
         const doc = this.contentDoc;
         if (!doc) return this.manifest.content;
         const $doc = $(doc);
         const $head = $doc.find('head');
         const $body = $doc.find('body');
         const local = [window.location.protocol, '//', window.location.host, window.location.pathname].join('');
+        const prod = editMode == undefined;
         $body.data(this.content.config);
         const $main = $body.find('main').first();
         $main.empty();
 
         for(let i = 0; i < this.content.pages.length; i++) {
-            $main.append(this.content.pages[i].html(editMode));
+            $main.append(this.content.pages[i].html(editMode === true));
         }
 
         //Dependecies
-        if (editMode) {
+        if (!prod) {
             $head.children('link[type="text/css"],script').remove();
             $.each(dependencies, function(i, it) {
                 if (it.type == 'style') {
@@ -161,13 +171,14 @@ export class Tepuy {
             });
         }
         const $base = $head.find('base');
-        if (!editMode) {
+        if (prod) {
             if ($base.length) $base.remove();
             return b64EncodeUnicode(doc.documentElement.outerHTML);
         }
         $body.attr('data-model', 'page');
         //$body.data('model', 'page'); //To prevent the dialog when loading content;
         if (!$base.length && baseUrl) {
+            baseUrl = baseUrl.replace(/^http[s]*:/, window.location.protocol);
             $head.prepend('<base href="' + baseUrl + '" />');
         }
         $head.children('script[src*="scorm"]').remove(); //ToDo: Need to indentify adding/removing only required scripts

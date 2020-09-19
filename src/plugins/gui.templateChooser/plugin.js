@@ -86,8 +86,8 @@ export class GuiTemplateChooser {
         var objects = App.storage.getObjects({});
         $.observable(this.model.objects).refresh(objects);
         this.isBusy = true;
-        App.storage.getTemplates({keyword: $keyword.val(), categories: cats.get()}).then(templates => {
-            $.observable(this.model.templates).refresh(templates);
+        App.storage.getObjects({}).then(objects => {
+            $.observable(this.model.objects).refresh(objects);
         })
         .finally(() => this.isBusy = false);
     }

@@ -29,6 +29,11 @@ export class Storage {
         return this._impl.getSpec(id);
     }
 
+    createObject(properties) {
+        this._checkImplementation('createObject');
+        return this._impl.createObject(properties);
+    }
+
     save(dco) {
         this._checkImplementation('save');
         return this._impl.save(dco);

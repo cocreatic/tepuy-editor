@@ -34,10 +34,11 @@ export class GuiEditor {
         $(document).on('tpy:document-changed', this.onDocumentChanged); //New components are create in this document
     }
 
-    initialize(template) {
+    initialize(canEdit = true) {
         const sidebarTpl = TemplateManager.get('sidebar');
         const contentTpl = TemplateManager.get('content');
-        this.sidebarModel = { };
+        this.canEdit = !(canEdit === false);
+        this.sidebarModel = { canEdit: this.canEdit, closePreview: this.initialize.bind(this) };
         this.contentModel = { responsiveDevice: defaultDevice };
         this.dco = App.data.dco;
 
@@ -53,7 +54,7 @@ export class GuiEditor {
     }
 
     activateTab(tab, oldTab) {
-        let id = tab.data().tabId;
+        let id = this.canEdit ? tab.data().tabId : CONTENT_TAB;
         this.activeTab = id;
         switch(id) {
             case SHARE_TAB:
@@ -90,7 +91,7 @@ export class GuiEditor {
         App.registerHook('gui_menu_file_metadata', this.openMetadataEditor.bind(this));
         App.registerHook('gui_menu_file_download', this.downloadObject.bind(this));
         App.registerHook('gui_menu_file_exit', this.close.bind(this));
-        App.registerHook('gui_menu_view_preview', this.notimplemented.bind(this));
+        App.registerHook('gui_menu_view_preview', this.preview.bind(this));
         App.registerHook('gui_menu_view_responsive', this.responsiveView.bind(this));
         App.registerHook('gui_menu_help_manual', this.notimplemented.bind(this));
         App.registerHook('gui_menu_help_about', this.about.bind(this));
@@ -117,7 +118,7 @@ export class GuiEditor {
             this.contentTreeActionHandler.bind(this),
             this.contentTreeSelectionHandler.bind(this)
         );
-        return this.contentTreeManager.getConfig();
+        return this.contentTreeManager.getConfig(this.canEdit);
     }
 
     contentTreeActionHandler(result) {
@@ -251,6 +252,16 @@ export class GuiEditor {
         }, 200);
     }
 
+    preview() {
+        if (this.canEdit) {
+            this.initialize(!this.canEdit);
+        }
+    }
+
+    closePreview() {
+        this.initialize(true);
+    }
+
     responsiveView(ui) {
         $(ui.item).toggleClass('checked');
         $.observable(App.ui).setProperty('responsive', !App.ui.responsive);
@@ -293,7 +304,7 @@ export class GuiEditor {
             this.editor.isIndex = false;
             this.editor.container = 'content';
         }
-        const html = App.data.dco.getHtml(this.editor.container);
+        const html = App.data.dco.getHtml(this.editor.container, this.canEdit);
         let promise = new Promise((resolve, reject) => {
             this.editor.resolve = resolve;
             this.editor.reject = reject;
@@ -305,9 +316,11 @@ export class GuiEditor {
             if (App.ui.responsive) {
                 $head.append('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
             }
-            const template = TemplateManager.get('pageViewStyles');
-            $head.append(template.render());
-            this.registerEditHandlers();
+            if (this.canEdit) {
+                const template = TemplateManager.get('pageViewStyles');
+                $head.append(template.render());
+            }
+            this.registerEventHandlers();
             $(App.data.dco.getDocument(this.editor.container))
                 .trigger('tpy:editor-loaded', [this.editorWindow])
                 .off('tpy:document-changed') //prevent multiple registration of the same event
@@ -363,9 +376,18 @@ export class GuiEditor {
         this.tepuyApp.loadPage(pageIndex, sectionIndex);
     }
 
-    registerEditHandlers() {
+    registerEventHandlers() {
         const _$ = this.editorWindow.$;
-        _$(this.editorWindow.document).on('click', '[data-cmpt-type] .tpy-action', (ev) => {
+        const $document = _$(this.editorWindow.document);
+        if (!this.canEdit) {
+            $document.on('tepuy.scorm-playing', (ev) => {
+                ev.preventDefault();
+                const page = App.data.dco.pages[0];
+                page && this.contentTreeManager.setSelection(page.id);
+            });
+            return;
+        }
+        $document.on('click', '[data-cmpt-type] .tpy-action', (ev) => {
             const $target = _$(ev.target); //Need to use jQuery form the frame window so it has all the tepuy plugins added
             const data = $target.data();
             if (/^add/.test(data.tpyAction)) {
@@ -386,10 +408,6 @@ export class GuiEditor {
         }).on('mouseout', '[data-cmpt-type]', function(e) {
             e.stopImmediatePropagation();
             _$('.tpy-edit-toolbar.'+this.id).hide();
-        }).on('tepuy.scorm-playing', (ev) => {
-            ev.preventDefault();
-            const page = App.data.dco.pages[0];
-            page && this.contentTreeManager.setSelection(page.id);
         });
     }
 

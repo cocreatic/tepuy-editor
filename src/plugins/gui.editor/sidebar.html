@@ -1,4 +1,5 @@
 <script id="gui-editor-sidebar" type="text/x-template">
+    {^{if canEdit }}
     <div id="tabs">
         <ul>
             <li data-tab-id="tab-1"><a href="#tab-1">{{:~icon('content')}}</a></li>
@@ -49,6 +50,22 @@
             {{/if}}
         </div>
     </div>
+    {{else}}
+    <div class="ui-widget ui-button" data-link="{on closePreview}">
+        <span data-i18n="sidebar.closepreview">Cerrar vista previa</span>
+    </div>
+    <div class="tpy-object-tree">
+        <!--h3 class="ui-widget ui-widget-header" data-i18n="sidebar.content"></h3-->
+        {^{if content}}
+        <div class="tpy-toolset">
+            <h3 class="ui-widget-header" data-i18n="editor.content.objecttree"></h3>
+            <div class="tpy-toolset-content">
+                {^{jstree content.jtData config=content.jtConfig /}}
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    {{/if}}
     <div id="tpy-modal-edit-dlg" title="{{:~translate(dlgTitle)}}"></div>
 </script>
 <script id="gui-editor-tree-node-toolbar" type="text/x-template">
