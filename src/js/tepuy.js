@@ -77,12 +77,18 @@ export class Tepuy {
 
         //Dependecies
         if (!prod) {
-            const srcs = {};
-            $head.children('link[type="text/css"],script').each((i, it) => {
-                const src = it.src || it.href;
-                const id = src.split('/').pop();
-                srcs[id] = {src: src.replace(local, ''), rel: it.rel, type: it.type };
-            }).remove();
+            let srcs = this.indexSrcs;
+            const $dependencies = $head.children('link[type="text/css"],script');
+            if (srcs == undefined) {
+                srcs = {};
+                $dependencies.each((i, it) => {
+                    const src = it.src || it.href;
+                    const id = src.split('/').pop();
+                    srcs[id] = {src: src.replace(local, ''), rel: it.rel, type: it.type };
+                });
+                this.indexSrcs = srcs;
+            }
+            $dependencies.remove();
 
             $.each(dependencies, function(i, it) {
                 if (it.type == 'style') {
@@ -119,7 +125,7 @@ export class Tepuy {
 
 
         if (!$base.length && baseUrl) {
-            baseUrl = baseUrl.replace(/^http[s]*:/, window.location.protocol);
+            baseUrl = baseUrl.replace(/^http[s]?:/, window.location.protocol);
             $doc.find('head').prepend('<base href="' + baseUrl + '" />');
         }
         //$doc.find('head').children('script[src*="scorm"]').remove(); //ToDo: Need to indentify adding/removing only required scripts
