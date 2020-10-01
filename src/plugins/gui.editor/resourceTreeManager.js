@@ -340,7 +340,8 @@ export class ResourceTreeManager {
                 name: file.name,
                 size: Math.round(file.size / 1024) + ' KB',
                 createdAt: moment(file.lastModifiedDate).unix(), // .format('YYYY-MM-DD HH:mm'),
-                extension: file.name.substring(file.name.lastIndexOf('.'))
+                extension: file.name.substring(file.name.lastIndexOf('.')),
+                blob: file
             }
             resource.icon = this.getFileIcon(resource);
 
