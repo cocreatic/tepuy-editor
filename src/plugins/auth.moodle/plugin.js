@@ -3,7 +3,6 @@ export class AuthMoodle {
 
         return new Promise((resolve, reject) => {
 
-//            var TepuyAPI = { currentuser: {id: 1, username: 'cirano', fullname: 'David', imageurl: ''} }
             if (typeof(TepuyAPI) != 'undefined') {
                 resolve({
                     id: TepuyAPI.currentuser.id,
