@@ -43,6 +43,8 @@ $(function () {
         dhbgApp.MODEL = 'scorm';
     }
 
+    console.log(dhbgApp.MODEL);
+
     // If mobile mode is enabled or disabled and the window width to define the mobile mode
     if ($body.attr('data-mobile-mode')) {
         if ($body.attr('data-mobile-mode') == 'false' || isNaN(Number($body.attr('data-mobile-mode')))) {
@@ -62,6 +64,7 @@ $(function () {
     dhbgApp.evaluation.approve_limit = $body.attr('data-approve-limit') ? Number($body.attr('data-approve-limit')) : 100;
 
     dhbgApp.evaluation.activities_percentage = $body.attr('data-activities-percentaje') ? Number($body.attr('data-activities-percentaje')) : 60;
+
     dhbgApp.start();
 });
 

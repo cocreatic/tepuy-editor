@@ -290,8 +290,9 @@ tepuy jQuery plugins
             }
 
             var $close = $('<div class="close button">X</div>');
-            $close.on('click', function() {
+            $close.on('click', function(event) {
                 $this.hide({ effect: 'slide', direction: 'down' });
+                event.stopPropagation();
             });
 
             if (style != '') {
@@ -312,7 +313,7 @@ tepuy jQuery plugins
                     $($(this).attr('data-ref')).hide();
                 });
 
-                $this.parent().find('.button').removeClass('current');
+                $this.parent().find('> .button').removeClass('current');
 
                 var selector = $(this).attr('data-ref');
                 $(selector).show();
@@ -705,6 +706,7 @@ tepuy jQuery plugins
      */
     $.fn.tepuyInteractiveVideo = function() {
         this.each(function() {
+            console.log('creating interactive video');
             $(this).data('ivideo', new IVideo(this));
         });
     }

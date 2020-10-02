@@ -127,7 +127,7 @@ dhbgApp.scorm.initialization = function (options) {
             doLMSCommit();
             doLMSFinish();
             dhbgApp.scorm.closed = true;
-        }   
+        }
 
     };
 
@@ -153,6 +153,7 @@ dhbgApp.scorm.saveVisit = function(index) {
 };
 
 dhbgApp.scorm.saveProgress = function() {
+
     if (dhbgApp.scorm.lms != null) {
         var scale_sco = 0;
         var progress = '';

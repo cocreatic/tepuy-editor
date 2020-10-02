@@ -184,7 +184,9 @@
             this.player.play();
         }
 
-        seek(time) {            
+        seek(time) {
+            console.log('Seeking at ' + time);
+            console.log(time);
             this.player.currentTime = time;
         }
 
@@ -401,6 +403,7 @@
         }
 
         selectMarker() {
+            console.log('Marker selected');
             const me = this;
             me.ivideo.seek(me.triggerAt);
         }
@@ -685,13 +688,13 @@
             };
 
             const stop = function(event, ui) {
-                me.videoPlayer.seek(ui.value);
-                me.updateTime(ui.value);
-                me.seeking = false;
-                if (me.resumePlay) {
-                    me.resumePlay = false;
-                    me.videoPlayer.play();
-                }
+//                me.videoPlayer.seek(ui.value);
+//                me.updateTime(ui.value);
+//                me.seeking = false;
+//                if (me.resumePlay) {
+//                    me.resumePlay = false;
+//                    me.videoPlayer.play();
+//                }
             };
 
             const $slider = $('<div/>', { appendTo: $wrapper }).slider({
@@ -740,11 +743,12 @@
         }
 
         seek(time) {
+            console.log(time);
             if (typeof time === 'string') {
                 time = durationToNumber(time);           
             }
             //this.videoPlayer.seek(time);
-
+            console.log(time);
             const player = this.videoPlayer;
             if (Math.floor(player.currentTime * 10) == Math.floor(time * 10)) { //Already in the marker time
                 return;
