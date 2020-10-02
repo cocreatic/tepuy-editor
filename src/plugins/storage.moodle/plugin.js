@@ -82,17 +82,30 @@ export class StorageMoodle {
     }
 
     /**
+     *
+     * @param {string} id Spec key
+     * @return {Promise<Object>} A Promise that resolves to the spec XML.
+     */
+    getSpec(id) {
+        if (typeof(TepuyAPI) == 'undefined') {
+            return Promise.reject('Specification not available');
+        }
+
+        return TepuyAPI.getSpecPromise(id);
+    }
+
+    /**
     * To persist an object information.
     *
     * @param {Object} dco The object manifest to save.
     * @return {Promise<Object>} A Promise that resolves to the saved object.
     */
-    save(dco) {
+    save(dco, publish) {
         if (typeof(TepuyAPI) == 'undefined') {
             return Promise.resolve([]);
         }
 
-        return TepuyAPI.savePromise(dco);
+        return TepuyAPI.savePromise(dco, publish);
     }
 
     /**
