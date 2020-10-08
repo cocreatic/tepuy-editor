@@ -129,8 +129,11 @@ export class StorageMoodle {
     * @return {Promise<string>} A Promise that resolves to a URL string to download the zip file.
     */
     download(dco) {
-        //ToDo: falta implementar
-        console.log('falta implementar download');
+        if (!dco.id || typeof(TepuyAPI) == 'undefined') {
+            return Promise.resolve(false);
+        }
+
+        return TepuyAPI.downloadPromise(dco.id);
     }
 
     /**
