@@ -28,7 +28,7 @@ export class ContentBox extends ContainerComponent {
         const typeOptions = ['important', 'example', 'note', 'link', 'connection', 'activity'];
         const type = {name: 'type', type: 'optionList', options: typeOptions, editSettings: {
                 label: 'cmpt.tepuyBasic:content-box.type',
-                options: typeOptions.map(o => ({value: o, label: o}))
+                options: typeOptions.map(o => ({value: o, label:  this.t('cmpt.tepuyBasic:instruction-box.types.'+o)}))
             } 
         };
         const label = {name: 'label', type: 'text', attr: 'label', editSettings: { label: 'cmpt.tepuyBasic:content-box.label' }};

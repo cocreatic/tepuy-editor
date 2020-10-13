@@ -70,12 +70,14 @@ export class ComponentEditor {
         }
     }
 
-    show(component) {
+    show(options) {
+        const { component, $refEl } = { ...options };
         const priv = _(this);
         const dlg = priv.dlg;
         const me = this;
         this.setMode('loading');
         this.selected = component;
+        this.objBaseUri = $refEl.get(0).baseURI;
 
         if (!priv.initialized) {
             dlg.create({
@@ -120,7 +122,9 @@ export class ComponentEditor {
             id: ['text', cmpt.id, { label: 'component.id', validators: [ validators.required, validators.pattern(validators.patterns.HTMLCLASSNAME)] }],
             //name: ['text', cmpt.name, { label: 'component.name', validators: [validators.required, validators.maxLength(60) ], maxLength: 60, default: true }],
         };
-
+        cmpt.onEditBefore({
+            baseURI: this.objBaseUri
+        });
         let properties = cmpt.properties.slice();
         if (this.parent && this.parent.childProperties) {
             const childProperties = this.parent.resolveChildProperties(this.jQuery); // .childProperties.slice();

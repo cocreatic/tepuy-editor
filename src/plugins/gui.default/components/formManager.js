@@ -203,10 +203,10 @@ export class AbstractControl {
             }
         });
 
-        if (!errors.length) {
-            return null;
+        if (errors.length) {
+            return errors;
         }
-        return errors;
+        return null;
     }
 
     _calculateStatus() {
@@ -226,6 +226,22 @@ export class AbstractControl {
     }
 
     updateValidity() {
+        $.observable(this).setProperty('errors', this.runValidator());
+        const [valid, invalid, enabled, disabled] = [this.valid, this.invalid, this.enabled, this.disabled];
+        _(this).status = this._calculateStatus();
+        //Raise property change trigger ($.observable)
+        (valid != this.valid) && $.observable(this)._trigger(this, {change: "set", path: 'valid', value: this.valid, oldValue: valid, remove: undefined});
+        (invalid != this.invalid) && $.observable(this)._trigger(this, {change: "set", path: 'invalid', value: this.invalid, oldValue: invalid, remove: undefined});
+        (enabled != this.enabled) && $.observable(this)._trigger(this, {change: "set", path: 'enabled', value: this.enabled, oldValue: enabled, remove: undefined});
+        (disabled != this.disabled) && $.observable(this)._trigger(this, {change: "set", path: 'disabled', value: this.disabled, oldValue: disabled, remove: undefined});
+
+        //
+        if (this.parent) {
+            this.parent.updateValue();
+        }
+    }
+
+    updateValidity2() {
         $.observable(this).setProperty('errors', this.runValidator());
         const [valid, invalid, enabled, disabled] = [this.valid, this.invalid, this.enabled, this.disabled];
         _(this).status = this._calculateStatus();
@@ -458,6 +474,9 @@ export class FormBuilder {
             imageInput: {
                 default: '#gui-default-form-imageinput'
             },
+            resourceInput: {
+                default: '#gui-default-form-resourceinput'
+            },
             group: {
                 default: '#gui-default-form-group',
                 twoColumns: '#gui-default-form-group-two-columns'
@@ -516,6 +535,10 @@ export class FormBuilder {
     
     static imageInput(value, settings) {
         return FormBuilder.control(FormBuilder.templates.imageInput.default, value, settings);
+    }
+    
+    static resourceInput(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.resourceInput.default, value, settings);
     }
     
     static html(value, settings) {

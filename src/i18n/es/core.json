@@ -119,7 +119,8 @@
     "addFile": "",
     "addFolder": "",
     "publish": "Publicar",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "browse": "Seleccionar"
   },
   "resources": {
     "root": "Carpeta principal",

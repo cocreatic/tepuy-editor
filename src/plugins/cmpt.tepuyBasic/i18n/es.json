@@ -6,12 +6,26 @@
     "content-box": {
         "title": "Bloque de Texto",
         "type": "Tipo",
-        "label": "Título"
+        "label": "Título",
+        "types": {
+            "important": "Importante",
+            "example": "Ejemplo",
+            "note": "Nota",
+            "link": "Enlace",
+            "connection": "Conexión",
+            "activity": "Actividad"
+        }
     },
     "instruction-box": {
         "title": "Instrucción",
         "type": "Tipo",
-        "content": "Contenido"
+        "content": "Contenido",
+        "types": {
+            "info": "Información",
+            "danger": "Peligro",
+            "alert": "Alerta",
+            "none": "Ninguno"
+        }
     },
     "interactive-video": {
         "title": "Video interactivo",

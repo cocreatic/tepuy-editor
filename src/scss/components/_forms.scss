@@ -215,3 +215,17 @@
         margin: auto;
     }
 }
+
+.tpy-control-resourceinput {
+    display: flex;
+
+    input[data-link] { flex: 1; }
+}
+
+.tpy-resource-viewer {
+    display: flex;
+
+    .tpy-object-tree {
+        flex: 0 0 250px;
+    }
+}

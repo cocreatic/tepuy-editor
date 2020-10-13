@@ -160,7 +160,7 @@ class App {
             i18next.on('languageChanged', () => {
                 $('body').localize();
             });
-            this.i18n = i18next; //Give the App object access to the while translation system
+            this.i18n = i18next; //Give the App object access to the whole translation system
         });
     }
 
@@ -187,3 +187,4 @@ export { app as App};
 export * as Utils from './utils';
 export * as Component from './component';
 export * as Tepuy from './tepuy';
+export * as ResourceTreeManager from './resourceTreeManager';

@@ -109,13 +109,14 @@
             //Show player controls
             player.controls = options.controls && options.controls === true;
 
-            if ($parent.is('[autoplay]')) {
+            if ($parent.is('[data-autoplay=true]')) {
                 player.autoplay = true;
             }
 
             this.$parent = $parent;
             this.player = player;
             this.$player = $player;
+            window.top.PLAYER = this;
 
             this._registerEvents();
         }
@@ -185,8 +186,6 @@
         }
 
         seek(time) {
-            console.log('Seeking at ' + time);
-            console.log(time);
             this.player.currentTime = time;
         }
 
@@ -315,10 +314,10 @@
             const data = $el.data();
             const ivideoId = this.ivideo.host.id;
             const elCss = {
-                top: data.posTop,
-                left: data.posLeft,
-                width: data.sizeWidth,
-                height: data.sizeHeight
+                top: isNaN(data.posTop) ? height * 0.1 : data.posTop,
+                left: isNaN(data.posLeft) ? width * 0.1 : data.posLeft,
+                width: isNaN(data.sizeWidth) ? width * 0.5 : data.sizeWidth,
+                height: isNaN(data.sizeHeight) ? height * 0.5 : data.sizeHeight
             };
             css = $.extend(css, elCss);
 
@@ -403,7 +402,6 @@
         }
 
         selectMarker() {
-            console.log('Marker selected');
             const me = this;
             me.ivideo.seek(me.triggerAt);
         }
@@ -743,12 +741,10 @@
         }
 
         seek(time) {
-            console.log(time);
             if (typeof time === 'string') {
                 time = durationToNumber(time);           
             }
             //this.videoPlayer.seek(time);
-            console.log(time);
             const player = this.videoPlayer;
             if (Math.floor(player.currentTime * 10) == Math.floor(time * 10)) { //Already in the marker time
                 return;

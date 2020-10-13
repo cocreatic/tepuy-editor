@@ -10,6 +10,7 @@ const dependencies = {
     "jpit_crossword.css": { type: 'style', src: "vendor/tepuy/components/pit/css/jpit_crossword.css" },
     "jpit_zoom.css": { type: 'style', src: "vendor/tepuy/components/pit/css/jpit_zoom.css" },
     "circle.min.css": { type: 'style', src: "vendor/tepuy/components/csscircle/circle.min.css" },
+    "ivideo.css": { type: 'style', src: "vendor/tepuy/components/interactivevideo/ivideo.css" },
     "scormplayer.css": { type: 'style', src: undefined }, //"vendor/tepuy/css/scormplayer.css" },
     "twentytwenty.css": { type: 'style', src: "vendor/tepuy/components/twentytwenty/css/twentytwenty.css", media: 'screen' },
     "mediaelementplayer.css": { type: 'style', src: "vendor/tepuy/components/mediaelementjs/mediaelementplayer.css" },
@@ -45,6 +46,9 @@ const dependencies = {
     "mobilelib.js": { type: 'script', src: "vendor/tepuy/js/mobilelib.js" },
     "stories.js": { type: 'script', src: "vendor/tepuy/js/stories.js" },
     "player.js": { type: 'script', src: "vendor/tepuy/components/scorm/player.js" },
+    "tinymce.js": { type: 'script', src: "vendor/assets/tinymce/js/tinymce.min.js" },
+    //"jquery.tinymcejs": { type: 'script', src: "vendor/assets/tinymce/js/jquery.tinymce.min.js" },
+    //"tepuy.tinymce.js": { type: 'script', src: "vendor/assets/tinymce/js/tepuy.tinymce.js" },
 }
 
 export class Tepuy {

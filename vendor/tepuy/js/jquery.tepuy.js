@@ -40,7 +40,6 @@ tepuy jQuery plugins
         $content.find('> .element').hide();
         $menu.find('.board .'+data.current_class).removeClass(data.current_class);
         $item_dt.addClass(data.current_class);
-        console.log(data.$content);
         data.$content.show();
     }
 
@@ -706,7 +705,6 @@ tepuy jQuery plugins
      */
     $.fn.tepuyInteractiveVideo = function() {
         this.each(function() {
-            console.log('creating interactive video');
             $(this).data('ivideo', new IVideo(this));
         });
     }

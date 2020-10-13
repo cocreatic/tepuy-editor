@@ -1,5 +1,6 @@
 import { Component, ComponentType } from '../../../js/component';
 import { _ } from '../../../js/utils';
+import { App } from '../../../js/app';
 
 export class InstructionBox extends Component {
 
@@ -29,7 +30,7 @@ export class InstructionBox extends Component {
         const typeOptions = ['info', 'danger', 'alert', 'none'];
         const type = { name: 'type', type: 'optionList', options: typeOptions, attr: 'type', editSettings: {
                 label: 'cmpt.tepuyBasic:instruction-box.type',
-                options: typeOptions.map(o => ({value: o, label: o})) //ToDo: Translation for labels
+                options: typeOptions.map(o => ({value: o, label: this.t('cmpt.tepuyBasic:instruction-box.types.'+o)}))
             }
         };
         type.value = this.getAttribute(type.attr);

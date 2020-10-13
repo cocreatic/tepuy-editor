@@ -141,6 +141,20 @@
   </div>
 </script>
 
+<script id="gui-default-resourceinput" type="text/x-template">
+  <div class="tpy-control-resourceinput">
+    <input type="text" data-link="value{:~path} readonly{:!~canEdit}" />
+    {^{if ~canEdit}}
+      {^{controlgroup ~iitag=~tag}}
+        {{if false}}
+          {^{on ~iitag.add}}{^{button ^tmpl=~translate('commands.add') /}}{{/on}}
+        {{/if}}
+          {^{on ~iitag.browse}}{^{button ^tmpl=~translate('commands.browse') /}}{{/on}}
+      {{/controlgroup}}
+    {{/if}}
+  </div>
+</script>
+
 <script id="gui-default-form-control-error" type="text/x-template">
   {^{if invalid && errors}}
   <div class="tpy-validation-error">
@@ -314,6 +328,19 @@
   </div>
 </script>
 
+<script id="gui-default-form-resourceinput" type="text/x-template">
+  <div class="tpy-form-control" data-link="
+    class{merge:invalid toggle='invalid'}
+    class{merge:required toggle='required'}
+    ">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+    <div data-link="{resourceInput value settings=settings editable=true}"></div>
+  </div>
+</script>
+
 <script id="gui-default-form-html" type="text/x-template">
   <div class="tpy-form-control" data-link="
     class{merge:invalid toggle='invalid'}
@@ -323,7 +350,7 @@
       <span data-link="data-i18n{:label}"></span>
       {{include tmpl="#gui-default-form-control-error"/}}
     </label>
-    {^{htmleditor value /}}
+    {^{htmleditor value settings=settings /}}
   </div>
 </script>
 
