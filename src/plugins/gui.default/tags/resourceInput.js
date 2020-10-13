@@ -124,7 +124,7 @@ export const resourceInput = {
         this.resourceManager = new ResourceTreeManager({
             actionHandler: this.onResourceAction.bind(this),
             filter: this.filter
-        });
+        }, App);
         const treeConfig = this.resourceManager.getConfig(true); //Read only resource manager
         this.resources = {
             ...treeConfig,

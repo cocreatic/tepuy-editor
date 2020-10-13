@@ -46,7 +46,7 @@
 
 <script id="gui-tplchooser-edit-content" type="text/x-template">
     <div id="tpy-object-container"> <!-- data-link="{on 'click' '.card' showDetail}"-->
-        {^{for model.objects ~open=openForEdition ~delete=delete }}
+        {^{for model.objects ~open=openForEdition ~delete=delete ~owned=ownedByMe }}
         <div class="card" data-id="{{:id}}">
             <div class="image-wrapper">
                 <img src="{{:(preview||'//:0')}}" alt="" />
@@ -62,7 +62,9 @@
             <div class="card-footer">
                 {^{controlgroup}}
                     {^{on ~open #data}}{^{button ^tmpl=~translate('commands.open') /}}{{/on}}
+                    {^{if ~owned(#data)}}
                     {^{on ~delete #data}}{^{button ^tmpl=~translate('commands.delete') /}}{{/on}}
+                    {{/if}}
                 {{/controlgroup}}
             </div>
         </div>

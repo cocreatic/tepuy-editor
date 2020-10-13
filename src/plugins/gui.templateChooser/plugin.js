@@ -68,6 +68,10 @@ export class GuiTemplateChooser {
         });
     }
 
+    ownedByMe(obj) {
+        return App.data.user && obj.createdBy == App.data.user.userName;
+    }
+
     applyFilter(e) {
         e.preventDefault();
         if (this.isBusy) return;

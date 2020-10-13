@@ -3,7 +3,8 @@ import moment from 'moment';
 import { App } from '../../js/app';
 import { TemplateManager } from './templateManager';
 import { ContentTreeManager } from './contentTreeManager';
-import { ResourceTreeManager } from './resourceTreeManager';
+//import { ResourceTreeManager } from './resourceTreeManager';
+import { ResourceTreeManager } from '../../js/resourceTreeManager';
 import { ComponentEditor } from './componentEditor';
 import { MetadataEditor } from './metadataEditor';
 import { downloadFile, filenamify } from '../../js/utils';
@@ -159,7 +160,8 @@ export class GuiEditor {
     }
 
     initializeResourceTreeManager() {
-        this.resourceTreeManager = new ResourceTreeManager();
+        this.resourceTreeManager = new ResourceTreeManager({
+        }, App);
         this.contentModel.resourceManager = this.resourceTreeManager;
         return this.resourceTreeManager.getConfig();
     }

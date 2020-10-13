@@ -1,6 +1,5 @@
 import moment from 'moment';
-import { App } from './app';
-
+let App;
 const resourceTypes = {
     'image': {
         pattern: /^\.?(png|jpg|gif|jpeg|)$/,
@@ -41,10 +40,11 @@ function hashCode(string) {
 
 export class ResourceTreeManager {
     
-    constructor(options) {
+    constructor(options, app) {
         options = Object.assign({
             actionHandler: () => {}
         }, options);
+        App = app;
         this.actionHandler = options.actionHandler;
         this.filter = options.filter;
         this.dco = App.data.dco;
