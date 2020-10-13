@@ -116,7 +116,6 @@
             this.$parent = $parent;
             this.player = player;
             this.$player = $player;
-            window.top.PLAYER = this;
 
             this._registerEvents();
         }
@@ -686,13 +685,13 @@
             };
 
             const stop = function(event, ui) {
-//                me.videoPlayer.seek(ui.value);
-//                me.updateTime(ui.value);
-//                me.seeking = false;
-//                if (me.resumePlay) {
-//                    me.resumePlay = false;
-//                    me.videoPlayer.play();
-//                }
+                me.videoPlayer.seek(ui.value);
+                me.updateTime(ui.value);
+                me.seeking = false;
+                if (me.resumePlay) {
+                    me.resumePlay = false;
+                    me.videoPlayer.play();
+                }
             };
 
             const $slider = $('<div/>', { appendTo: $wrapper }).slider({

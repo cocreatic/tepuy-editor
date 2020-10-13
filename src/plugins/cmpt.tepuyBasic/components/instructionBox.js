@@ -1,6 +1,5 @@
 import { Component, ComponentType } from '../../../js/component';
 import { _ } from '../../../js/utils';
-import { App } from '../../../js/app';
 
 export class InstructionBox extends Component {
 
