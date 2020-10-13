@@ -68,7 +68,7 @@ export const resourceInput = {
     init: function(tagCtx) {
         const settings = tagCtx.props.settings;
         this.filter = settings && settings.filter;
-        this.ctxPrm("canEdit", true);        
+        this.ctxPrm("canEdit", true);
     },
     onBind: function(tagCtx) {
         //console.log(this['~settings']);
@@ -107,14 +107,14 @@ export const resourceInput = {
         };
         const $container = $(this.parentElem).closest('.tpy-form-container');
         if ($container.length) {
-            dlgOptions.minWidth = $container.width() * .8;            
+            dlgOptions.minWidth = $container.width() * .8;
         }
-        const template = $.templates(modalTemplate);        
+        const template = $.templates(modalTemplate);
         const dlg = new Dialog(Object.assign({
             title: App.i18n.t('commands.browse'),
             centerOnContent: true
         }, dlgOptions));
-        
+
         dlg.setButtons([
             { text: App.i18n.t(App.i18n.t('commands.cancel')), click: this.cancel.bind(this) },
             { text: App.i18n.t(App.i18n.t('commands.browse')), click: this.submit.bind(this), 'data-default': true }

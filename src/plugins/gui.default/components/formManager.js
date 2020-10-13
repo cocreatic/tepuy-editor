@@ -48,7 +48,7 @@ export class FormManager {
         });
         dlg.host.localize();
         priv.dialog = dlg;
-        
+
         return new Promise((resolve, reject) => {
             priv.resolve = resolve;
             priv.reject = reject;
@@ -235,23 +235,6 @@ export class AbstractControl {
         (enabled != this.enabled) && $.observable(this)._trigger(this, {change: "set", path: 'enabled', value: this.enabled, oldValue: enabled, remove: undefined});
         (disabled != this.disabled) && $.observable(this)._trigger(this, {change: "set", path: 'disabled', value: this.disabled, oldValue: disabled, remove: undefined});
 
-        //
-        if (this.parent) {
-            this.parent.updateValue();
-        }
-    }
-
-    updateValidity2() {
-        $.observable(this).setProperty('errors', this.runValidator());
-        const [valid, invalid, enabled, disabled] = [this.valid, this.invalid, this.enabled, this.disabled];
-        _(this).status = this._calculateStatus();
-        //Raise property change trigger ($.observable)
-        (valid != this.valid) && $.observable(this)._trigger(this, {change: "set", path: 'valid', value: this.valid, oldValue: valid, remove: undefined});
-        (invalid != this.invalid) && $.observable(this)._trigger(this, {change: "set", path: 'invalid', value: this.invalid, oldValue: invalid, remove: undefined});
-        (enabled != this.enabled) && $.observable(this)._trigger(this, {change: "set", path: 'enabled', value: this.enabled, oldValue: enabled, remove: undefined});
-        (disabled != this.disabled) && $.observable(this)._trigger(this, {change: "set", path: 'disabled', value: this.disabled, oldValue: disabled, remove: undefined});
-
-        //
         if (this.parent) {
             this.parent.updateValue();
         }
@@ -379,7 +362,6 @@ export class FormArray extends AbstractControl {
     registerControl(control, i) {
         control.setParent(this);
         control.key = i;
-        //$.observe(control, 'value', () => this.updateValue());
     }
 
     push(control) {
@@ -516,31 +498,31 @@ export class FormBuilder {
     static radio(value, settings) {
         return FormBuilder.control(FormBuilder.templates.radio.default, value, settings);
     }
-    
+
     static boolean(value, settings) {
         return FormBuilder.control(FormBuilder.templates.boolean.default, value, settings);
     }
-    
+
     static yesno(value, settings) {
         return FormBuilder.control(FormBuilder.templates.yesno.default, value, settings);
     }
-    
+
     static optionList(value, settings) {
         return FormBuilder.control(FormBuilder.templates.optionList.default, value, settings);
     }
-    
+
     static shareList(value, settings) {
         return FormBuilder.control(FormBuilder.templates.shareList.default, value, settings);
     }
-    
+
     static imageInput(value, settings) {
         return FormBuilder.control(FormBuilder.templates.imageInput.default, value, settings);
     }
-    
+
     static resourceInput(value, settings) {
         return FormBuilder.control(FormBuilder.templates.resourceInput.default, value, settings);
     }
-    
+
     static html(value, settings) {
         return FormBuilder.control(FormBuilder.templates.html.default, value, settings);
     }
@@ -598,9 +580,6 @@ export class FormBuilder {
             return FormBuilder[type](value, settings);
         }
         else {
-//            if (!FormBuilder[config.type]) {
-//                throw TypeError('Missing control type ' + config.type);
-//            }
             return FormBuilder[config.type](config.value, config.settings);
         }
     }
