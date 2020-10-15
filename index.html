@@ -15,14 +15,29 @@
     <!-- inject:template:html -->
     <!--endinject-->
     <script>
-      tepuyEditor.App.init({
-        //defaultView: 'editor',
-        theme: 'light', //
-        exit: {
-          action: 'http://cocreatic.org/',
-          target: top
-        }
-      });
+      var TepuyAPI = parent.window.TepuyAPI;
+      if (TepuyAPI) {
+        tepuyEditor.App.init({
+          authentication: 'moodle',
+          storage: 'moodle',
+          theme: 'light',
+          exit: {
+            text: 'Regresar',
+            action: 'https://cocreatic.org/',
+            target: top
+          }
+        });
+      }
+      else {
+        tepuyEditor.App.init({
+          //defaultView: 'editor',
+          theme: 'light', //
+          exit: {
+            action: 'http://cocreatic.org/',
+            target: top
+          }
+        });
+      }
     </script>
   </body>
 </html>

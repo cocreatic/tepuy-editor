@@ -36,9 +36,11 @@ export class Dialog {
         options = Object.assign(options, dlgOptions);
 
         let { settings, buttons } = {..._(this)};
-        const { width, maxWidth, title } = { ...settings };
+        const { width, maxWidth, minWidth, minHeight, title } = { ...settings };
         options.width = width;
         options.maxWidth = maxWidth;
+        options.minWidth = minWidth;
+        options.minHeight = minHeight;
         if (title) options.title = title;
 
         if(!buttons) {

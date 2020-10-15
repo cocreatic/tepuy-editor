@@ -26,13 +26,15 @@ export class InteractiveVideo extends ContainerComponent {
         super(element);
         //Initialize public properties
         this.host.classList.add('tpy-ivideo');
+        this.addChildText = 'cmpt.tepuyBasic:interactive-video.addChildText';
     }
 
     initialize() {
-        const source = {name: 'source', type: 'text', attr: 'data-src', editSettings: { label: 'cmpt.tepuyBasic:interactive-video.source' }};
+        const source = {name: 'source', type: 'resourceInput', attr: 'data-src', editSettings: { label: 'cmpt.tepuyBasic:interactive-video.source', filter: 'video' }};
         const autoplay = { name: 'autoplay', type: 'boolean', attr: 'data-autoplay', editSettings: { label: 'cmpt.tepuyBasic:interactive-video.autoplay' }};
 
         source.value = this.getAttribute(source.attr);
+        source.editSettings.editable = !source.value; 
         autoplay.value = this.getAttribute(autoplay.attr);
 
         _(this).properties = [ source, autoplay ];
@@ -46,13 +48,24 @@ export class InteractiveVideo extends ContainerComponent {
         ];
     }
 
-    setPropertyValue(prop, value) {
-        super.setPropertyValue(prop, value);
-        if (!this.$host) return;
-
-        if (prop == 'source') {
+    updateProperties(value) {
+        if (value == null) return false;
+        const currentSource = this.getPropertyValue('source');
+        let source = value['source'];
+        if (source && source != currentSource) {
 
         }
+
+        super.updateProperties(value);
+    }
+
+    setPropertyValue(prop, value) {
+        if (prop.name == 'source') {
+            //Update url link and clear 
+        }
+
+        super.setPropertyValue(prop, value);
+        if (!this.$host) return;
     }
 
     resolveChildProperties(jQuery) {

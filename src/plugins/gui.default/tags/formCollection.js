@@ -11,7 +11,7 @@ export const formCollection = {
     init: function(tagCtx) {
         //this.controlsarr = this.tagCtx.args[0];
         this.settings = this.tagCtx.props.settings;
-        this.required = this.settings.required;
+        this.required = this.settings && this.settings.required;
     },
     //Methods
     add: function() {

@@ -97,7 +97,7 @@ function add_load_button (unique_id) {
 }
 
 function try_playing_scorm() {
-    var ev = $.Event('tepuy.scorm-playing');
+    var ev = $.Event('tpy:scorm.playing');
     $(document).trigger(ev);
     if (!ev.isDefaultPrevented()) play_scorm();    
 }
@@ -119,5 +119,5 @@ function play_scorm() {
     else {
         location.href = 'content.html';
     }
-    $(document).trigger('tepuy.scorm-played', ["param1", dhbgApp.WINDOWS_MODE]);
+    $(document).trigger('tpy:scorm.played', [{mode: dhbgApp.WINDOWS_MODE}]);
 }

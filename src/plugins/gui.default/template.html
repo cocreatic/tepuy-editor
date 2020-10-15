@@ -101,6 +101,12 @@
   </div>
 </script>
 
+<script id="gui-default-questioninput" type="text/x-template">
+  <div class="tpy-form-questioninput">
+    {^{include baseConfig tmpl="#gui-default-form-group" /}}
+  </div>
+</script>
+
 <script id="gui-default-formgroup-collection" type="text/x-template">
   <div class="tpy-form form-array form-collection">
     {^{if controls.length==0}}<button class="ui-button btn-add" data-link="{on ~tag.add}">{{:~icon('add')}}</button>{{/if}}
@@ -136,6 +142,20 @@
       {^{controlgroup ~iitag=~tag}}
           {^{on ~iitag.delete}}{^{button ^tmpl=~translate('commands.delete') /}}{{/on}}
           {^{on ~iitag.update}}{^{button ^tmpl=~translate('commands.update') /}}{{/on}}
+      {{/controlgroup}}
+    {{/if}}
+  </div>
+</script>
+
+<script id="gui-default-resourceinput" type="text/x-template">
+  <div class="tpy-control-resourceinput">
+    <input type="text" data-link="value{:~path} readonly{:!~canEdit}" />
+    {^{if ~canEdit}}
+      {^{controlgroup ~iitag=~tag}}
+        {{if false}}
+          {^{on ~iitag.add}}{^{button ^tmpl=~translate('commands.add') /}}{{/on}}
+        {{/if}}
+          {^{on ~iitag.browse}}{^{button ^tmpl=~translate('commands.browse') /}}{{/on}}
       {{/controlgroup}}
     {{/if}}
   </div>
@@ -211,6 +231,25 @@
       {:value:}
       readonly{:settings.readonly}
       maxlength{:settings.maxLength}
+      autofocus{:settings.default||null}
+    "/>
+  </div>
+  {{/if}}
+</script>
+
+<script id="gui-default-form-number" type="text/x-template">
+  {^{if visible()}}
+  <div class="tpy-form-control text-small" data-link="
+    class{merge:invalid toggle='invalid'}
+    class{merge:required toggle='required'}
+    ">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+    <input type="text" data-link=" 
+      {:value:}
+      readonly{:settings.readonly}
       autofocus{:settings.default||null}
     "/>
   </div>
@@ -314,6 +353,19 @@
   </div>
 </script>
 
+<script id="gui-default-form-resourceinput" type="text/x-template">
+  <div class="tpy-form-control" data-link="
+    class{merge:invalid toggle='invalid'}
+    class{merge:required toggle='required'}
+    ">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+    <div data-link="{resourceInput value settings=settings editable=true}"></div>
+  </div>
+</script>
+
 <script id="gui-default-form-html" type="text/x-template">
   <div class="tpy-form-control" data-link="
     class{merge:invalid toggle='invalid'}
@@ -323,7 +375,20 @@
       <span data-link="data-i18n{:label}"></span>
       {{include tmpl="#gui-default-form-control-error"/}}
     </label>
-    {^{htmleditor value /}}
+    {^{htmleditor value settings=settings /}}
+  </div>
+</script>
+
+<script id="gui-default-form-customtag" type="text/x-template">
+  <div class="tpy-form-control" data-link="
+    class{merge:invalid toggle='invalid'}
+    class{merge:required toggle='required'}
+    ">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+    {{include ^tmpl=settings.tagTemplate onErrorxx="Unable to load custom template" /}}
   </div>
 </script>
 

@@ -24,7 +24,8 @@
     "addFile": "",
     "addFolder": "",
     "publish": "",
-    "close": ""
+    "close": "",
+    "browse": ""
   },
   "sidebar": {
     "content": "",
@@ -138,7 +139,12 @@
   },
   "component": {
     "name": "",
-    "category": "",
+    "category": {
+      "textblock": "",
+      "multimedia": "",
+      "layout": "",
+      "activity": ""
+    },
     "categoryName": "",
     "categoryLabel": "",
     "deleteTitle": "",

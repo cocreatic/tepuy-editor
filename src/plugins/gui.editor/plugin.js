@@ -3,7 +3,8 @@ import moment from 'moment';
 import { App } from '../../js/app';
 import { TemplateManager } from './templateManager';
 import { ContentTreeManager } from './contentTreeManager';
-import { ResourceTreeManager } from './resourceTreeManager';
+//import { ResourceTreeManager } from './resourceTreeManager';
+import { ResourceTreeManager } from '../../js/resourceTreeManager';
 import { ComponentEditor } from './componentEditor';
 import { MetadataEditor } from './metadataEditor';
 import { downloadFile, filenamify } from '../../js/utils';
@@ -24,7 +25,7 @@ const defaultDevice = 'iphone';
 export class GuiEditor {
 
     constructor() {
-        App.registerHook('gui_view_editor', this.initialize.bind(this));
+        App.registerHook('gui_view_editor', this.initialize.bind(this, true));
         App.registerHook('gui_menu_initialize', this.registerMenu.bind(this));
 
         //Guarantee this context
@@ -34,9 +35,10 @@ export class GuiEditor {
         $(document).on('tpy:document-changed', this.onDocumentChanged); //New components are create in this document
     }
 
-    initialize(canEdit = true) {
+    initialize(canEdit) {
         const sidebarTpl = TemplateManager.get('sidebar');
         const contentTpl = TemplateManager.get('content');
+        //if (canEdit == undefined) this.canEdit = false;
         this.canEdit = !(canEdit === false);
         this.sidebarModel = { canEdit: this.canEdit, closePreview: this.initialize.bind(this) };
         this.contentModel = { responsiveDevice: defaultDevice };
@@ -101,7 +103,7 @@ export class GuiEditor {
     loadContentTab() {
         if (!this.sidebarModel.content){
             const treeConfig = this.initializeContentTreeManager();
-            let extras = App.data.dco.extras().slice(0);
+            let extras = this.dco.extras().slice(0);
             $.observable(this.sidebarModel).setProperty('content', {
                 extras: extras,
                 ...treeConfig
@@ -158,7 +160,8 @@ export class GuiEditor {
     }
 
     initializeResourceTreeManager() {
-        this.resourceTreeManager = new ResourceTreeManager();
+        this.resourceTreeManager = new ResourceTreeManager({
+        }, App);
         this.contentModel.resourceManager = this.resourceTreeManager;
         return this.resourceTreeManager.getConfig();
     }
@@ -304,18 +307,18 @@ export class GuiEditor {
             this.editor.isIndex = false;
             this.editor.container = 'content';
         }
-        const html = App.data.dco.getHtml(this.editor.container, this.canEdit);
-        let promise = new Promise((resolve, reject) => {
-            this.editor.resolve = resolve;
-            this.editor.reject = reject;
-            this.editor.srcdoc = html; //HTML5 only property
-        })
+
         $frame.off('load').on('load', () => {
             const $content = $frame.contents();
             const $head = $content.find('head');
             if (App.ui.responsive) {
                 $head.append('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
             }
+
+            /*if (this.canEdit) {
+                this.tepuyApp.enterEditMode();
+            }*/
+
             if (this.canEdit) {
                 const template = TemplateManager.get('pageViewStyles');
                 $head.append(template.render());
@@ -326,6 +329,13 @@ export class GuiEditor {
                 .off('tpy:document-changed') //prevent multiple registration of the same event
                 .on('tpy:document-changed', this.onDocumentChanged);
             this.editor.resolve();
+        });
+        const html = App.data.dco.getHtml(this.editor.container, this.canEdit);
+        let promise = new Promise((resolve, reject) => {
+            this.editor.resolve = resolve;
+            this.editor.reject = reject;
+            this.editor.srcdoc = html; //HTML5 only property
+            this.editorWindow.srcDocument = this.editorWindow.document;
         });
         return promise;
     }
@@ -373,20 +383,21 @@ export class GuiEditor {
     loadPageInEditor(page, section) {
         const pageIndex = App.data.dco.pages.indexOf(page);
         const sectionIndex = page.sections.indexOf(section);
+        this.tepuyApp.mainWindow = this.editorWindow;
         this.tepuyApp.loadPage(pageIndex, sectionIndex);
     }
 
     registerEventHandlers() {
         const _$ = this.editorWindow.$;
         const $document = _$(this.editorWindow.document);
-        if (!this.canEdit) {
-            $document.on('tepuy.scorm-playing', (ev) => {
-                ev.preventDefault();
-                const page = App.data.dco.pages[0];
-                page && this.contentTreeManager.setSelection(page.id);
-            });
-            return;
-        }
+        $document.on('tpy:scorm.playing', (ev) => {
+            ev.preventDefault();
+            const page = App.data.dco.pages[0];
+            page && this.contentTreeManager.setSelection(page.id);
+        });
+
+        if (!this.canEdit) return;
+
         $document.on('click', '[data-cmpt-type] .tpy-action', (ev) => {
             const $target = _$(ev.target); //Need to use jQuery form the frame window so it has all the tepuy plugins added
             const data = $target.data();
@@ -433,7 +444,9 @@ export class GuiEditor {
             parent = parent.parent;
         }
         ed.parent = parent; //Set the parent so it can be used to get properties required on their children        
-        ed.show().then((child) => {
+        ed.show({
+            $refEl: $cmpt
+        }).then((child) => {
             parent.appendChild(child, options);
             parent.parser.registerComponent(child, this.editor.container); //Required for the dco.getComponent() method to work with new added components
             this.onDocumentChanged();
@@ -457,7 +470,10 @@ export class GuiEditor {
         const component = App.data.dco.getComponent($cmpt.get(0).id, this.editor.container);
         component.$host = $cmpt;
         ed.parent = component.parent;
-        ed.show(component).then((cmpt) => {
+        ed.show({
+            component,
+            $refEl: $cmpt
+        }).then((cmpt) => {
             //update Html
             component.parser.updateComponentRegistration(this.editor.container, id, cmpt.id);
             this.onDocumentChanged();

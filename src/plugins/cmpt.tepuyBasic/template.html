@@ -1,0 +1,126 @@
+<script id="cmpt-tepuy-basic-questionaire" type="text/x-template">
+    {^{if ~setup}}
+    <div class="tpy-datatable-wrapper tpy-control-input">
+        <div class="fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix ui-corner-tl ui-corner-tr">
+            <div class="tpy-datatable-commands">
+                {^{selectmenu ~tag.newtype ~options=~tag.questionTypes}}
+                    {^{for ~options}}
+                        <option data-link="value{:value}">{{:~translate(label)}}</option>
+                    {{/for}}
+                {{/selectmenu}}
+                <button class="ui-button ui-widget ui-state-default" data-i18n="commands.add" data-link="{on ~tag.add}"></button>
+            </div>
+        </div>
+        <table class="display tpy-datatable">
+            <colgroup>
+                <col width="10px" />
+                <col width="150px" />
+                <col/>
+                <col width="200px" />
+            </colgroup>
+            <thead>
+                <tr role="row">
+                    <th class="ui-state-default">&nbsp;</th>
+                    <th class="ui-state-default" data-i18n="cmpt.tepuyBasic:activity-quiz.question.type"></th>
+                    <th class="ui-state-default" data-i18n="cmpt.tepuyBasic:activity-quiz.question.description"></th>
+                    <th class="ui-state-default">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+            {^{for ~setup.questions ~maxIndex=~setup.questions.length-1}}
+                <tr role="row" data-link="
+                class{merge:!(#getIndex()%2) toggle='even'}
+                class{merge:!!(#getIndex()%2) toggle='odd'}">
+                    <td>{{:#getIndex()+1}}.</td>
+                    <td><span class="tpy-control-input">{{:~translate('cmpt.tepuyBasic:activity-quiz.types.'+type)}}</span></td>
+                    <td><div data-link="html{:description}"></div></td>
+                    <td class="dt-center">
+                        <div class="controlgroup ui-controlgroup ui-controlgroup-horizontal ui-helper-clearfix" role="toolbar">
+                            <button class="ui-widget ui-controlgroup-item ui-button ui-state-default ui-corner-left tpy-action" data-link="{on ~tag.moveUp #getIndex()} disabled{:#getIndex()==0}"><i class="fas fa-chevron-circle-up"></i></button>
+                            <button class="ui-widget ui-controlgroup-item ui-button ui-state-default tpy-action" data-link="{on ~tag.moveDown #getIndex()} disabled{:#getIndex()==~maxIndex}"><i class="fas fa-chevron-circle-down"></i></button>
+                            <button class="ui-widget ui-controlgroup-item ui-button ui-state-default tpy-action" data-tpy-action="edit" data-link="{on ~tag.edit #getIndex()}"><i class="fas fa-pen"></i></button>
+                            <button class="ui-widget ui-controlgroup-item ui-button ui-state-default ui-corner-right tpy-action" data-tpy-action="remove" data-link="{on ~tag.remove #getIndex()}"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            {{/for}}
+            </tbody>
+        </table>
+    </div>  
+    {{/if}}
+</script>
+
+
+<script id="cmpt-tepuy-basic-answerlist" type="text/x-template">
+    {^{if ~answers}}
+    <div class="tpy-datatable-wrapper tpy-control-input tpy-control-full">
+        <div class="fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix ui-corner-tl ui-corner-tr">
+            <div class="tpy-datatable-commands">
+                <button class="ui-button ui-widget ui-state-default" data-i18n="commands.add" data-link="{on ~tag.add}"></button>
+            </div>
+        </div>
+        <table class="display tpy-datatable">
+            <colgroup>
+                <col width="10px" />
+                <col/>
+                {{if ~tag.askForTarget}}
+                <col width="30px" />
+                {{/if}}
+                {{if ~tag.askForCorrect}}
+                <col width="120px" />
+                {{else}}
+                <col width="300px" />
+                {{/if}}
+                <col width="200px" />
+            </colgroup>
+            <thead>
+                <tr role="row">
+                    <th class="ui-state-default">&nbsp;</th>
+                    <th class="ui-state-default" data-i18n="cmpt.tepuyBasic:activity-quiz.option.text"></th>
+                    {{if ~tag.askForTarget}}
+                    <th class="ui-state-default" data-i18n="cmpt.tepuyBasic:activity-quiz.option.target"></th>
+                    {{/if}}
+                    {{if ~tag.askForCorrect}}
+                    <th class="ui-state-default" data-i18n="cmpt.tepuyBasic:activity-quiz.option.correctAnswer"></th>
+                    {{else}}
+                    <th class="ui-state-default" data-i18n="cmpt.tepuyBasic:activity-quiz.option.answer"></th>
+                    {{/if}}
+                    <th class="ui-state-default">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+            {^{for ~answers ~maxIndex=(~answers.length-1)}}
+                <tr role="row" data-link="
+                class{merge:!(#getIndex()%2) toggle='even'}
+                class{merge:!!(#getIndex()%2) toggle='odd'}">
+                    <td>{{:#getIndex()+1}}.</td>
+                    <td><div data-link="html{:text}"></div></td>
+                    {{if ~tag.askForTarget}}
+                    <td class="dt-center">
+                        <select data-link="target">
+                        {^{for ~tag.targets}}
+                            <option data-link="value{:value} html{:label}"></option>
+                        {{/for}}
+                        </select>
+                    </td>
+                    {{/if}}
+                    {{if ~tag.askForCorrect}}
+                    <td class="dt-center"><input type="checkbox" data-link="{:isCorrect:} {on ~tag.correctChanged #getIndex()}" class="tpy-visible" /></td>
+                    {{else}}
+                    <td><input type="text" data-link="response" /></td>
+                    {{/if}}
+                    <td class="dt-center">
+                        <div class="controlgroup ui-controlgroup ui-controlgroup-horizontal ui-helper-clearfix" role="toolbar">
+                            <button class="ui-widget ui-controlgroup-item ui-button ui-state-default ui-corner-left tpy-action" data-link="{on ~tag.moveUp #getIndex()} disabled{:(#getIndex()==0)}"><i class="fas fa-chevron-circle-up"></i></button>
+                            <button class="ui-widget ui-controlgroup-item ui-button ui-state-default tpy-action" data-link="{on ~tag.moveDown #getIndex()} disabled{:(#getIndex()==~maxIndex)}"><i class="fas fa-chevron-circle-down"></i></button>
+                            <button class="ui-widget ui-controlgroup-item ui-button ui-state-default tpy-action" data-tpy-action="edit" data-link="{on ~tag.edit #getIndex()}"><i class="fas fa-pen"></i></button>
+                            <button class="ui-widget ui-controlgroup-item ui-button ui-state-default ui-corner-right tpy-action" data-tpy-action="remove" data-link="{on ~tag.remove #getIndex()}"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            {{/for}}
+            </tbody>
+        </table>
+    </div>  
+    {{/if}}
+</script>

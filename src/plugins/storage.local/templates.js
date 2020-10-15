@@ -45,5 +45,5 @@ export const templates = [{
     license:'GPL',
     createdBy:"Jesús Otero",
     //url: "http://localhost/rutatic_salud/plantilla/",
-    baseUrl: 'http://boa.nuestroscursos.net/api/c/repositorio-de-pruebas/resources/MURGMzk4NUYtMEM5Ny00RjI1LThDNTUtNTQ5QjRFNzI0QTNGQGJvYS51ZGVhLmVkdS5jbw==/!/'
+    baseUrl: 'http://localhost/tepuy-repository/plantilla/'
 }];

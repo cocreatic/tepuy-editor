@@ -48,7 +48,7 @@ export class FormManager {
         });
         dlg.host.localize();
         priv.dialog = dlg;
-        
+
         return new Promise((resolve, reject) => {
             priv.resolve = resolve;
             priv.reject = reject;
@@ -101,7 +101,10 @@ export class AbstractControl {
 
         this._onDependencyValueChanged = this._onDependencyValueChanged.bind(this);
 
-        $.observe(this, 'value', () => this.updateValidity());
+        $.observe(this, 'value', (ev, data) => {
+            this.updateValidity();
+            $(this).trigger('tpy:valueChanged', data);
+        });
     }
 
     /*get parent() {
@@ -203,10 +206,10 @@ export class AbstractControl {
             }
         });
 
-        if (!errors.length) {
-            return null;
+        if (errors.length) {
+            return errors;
         }
-        return errors;
+        return null;
     }
 
     _calculateStatus() {
@@ -235,7 +238,6 @@ export class AbstractControl {
         (enabled != this.enabled) && $.observable(this)._trigger(this, {change: "set", path: 'enabled', value: this.enabled, oldValue: enabled, remove: undefined});
         (disabled != this.disabled) && $.observable(this)._trigger(this, {change: "set", path: 'disabled', value: this.disabled, oldValue: disabled, remove: undefined});
 
-        //
         if (this.parent) {
             this.parent.updateValue();
         }
@@ -245,7 +247,7 @@ export class AbstractControl {
 export class FormControl extends AbstractControl {
     constructor(template, settings) {
         super(template, settings);
-        this.value = getSafe(settings, 'value', null);
+        this.value = getSafe(settings, 'value', getSafe(settings, 'defaultValue', null));
     }
 
     _allControlsDisabled() {
@@ -363,7 +365,6 @@ export class FormArray extends AbstractControl {
     registerControl(control, i) {
         control.setParent(this);
         control.key = i;
-        //$.observe(control, 'value', () => this.updateValue());
     }
 
     push(control) {
@@ -438,7 +439,7 @@ export class FormBuilder {
                 default: '#gui-default-form-text'
             },
             number: {
-                default: '#gui-default-form-text'
+                default: '#gui-default-form-number'
             },
             radio: {
                 default: '#gui-default-form-radio'
@@ -458,6 +459,9 @@ export class FormBuilder {
             imageInput: {
                 default: '#gui-default-form-imageinput'
             },
+            resourceInput: {
+                default: '#gui-default-form-resourceinput'
+            },
             group: {
                 default: '#gui-default-form-group',
                 twoColumns: '#gui-default-form-group-two-columns'
@@ -467,6 +471,9 @@ export class FormBuilder {
             },
             html: {
                 default: '#gui-default-form-html'
+            },
+            customtag: {
+                default: '#gui-default-form-customtag'
             },
             duration: {
                 default: '#gui-default-form-duration'
@@ -482,7 +489,8 @@ export class FormBuilder {
 
     static control(defTemplate, value, settings) {
         const ctrl = new FormControl(getSafe(settings, 'template', defTemplate), settings);
-        ctrl.setValue(value);
+        const defaultValue = getSafe(settings, 'defaultValue', value);
+        ctrl.setValue(value == null ? defaultValue : value);
         return ctrl;
     }
 
@@ -497,29 +505,37 @@ export class FormBuilder {
     static radio(value, settings) {
         return FormBuilder.control(FormBuilder.templates.radio.default, value, settings);
     }
-    
+
     static boolean(value, settings) {
         return FormBuilder.control(FormBuilder.templates.boolean.default, value, settings);
     }
-    
+
     static yesno(value, settings) {
         return FormBuilder.control(FormBuilder.templates.yesno.default, value, settings);
     }
-    
+
     static optionList(value, settings) {
         return FormBuilder.control(FormBuilder.templates.optionList.default, value, settings);
     }
-    
+
     static shareList(value, settings) {
         return FormBuilder.control(FormBuilder.templates.shareList.default, value, settings);
     }
-    
+
     static imageInput(value, settings) {
         return FormBuilder.control(FormBuilder.templates.imageInput.default, value, settings);
     }
-    
+
+    static resourceInput(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.resourceInput.default, value, settings);
+    }
+
     static html(value, settings) {
         return FormBuilder.control(FormBuilder.templates.html.default, value, settings);
+    }
+
+    static customtag(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.customtag.default, value, settings);
     }
 
     static duration(value, settings) {
@@ -575,9 +591,6 @@ export class FormBuilder {
             return FormBuilder[type](value, settings);
         }
         else {
-//            if (!FormBuilder[config.type]) {
-//                throw TypeError('Missing control type ' + config.type);
-//            }
             return FormBuilder[config.type](config.value, config.settings);
         }
     }

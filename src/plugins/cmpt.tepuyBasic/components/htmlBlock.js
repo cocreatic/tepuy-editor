@@ -24,4 +24,11 @@ export class HtmlBlock extends Component {
         const content = {name: 'content', type: 'html', prop: 'innerHTML', editSettings: { label: 'cmpt.tepuyBasic:html-block.content' }};
         _(this).properties = [content];
     }
+
+    onEditBefore(options) {
+        if (options && options.baseURI) {
+            const content = _(this).properties[0];
+            content.editSettings.baseURI = options.baseURI;
+        }
+    }
 }

@@ -1,4 +1,4 @@
-import { t as _t } from 'i18next';
+import i18next from 'i18next';
 import { privateMap, _, checkAbstractImplementation, camelCaseToDash, newid } from './utils';
 
 export const ComponentType = {
@@ -101,6 +101,7 @@ export class Component {
             properties: []
         });
 
+        this.t = i18next.t.bind(i18next); //Allow components to access translations
         this.initialize();
 
         //Assign properties from options if available.
@@ -165,6 +166,7 @@ export class Component {
 
     initialize() {} //Abstract
     onEditorLoaded() {} //Abstract
+    onEditBefore() {} //Abstract
 
     getAttribute(name, defaultValue = '') {
         return this.host.getAttribute(name) || defaultValue;
@@ -205,6 +207,15 @@ export class Component {
         return property.value;
     }
 
+    updateProperties(value) {
+        if (value == null) return true;
+        for(let prop in value) {
+            if (prop == 'id') continue;
+            this.setPropertyValue(prop, value[prop]);
+        }
+        return true;
+    }
+
     setPropertyValue(prop, value) {
         let properties = {};
         if (typeof(prop) === 'string') {
@@ -229,6 +240,9 @@ export class Component {
                 if (this.$host) { //Update the actual host also
                     if (property.prop == 'innerHTML') {
                         this.$host.children(':not(.tpy-edit-toolbar)').remove();
+                        this.$host.contents().filter(function(){
+                            return this.nodeType === 3;
+                        }).remove();
                         this.$host.prepend(value);
                     }
                     else
@@ -441,12 +455,12 @@ export class ContainerComponent extends Component {
         this.children = Component.resolveComponents(element);
         this.children.map(ch => {
             ch.parent = this;
-        }); //Set the parent property        
+        }); //Set the parent property
     }
 
     appendAddChildButton() {
         //if (this.children.length) return;
-        const text = _t('commands.addComponent');
+        const text = this.t(this.addChildText||'commands.addComponent');
         const $button = $('<button class="ui-widget tpy-button tpy-action" data-tpy-action="add"></button>');
         $button.html(text+'<i class="ion-plus-circled"></i>');
         $button.appendTo($(this.host)).toggle(this.children.length == 0 || !this.canHideAppendButton);

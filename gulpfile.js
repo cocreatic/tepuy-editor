@@ -326,7 +326,7 @@ gulp.task('serve', gulp.series('compile', function () {
         const pluginsGlobals = getPluginGlobals();
         return gulp.series(rollupPlugin(folder, pluginsGlobals), translations, browserReload)();
     });
-    gulp.watch(["./vendor/tepuy/**/*"], gulp.series(copyVendorAssets, browserReload));
+    gulp.watch(["./vendor/tepuy/**/*", "./vendor/assets/tinymce/js/*"], gulp.series(copyVendorAssets, browserReload));
     gulp.watch(["./index.html", "./src/plugins/**/*.html"], gulp.parallel('html', translations));
 }));
 

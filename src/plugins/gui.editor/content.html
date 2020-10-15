@@ -135,12 +135,22 @@
             </div>
             <label data-i18n="general.category"></label>
             <div id="category-selector" class="tpy-check-list">
-                {^{for categories ~categories=filter.categories}}
                 <div>
-                    <input type="checkbox" value="{{:id}}" id="c_{{:#index}}" data-link="{:~categories[id]}" />
-                    <label for="c_{{:#index}}">{{:~translate(label)}}</label>
+                    <input type="checkbox" value="textblock" id="c_textblock" data-link="filter.categories.textblock" />
+                    <label for="c_textblock" data-i18n="component.category.textblock"></label>
                 </div>
-                {{/for}}
+                <div>
+                    <input type="checkbox" value="multimedia" id="c_multimedia" data-link="filter.categories.multimedia" />
+                    <label for="c_multimedia" data-i18n="component.category.multimedia"></label>
+                </div>
+                <div>
+                    <input type="checkbox" value="layout" id="c_layout" data-link="filter.categories.layout" />
+                    <label for="c_layout" data-i18n="component.category.layout"></label>
+                </div>
+                <div>
+                    <input type="checkbox" value="activity" id="c_activity" data-link="filter.categories.activity" />
+                    <label for="c_activity" data-i18n="component.category.activity"></label>
+                </div>
             </div>
         </div>
         <div class="tpy-component-list-viewer">
