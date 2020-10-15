@@ -101,7 +101,10 @@ export class AbstractControl {
 
         this._onDependencyValueChanged = this._onDependencyValueChanged.bind(this);
 
-        $.observe(this, 'value', () => this.updateValidity());
+        $.observe(this, 'value', (ev, data) => {
+            this.updateValidity();
+            $(this).trigger('tpy:valueChanged', data);
+        });
     }
 
     /*get parent() {
@@ -244,7 +247,7 @@ export class AbstractControl {
 export class FormControl extends AbstractControl {
     constructor(template, settings) {
         super(template, settings);
-        this.value = getSafe(settings, 'value', null);
+        this.value = getSafe(settings, 'value', getSafe(settings, 'defaultValue', null));
     }
 
     _allControlsDisabled() {
@@ -436,7 +439,7 @@ export class FormBuilder {
                 default: '#gui-default-form-text'
             },
             number: {
-                default: '#gui-default-form-text'
+                default: '#gui-default-form-number'
             },
             radio: {
                 default: '#gui-default-form-radio'
@@ -469,6 +472,9 @@ export class FormBuilder {
             html: {
                 default: '#gui-default-form-html'
             },
+            customtag: {
+                default: '#gui-default-form-customtag'
+            },
             duration: {
                 default: '#gui-default-form-duration'
             },
@@ -483,7 +489,8 @@ export class FormBuilder {
 
     static control(defTemplate, value, settings) {
         const ctrl = new FormControl(getSafe(settings, 'template', defTemplate), settings);
-        ctrl.setValue(value);
+        const defaultValue = getSafe(settings, 'defaultValue', value);
+        ctrl.setValue(value == null ? defaultValue : value);
         return ctrl;
     }
 
@@ -525,6 +532,10 @@ export class FormBuilder {
 
     static html(value, settings) {
         return FormBuilder.control(FormBuilder.templates.html.default, value, settings);
+    }
+
+    static customtag(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.customtag.default, value, settings);
     }
 
     static duration(value, settings) {

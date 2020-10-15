@@ -1,4 +1,4 @@
-input[type="checkbox"] {
+input[type="checkbox"]:not(.tpy-visible) {
     visibility: hidden;
     float: left;
 

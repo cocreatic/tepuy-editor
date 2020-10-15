@@ -101,6 +101,12 @@
   </div>
 </script>
 
+<script id="gui-default-questioninput" type="text/x-template">
+  <div class="tpy-form-questioninput">
+    {^{include baseConfig tmpl="#gui-default-form-group" /}}
+  </div>
+</script>
+
 <script id="gui-default-formgroup-collection" type="text/x-template">
   <div class="tpy-form form-array form-collection">
     {^{if controls.length==0}}<button class="ui-button btn-add" data-link="{on ~tag.add}">{{:~icon('add')}}</button>{{/if}}
@@ -231,6 +237,25 @@
   {{/if}}
 </script>
 
+<script id="gui-default-form-number" type="text/x-template">
+  {^{if visible()}}
+  <div class="tpy-form-control text-small" data-link="
+    class{merge:invalid toggle='invalid'}
+    class{merge:required toggle='required'}
+    ">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+    <input type="text" data-link=" 
+      {:value:}
+      readonly{:settings.readonly}
+      autofocus{:settings.default||null}
+    "/>
+  </div>
+  {{/if}}
+</script>
+
 <script id="gui-default-form-boolean" type="text/x-template">
   {^{if visible()}}
   <div class="tpy-form-control" data-link="
@@ -351,6 +376,19 @@
       {{include tmpl="#gui-default-form-control-error"/}}
     </label>
     {^{htmleditor value settings=settings /}}
+  </div>
+</script>
+
+<script id="gui-default-form-customtag" type="text/x-template">
+  <div class="tpy-form-control" data-link="
+    class{merge:invalid toggle='invalid'}
+    class{merge:required toggle='required'}
+    ">
+    <label>
+      <span data-link="data-i18n{:label}"></span>
+      {{include tmpl="#gui-default-form-control-error"/}}
+    </label>
+    {{include ^tmpl=settings.tagTemplate onErrorxx="Unable to load custom template" /}}
   </div>
 </script>
 

@@ -709,4 +709,15 @@ tepuy jQuery plugins
         });
     }
 
+    /**
+     * jpit activity quiz
+     * @return {[type]}
+     */
+    $.fn.jpitActivityQuiz = function() {
+        this.each(function() {
+            var $this = $(this);
+            dhbgApp.actions.loadActivity($this, 'quiz', dhbgApp.actions.activityQuiz);
+        });
+    }
+
 })(jQuery)

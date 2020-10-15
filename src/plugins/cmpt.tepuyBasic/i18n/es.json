@@ -33,6 +33,51 @@
         "autoplay": "Iniciar automáticamente",
         "triggerAt": "Mostrar en",
         "hideAt": "Ocultar en",
-        "waitFor": "Pausar video"
+        "waitFor": "Pausar video",
+        "addChildText": "Agregar acción"
+    },
+    "activity-quiz": {
+        "title": "Cuestionario",
+        "title_prop": "Título",
+        "activityId": "Id de la actividad",
+        "shuffle": "Desordenar",
+        "prefixtype": "Tipo de numeración",
+        "requiredall": "Debe responder todas",
+        "allowretry": "Permitir reintentar",
+        "paginationnumber": "Paginación inicia en",
+        "modalFeedback": "Retroalimentación modal",
+        "feedbackOk": "Mensaje respuesta correcta",
+        "feedbackWrong": "Mensaje respuesta incorrecta",
+        "questions": "Preguntas",
+        "addChildText": "Agregar pregunta",
+        "prefix": {
+            "none": "Ninguno",
+            "numeric": "Númerico",
+            "letter": "Letra mínuscula",
+            "capital": "Letra mayúscula",
+            "roman": "Número romano"
+        },
+        "types": {
+            "simplechoice": "Selección única",
+            "multichoice": "Selección múltiple",
+            "complete": "Cloze",
+            "label": "Etiqueta",
+            "defineterm": "Definición",
+            "multisetchoice": "Selección múltiple en conjunto"
+        },
+        "question": {
+            "editTitle": "Editar pregunta",
+            "type": "Tipo",
+            "description": "Enunciado",
+            "options": "Opciones",
+            "paragraph": "Párrafo"
+        },
+        "option": {
+            "editTitle": "Editar opción de respuesta",
+            "text": "Texto",
+            "correctAnswer": "¿Es correcta?",
+            "target": "Grupo",
+            "answer": "Respuesta"
+        }
     }
 }

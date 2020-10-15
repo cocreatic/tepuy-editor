@@ -1,5 +1,82 @@
 import { newid } from '../../../js/utils';
 
+const presets = {
+    basic: {
+        toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter alignright alignjustify |',
+        plugins: 'searchreplace paste',
+        height: undefined,
+        min_height: 200,
+        width: '100%',
+        customs: []
+    },
+    default: {
+        height: 500,
+        toolbar: 'undo redo |' +
+            ' formatselect |' +
+            ' bold italic backcolor |' +
+            ' alignleft aligncenter alignright alignjustify |' +
+            ' table tabledelete |' +
+            ' tableprops tablerowprops tablecellprops |' +
+            ' tableinsertrowbefore tableinsertrowafter tabledeleterow |' +
+            ' tableinsertcolbefore tableinsertcolafter tabledeletecol |' +
+            ' bullist numlist outdent indent |' +
+            ' removeformat |' +
+            ' media |' +
+            ' tpyBlockquote tpyAccordion tpyTwoColumns |' +
+            ' code |' +
+            ' help',
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks fullscreen',
+            'insertdatetime media table paste code help'
+        ],
+        customs: ['tpyBlockquote', 'tpyTwoColumns' ]
+    }
+}
+
+const basic_with_placeholder = Object.assign({
+    content_style: 'span.placeholder { display: inline-block; width: 60px; border-bottom: solid 1px #000; background-color: #fcfcfc; padding: 2px; margin: 2px }'
+}, presets.basic);
+basic_with_placeholder.toolbar += ' tpyQuestionPlaceholder |'
+basic_with_placeholder.customs = ['tpyQuestionPlaceholder'];
+basic_with_placeholder.plugins += ' noneditable';
+presets.basic_with_placeholder = basic_with_placeholder;
+
+const customizations = {
+    tpyBlockquote: (editor) => {
+        editor.ui.registry.addButton('tpyBlockquote', {
+            icon: 'tpy-blockquote',
+            tooltip: 'Insertar cita',
+            onAction: function() {
+                editor.insertContent('<blockquote>Texto cita<label>Referencia</label></blockquote>');
+            }
+        });
+    },
+    tpyTwoColumns: (editor) => {
+        editor.ui.registry.addButton('tpyTwoColumns', {
+            icon: 'tpy-two-columns',
+            tooltip: 'Dos columnas',
+            onAction: function() {
+                editor.insertContent('<div class="row"><div class="col-2">Columna 1</div><div class="col-2">Columna 2</div></div>');
+            }
+        })
+    },
+    tpyQuestionPlaceholder: (editor) => {
+        editor.ui.registry.addButton('tpyQuestionPlaceholder', {
+            icon: 'tpy-icon4-16',
+            tooltip: 'Agregar espacio para completar',
+            onAction: function() {
+                editor.insertContent('<span class="placeholder mceNonEditable">&nbsp;</span>');
+            }
+        })
+    }
+}
+const registerCustoms = (editor, customs) => {
+    for(let i = 0; i < customs.length; i++) {
+        customizations[customs[i]] && customizations[customs[i]].apply(null, [editor]);
+    }
+};
+
 export const tinymceCtrl = { };
 export const htmleditor = {
 // ============================= JSTREE =============================
@@ -23,20 +100,8 @@ export const htmleditor = {
     },
     onBind: function(tagCtx) {
         const settings = this.ctxPrm('settings');
-        const toolbarConfig = 'undo redo |' +
-            ' formatselect |' +
-            ' bold italic backcolor |' +
-            ' alignleft aligncenter alignright alignjustify |' +
-            ' table tabledelete |' +
-            ' tableprops tablerowprops tablecellprops |' +
-            ' tableinsertrowbefore tableinsertrowafter tabledeleterow |' +
-            ' tableinsertcolbefore tableinsertcolafter tabledeletecol |' +
-            ' bullist numlist outdent indent |' +
-            ' removeformat |' +
-            ' media |' +
-            ' tpyBlockquote tpyAccordion tpyTwoColumns |' +
-            ' code |' +
-            ' help';
+        const preset = presets[settings.preset || 'default'];
+
         const stylesheets = [];
 
         if (settings && settings.baseURI) {
@@ -47,19 +112,12 @@ export const htmleditor = {
             tag = this,
             widgetName = tag.widgetName,
             defaultConfig = {
-                height: 500,
                 menubar: "insert",
                 forced_root_block: false,
                 icons: 'tepuy',
                 content_css: stylesheets.join(','),
-                plugins: [
-                  'advlist autolink lists link image charmap print preview anchor',
-                  'searchreplace visualblocks fullscreen',
-                  'insertdatetime media table paste code help'
-                ],
                 visualblocks_default_state: true,
                 formats: {},
-                toolbar: toolbarConfig,
                 toolbar_mode: 'wrap',
                 setup: function(editor) {
                     // Store widget instance
@@ -69,26 +127,11 @@ export const htmleditor = {
                         tag.ctxPrm("content", content); //Two way binding;
                     });
 
-                    editor.ui.registry.addButton('tpyBlockquote', {
-                        icon: 'tpy-blockquote',
-                        tooltip: 'Insertar cita',
-                        onAction: function() {
-                            editor.insertContent('<blockquote>Texto cita<label>Referencia</label></blockquote>');
-                        }
-                    });
-
-                    editor.ui.registry.addButton('tpyTwoColumns', {
-                        icon: 'tpy-two-columns',
-                        tooltip: 'Dos columnas',
-                        onAction: function() {
-                            editor.insertContent('<div class="row"><div class="col-2">Columna 1</div><div class="col-2">Columna 2</div></div>');
-                        }
-                    })
+                    registerCustoms(editor, preset.customs);
                 }
             };
 
-        const config = Object.assign({}, defaultConfig);
-
+        const config = Object.assign(defaultConfig, preset);
         mainElem = tag.mainElem;
         if (!mainElem || !mainElem[0]) {
             // This may be due to using {{myWidget}} No element found here {{/myWidget}} 

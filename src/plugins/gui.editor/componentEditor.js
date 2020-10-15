@@ -45,11 +45,20 @@ export class ComponentEditor {
     }
 
     get components() {
-        return _(this).components;
+        if (!this.filteredComponents) {
+            this.applyFilter();
+        }
+        return this.filteredComponents;
     }
 
     applyFilter() {
-        //Apply the filter
+        let items = _(this).components;
+        let filterFn = (it) => {
+            return this.filter.categories[it.ctor.type] && (!this.parent || !this.parent.acceptChild || this.parent.acceptChild(it));
+        };
+        const oldvalue = this.filteredComponents;
+        this.filteredComponents = items.filter(filterFn);
+        $.observable(this)._trigger(this, {change: "set", path: 'components', value: this.filteredComponents, oldValue: oldvalue, remove: undefined});
     }
 
     setTitle(title) {
@@ -71,12 +80,17 @@ export class ComponentEditor {
     }
 
     show(options) {
+        this.filteredComponents = null;
         const { component, $refEl } = { ...options };
         const priv = _(this);
         const dlg = priv.dlg;
         const me = this;
         this.setMode('loading');
         this.selected = component;
+        if (!this.selected && this.components.length == 1) {
+            const selected = this.components[0];
+            this.selected = new selected.ctor();
+        }
         this.objBaseUri = $refEl.get(0).baseURI;
 
         if (!priv.initialized) {
@@ -153,7 +167,7 @@ export class ComponentEditor {
                 App.ui.components.Dialog.message(App.i18n.t('component.errors.componentRequired'), App.i18n.t('tepuy'));
                 return;
             }
-            const type = Component.registry[selected.rindex];
+            //const type = Component.registry[selected.rindex];
             this.selected = new selected.ctor();
             this.enterEditMode();
             this.setMode('edit');
@@ -167,10 +181,11 @@ export class ComponentEditor {
         const value = this.form.value;
         this.selected.id = value.id;
         if (this.parent) this.selected.parent = this.parent;
-        for(let prop in value) {
+        this.selected.updateProperties(value);
+        /*for(let prop in value) {
             if (prop == 'id') continue;
             this.selected.setPropertyValue(prop, value[prop]);
-        }
+        }*/
         priv.resolve(this.selected); //Resolve with the selected component.
         this.form = null;
         this.selected = null;

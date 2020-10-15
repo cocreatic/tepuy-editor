@@ -455,12 +455,12 @@ export class ContainerComponent extends Component {
         this.children = Component.resolveComponents(element);
         this.children.map(ch => {
             ch.parent = this;
-        }); //Set the parent property        
+        }); //Set the parent property
     }
 
     appendAddChildButton() {
         //if (this.children.length) return;
-        const text = this.t('commands.addComponent');
+        const text = this.t(this.addChildText||'commands.addComponent');
         const $button = $('<button class="ui-widget tpy-button tpy-action" data-tpy-action="add"></button>');
         $button.html(text+'<i class="ion-plus-circled"></i>');
         $button.appendTo($(this.host)).toggle(this.children.length == 0 || !this.canHideAppendButton);

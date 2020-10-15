@@ -26,6 +26,7 @@ export class InteractiveVideo extends ContainerComponent {
         super(element);
         //Initialize public properties
         this.host.classList.add('tpy-ivideo');
+        this.addChildText = 'cmpt.tepuyBasic:interactive-video.addChildText';
     }
 
     initialize() {

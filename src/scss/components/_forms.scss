@@ -138,6 +138,15 @@
         }
     }
 
+    & > .tpy-control-input {
+        flex: 1 0 220px;
+
+        &.tpy-control-full {
+            flex: 1 0 100%;
+        }
+    }
+
+
     &.required > label > span:after {
         content: '*';
         padding: 2px;
