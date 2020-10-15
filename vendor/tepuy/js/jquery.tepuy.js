@@ -68,7 +68,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyMenu = function() {
-        this.each(function(){
+        return this.each(function(){
             var $this = $(this);
             var $nav = $this.parent();
 
@@ -136,11 +136,11 @@ tepuy jQuery plugins
 
             $nav.empty();
             $nav.append($menu);
-        })
+        });
     }
 
     $.fn.tepuyProgressIndicator = function() {
-        this.each(function() {
+        return this.each(function() {
             if (typeof dhbgApp.scorm == 'object') {
                 var $this = $(this);
                 var type = $this.attr('data-type') ? $this.attr('data-type') : 'default';
@@ -204,7 +204,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyBoxText = function () {
-        this.each(function(){
+        return this.each(function(){
             var $this = $(this);
             var $children = $this.children();
             var $box_body = $('<div class="box_body"></div>');
@@ -229,7 +229,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyModalWindowContent = function() {
-        this.each(function() {
+        return this.each(function() {
             var $this = $(this);
             var properties = {
                 modal: true,
@@ -276,7 +276,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyFloatingWindowContent = function() {
-        this.each(function() {
+        return this.each(function() {
             var $this = $(this);
 
             var style = '';
@@ -304,7 +304,7 @@ tepuy jQuery plugins
     }
 
     $.fn.tepuyMouseOverOne = function() {
-        this.each(function(){
+        return this.each(function(){
             var $this = $(this);
 
             $this.find('[data-ref]').on('mouseover', function() {
@@ -326,7 +326,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyInstructionBox = function() {
-        this.each(function(){
+        return this.each(function(){
             var $this = $(this);
             var cssclass = 'ion-help-circled';
             if ($this.attr('type')) {
@@ -354,7 +354,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyAnimation = function() {
-        this.each(function () {
+        return this.each(function () {
             var $this = $(this);
             var playAnimation = $this.is('play-animation');
             var instruction = dhbgApp.s(playAnimation ? 'play_animation' : 'repeat_animation');
@@ -381,7 +381,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyViewFirst = function() {
-        this.each(function () {
+        return this.each(function () {
             var $this = $(this);
 
             var $mask = $('<div class="mask"></div>');
@@ -396,7 +396,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyInnerMenu = function() {
-        this.each(function(){
+        return this.each(function(){
             var $this = $(this);
             $this.addClass('inner-menu');
             var type = 'horizontal';
@@ -449,7 +449,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyPagination = function() {
-        this.each(function() {
+        return this.each(function() {
             var $this = $(this);
             var $items = $this.find('>li');
             var $list = $('<ul class="layers"></ul>');
@@ -660,7 +660,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyTooltip = function() {
-        this.each(function() {
+        return this.each(function() {
             var $this = $(this);
             var position = {};
 
@@ -704,7 +704,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.tepuyInteractiveVideo = function() {
-        this.each(function() {
+        return this.each(function() {
             $(this).data('ivideo', new IVideo(this));
         });
     }
@@ -714,7 +714,7 @@ tepuy jQuery plugins
      * @return {[type]}
      */
     $.fn.jpitActivityQuiz = function() {
-        this.each(function() {
+        return this.each(function() {
             var $this = $(this);
             dhbgApp.actions.loadActivity($this, 'quiz', dhbgApp.actions.activityQuiz);
         });

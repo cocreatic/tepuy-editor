@@ -274,6 +274,11 @@ export class ActivityQuiz extends Component {
         description.innerHTML = question.description;
         el.setAttribute('type', question.type);
         el.appendChild(description);
+        el.setAttribute('data-prefixtype', question.prefixtype);
+
+        if (question.shuffle) {
+            el.setAttribute('data-shuffle', true);
+        }
 
         if (question.type == 'label') {
             const text = document.createElement('text');
