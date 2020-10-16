@@ -74,7 +74,7 @@ class App {
                 this.invokeHook('gui_initialize');
                 return this.auth.authenticate().then(userInfo => {
                     this.data.user = userInfo;
-                    this.ui.load(this.options.defaultView);
+                    this.ui.load(this.options.defaultView, this.options.viewParams);
                     return true;
                 }, err => {
                     console.log('Authenticate failed');

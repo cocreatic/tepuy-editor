@@ -12,7 +12,12 @@ export class GuiTemplateChooser {
         this.delete = this.delete.bind(this);
     }
 
-    initialize() {
+    initialize(params) {
+        //Set the after templates load handler.
+        this.initParams = params||{};
+        if (this.initParams.afterTemplatesLoadOnce) {
+            this.afterTemplatesLoadOnce = this.initParams.afterTemplatesLoadOnce;
+        }
         const sidebarTpl = $.templates("script#gui-tplchooser-sidebar");
         const contentTpl = $.templates("script#gui-tplchooser-content");
 
@@ -52,6 +57,10 @@ export class GuiTemplateChooser {
         //Load templates
         App.storage.getTemplates({}).then(templates => {
             $.observable(this.model.templates).refresh(templates);
+            if (this.afterTemplatesLoadOnce) {
+                this.afterTemplatesLoadOnce.apply(null, [this, templates]);
+                delete this.afterTemplatesLoadOnce;
+            }
         });
     }
 
@@ -115,6 +124,22 @@ export class GuiTemplateChooser {
     closeDetail(destroy) {
         if (!this.modal) return;
         this.modal.close(destroy);
+    }
+
+    createObjectFromTemplate(template) {
+        if (template == null) {
+            throw TypeError('template is not defined');
+        }
+        const exist = this.model.templates.find(it => it.id == template.id);
+
+        if (!exist) {
+            throw 'Unable to find template with id ' + template.id;
+        }
+
+        $.observable(this.model).setProperty('activeTemplate', exist);
+        App.ui.$content.localize();
+
+        this.createObject();
     }
 
     createObject(e, args) {
