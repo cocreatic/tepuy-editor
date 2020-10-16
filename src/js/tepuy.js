@@ -97,8 +97,9 @@ export class Tepuy {
             $.each(dependencies, function(i, it) {
                 if (it.type == 'style') {
                     const media = it.media ? ' media="' + it.media + '"' : '';
-                    const source = it.src == undefined ? srcs[i].src : local + it.src;
-                    $head.append(['<link href="', source, '" rel="stylesheet" type="text/css"', media, '/>'].join(''));
+                    let source = it.src;
+                    if (source == undefined && srcs[i]) source = srcs[i].src;
+                    source && $head.append(['<link href="', source, '" rel="stylesheet" type="text/css"', media, '/>'].join(''));
                 }
                 else {
                     $head.append(['<script type="text/javascript" src="', local, it.src, '"></script>'].join(''));
