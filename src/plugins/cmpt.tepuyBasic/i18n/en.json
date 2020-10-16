@@ -1,0 +1,16 @@
+{
+  "activity-quiz": {
+    "question": {
+      "type": "",
+      "description": "",
+      "editTitle": ""
+    },
+    "option": {
+      "text": "",
+      "target": "",
+      "correctAnswer": "",
+      "answer": "",
+      "editTitle": ""
+    }
+  }
+}

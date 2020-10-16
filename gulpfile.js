@@ -121,15 +121,29 @@ function translations(done) {
             trans: false,
             defaultLng: 'es',
             defaultNs: 'core',
-            ns: ['core'],
+            ns: ['core', 'cmpt.tepuyBasic'],
             func: {
                 list: ['i18next.t', 'i18n.t', 'translate'],
                 extensions: ['.js', '.jsx']
             },
             //removeUnusedKeys: false,
             resource: {
-                loadPath: './src/i18n/{{lng}}/{{ns}}.json',
-                savePath: 'i18n/{{lng}}/{{ns}}.json'
+                loadPath: (lng, ns) => {
+                    if (ns == 'core') {
+                        return ['./src/i18n/', lng, '/', ns, '.json'].join('');
+                    }
+                    else {
+                        return ['./src/plugins/', ns, '/i18n/', lng, '.json'].join('');
+                    }
+                },
+                savePath: (lng, ns) => {
+                    if (ns == 'core') {
+                        return ['i18n/', lng, '/', ns, '.json'].join('');
+                    }
+                    else {
+                        return ['plugins/', ns, '/i18n/', lng, '.json'].join('');
+                    }
+                }
             }
         }, customTransform))
         .pipe(gulp.dest('./src'))
