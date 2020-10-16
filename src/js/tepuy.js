@@ -46,7 +46,7 @@ const dependencies = {
     "mobilelib.js": { type: 'script', src: "vendor/tepuy/js/mobilelib.js" },
     "stories.js": { type: 'script', src: "vendor/tepuy/js/stories.js" },
     "player.js": { type: 'script', src: "vendor/tepuy/components/scorm/player.js" },
-    "tinymce.js": { type: 'script', src: "vendor/assets/tinymce/js/tinymce.min.js" },
+    //"tinymce.js": { type: 'script', src: "vendor/assets/tinymce/js/tinymce.min.js" },
     //"jquery.tinymcejs": { type: 'script', src: "vendor/assets/tinymce/js/jquery.tinymce.min.js" },
     //"tepuy.tinymce.js": { type: 'script', src: "vendor/assets/tinymce/js/tepuy.tinymce.js" },
 }
