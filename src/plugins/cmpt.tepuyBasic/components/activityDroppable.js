@@ -64,9 +64,11 @@ const tpyResultBox = (ctrl, editor) => {
         //icon: 'tpy-icon4-16',
         tooltip: App.i18n.t('cmpt.tepuyBasic:activity-droppable.resultBoxTooltip'),
         onAction: function() {
+            let boxend = $(editor.getElement()).find('.box_end');
+            if (boxend && boxend.length) {
+                return; //There is already a result box.
+            }
             let node = editor.selection.getNode();
-            tinymce.dom.DomQuery(editor.getElement()).find('.box_end').remove();
-
             const content = '<div class="box_end mceNonEditable">'+text+'</div>';
             if (node.matches('body')) {
                 editor.insertContent(content);
@@ -188,11 +190,11 @@ export class ActivityDroppable extends Component {
             if (node) feedbackOk = node.innerHTML;
             node = feedback.querySelector('wrong');
             if (node) feedbackWrong = node.innerHTML;
-            feedback.remove();
+            //feedback.remove();
         }
 
-        const clearBr = element && element.querySelector('br.clear');
-        clearBr && clearBr.remove();
+        //const clearBr = element && element.querySelector('br.clear');
+        //clearBr && clearBr.remove();
 
         //Update content
         this.setPropertyValue('content', element ? element.innerHTML : '&nbsp;'); //'<question type="simplechoice"><description><p>Los tipos de preguntas que hay son: simplechoice y complete</p></description><ul><li data-response="true">Falso</li><li>Verdadero</li></ul><feedback><correct>Así es, hay más tipos de preguntas.</correct></feedback></question><question type="multisetchoice"><description><p>Seleccione solamente los pares o los impares</p></description><ul><li data-response="1">1</li><li data-response="2">2</li><li data-response="2">6</li><li data-response="1">3</li><li data-response="1">9</li></ul></question><question type="complete"><description><p>Sobre las diferencias entre los tipos de cuestionario.</p></description><p class="item">Las preguntas por defecto son mostradas de manera<select class="answers"><option data-response="true">aleatoria</option><option>ordenada</option></select>, para cambiar su comportamiento por defecto se debe agregar el atributo<select class="answers"><option>ni idea</option><option data-response="true">data-shuffle="false"</option></select>.</p></question>'); //Required because during super, innerHTML is not cloned
@@ -285,8 +287,8 @@ export class ActivityDroppable extends Component {
             customs: [],
             customize: (editor, tag) => {
                 //Setup target group elements
-                const toclear = this.host.querySelector('feedback,br.clear');
-                toclear && toclear.remove();
+                //const toclear = this.host.querySelector('feedback,br.clear');
+                //toclear && toclear.remove();
                 this.$contentEl = tinymce.dom.DomQuery(editor.getElement());
                 this.$contentEl.find('feedback').remove(); //Remove feedback element
                 this.$contentEl.find('br.clear').remove(); //Remove clear br
