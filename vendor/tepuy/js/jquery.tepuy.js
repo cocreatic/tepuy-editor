@@ -720,4 +720,15 @@ tepuy jQuery plugins
         });
     }
 
+    /**
+     * jpit activity droppable
+     * @return {[type]}
+     */
+    $.fn.jpitActivityDroppable = function() {
+        return this.each(function(){
+            var $this = $(this);
+            dhbgApp.actions.loadActivity($this, 'droppable', dhbgApp.actions.activityDroppable);
+        });
+    }
+
 })(jQuery)

@@ -36,18 +36,20 @@
     "waitFor": "Pausar video",
     "addChildText": "Agregar acción"
   },
+  "activity": {
+    "title": "Título",
+    "activityId": "Id de la actividad",
+    "allowretry": "Permitir reintentar",
+    "feedbackOk": "Mensaje respuesta correcta",
+    "feedbackWrong": "Mensaje respuesta incorrecta",
+    "modalFeedback": "Retroalimentación modal"
+  },
   "activity-quiz": {
     "title": "Cuestionario",
-    "title_prop": "Título",
-    "activityId": "Id de la actividad",
     "shuffle": "Desordenar",
     "prefixtype": "Tipo de numeración",
     "requiredall": "Debe responder todas",
-    "allowretry": "Permitir reintentar",
     "paginationnumber": "Paginación inicia en",
-    "modalFeedback": "Retroalimentación modal",
-    "feedbackOk": "Mensaje respuesta correcta",
-    "feedbackWrong": "Mensaje respuesta incorrecta",
     "questions": "Preguntas",
     "addChildText": "Agregar pregunta",
     "prefix": {
@@ -79,5 +81,16 @@
       "target": "Grupo",
       "answer": "Respuesta"
     }
+  },
+  "activity-droppable": {
+    "title": "Arrastrar y soltar",
+    "targetText": "Destino",
+    "targetTooltip": "Insertar destino",
+    "sourceText": "Origen",
+    "sourceTooltip": "Insertar origen",
+    "targetConvertTooltip": "Convertir en destino",
+    "resultBoxText": "Resultados",
+    "resultBoxTooltip": "Insertar contenedor de resultados",
+    "autoalign": "Autoalinear"
   }
 }

@@ -12,6 +12,6 @@ export class CmptTepuyBasic {
         register(components.InstructionBox, ns);
         register(components.InteractiveVideo, ns)
         register(components.ActivityQuiz, ns);
-        //register(components.ActivityQuizQuestion, ns);
+        register(components.ActivityDroppable, ns);
     }
 }

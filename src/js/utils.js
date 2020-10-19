@@ -145,6 +145,10 @@ export function round(number, decimals) {
     return Math.round(number * factor) / factor;
 }
 
+export function isFunction(obj) {
+    return {}.toString.call(obj) === '[object Function]';
+}
+
 // Source: http://pixelscommander.com/en/javascript/javascript-file-download-ignore-content-type/
 const downloadFn = function(sUrl, sFilename) {
     //iOS devices do not support downloading. We have to inform user about this.

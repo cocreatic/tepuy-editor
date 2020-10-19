@@ -42,14 +42,14 @@ export class ActivityQuiz extends Component {
     initialize() {
         const validators = App.validation.validators;
 
-        const title = {name: 'title', type: 'text', attr: 'data-act-title', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.title_prop', validators: [ validators.required ] }};
-        const activityId = {name: 'activityId', type: 'text', attr: 'data-act-id', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.activityId', defaultValue: this.id, validators: [ validators.required ] }};
+        const title = {name: 'title', type: 'text', attr: 'data-act-title', editSettings: { label: 'cmpt.tepuyBasic:activity.title', validators: [ validators.required ] }};
+        const activityId = {name: 'activityId', type: 'text', attr: 'data-act-id', editSettings: { label: 'cmpt.tepuyBasic:activity.activityId', defaultValue: this.id, validators: [ validators.required ] }};
         const shuffle = {name: 'shuffle', type: 'boolean', attr: 'data-shuffle', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.shuffle', defaultValue: true }};
         const prefix = {name: 'prefix', type: 'optionList', attr: 'data-prefixtype', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.prefixtype', options: prefixes, defaultValue: '0' }};
         const requireAll = {name: 'requireAll', type: 'boolean', attr: 'data-requiredall', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.requiredall', defaultValue: true }};
         const paginationNumber = {name: 'paginationNumber', type: 'number', attr: 'data-paginationnumber', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.paginationnumber', defaultValue: 1 }};
-        const allowretry = {name: 'allowretry', type: 'boolean', attr: 'data-allow-retry', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.allowretry', defaultValue: true }};
-        const modalFeedback = {name: 'modalFeedback', type: 'boolean', attr: 'data-modal-feedback', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.modalFeedback', defaultValue: false }};
+        const allowretry = {name: 'allowretry', type: 'boolean', attr: 'data-allow-retry', editSettings: { label: 'cmpt.tepuyBasic:activity.allowretry', defaultValue: true }};
+        const modalFeedback = {name: 'modalFeedback', type: 'boolean', attr: 'data-modal-feedback', editSettings: { label: 'cmpt.tepuyBasic:activity.modalFeedback', defaultValue: false }};
         const questions = {name: 'questions', type: 'customtag', prop: 'innerHTML', editSettings: {
             label: 'cmpt.tepuyBasic:activity-quiz.questions',
             tagTemplate: '{^{tpyBasicQuestionaire value settings /}}',
@@ -77,6 +77,9 @@ export class ActivityQuiz extends Component {
 
 }
 
+/*
+Utility tags and editors required by the Quiz activity
+ */
 
 (function($) {
 
@@ -214,8 +217,8 @@ export class ActivityQuiz extends Component {
                 validators: [ validators.required ]
             }];
             controls.shuffle = ['boolean', question.shuffleAnswers, { label: 'cmpt.tepuyBasic:activity-quiz.shuffle' }];
-            controls.feedbackOk = ['html', question.feedbackOk, { label: 'cmpt.tepuyBasic:activity-quiz.feedbackOk', preset: 'basic' }];
-            controls.feedbackWrong = ['html', question.feedbackWrong, { label: 'cmpt.tepuyBasic:activity-quiz.feedbackWrong', preset: 'basic' }];
+            controls.feedbackOk = ['html', question.feedbackOk, { label: 'cmpt.tepuyBasic:activity.feedbackOk', preset: 'basic' }];
+            controls.feedbackWrong = ['html', question.feedbackWrong, { label: 'cmpt.tepuyBasic:activity.feedbackWrong', preset: 'basic' }];
             controls.prefixtype = ['optionList', question.prefixtype, { label: 'cmpt.tepuyBasic:activity-quiz.prefixtype', options: prefixes, defaultValue: '0' }];
         }
         const formConfig = builder.group(controls);

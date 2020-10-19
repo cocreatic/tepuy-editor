@@ -663,10 +663,7 @@ dhbgApp.standard.start = function() {
         dhbgApp.actions.activityCrossword($this);
     });
 
-    $('.jpit-activities-droppable').each(function(){
-        var $this = $(this);
-        dhbgApp.actions.loadActivity($this, 'droppable', dhbgApp.actions.activityDroppable);
-    });
+    $('.jpit-activities-droppable').jpitActivityDroppable();
 
     $('.jpit-activities-multidroppable').each(function(){
         var $this = $(this);

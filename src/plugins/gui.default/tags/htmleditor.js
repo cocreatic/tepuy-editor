@@ -1,10 +1,10 @@
-import { newid } from '../../../js/utils';
+import { newid, isFunction } from '../../../js/utils';
 
 const presets = {
     basic: {
         toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter alignright alignjustify |',
         plugins: 'searchreplace paste',
-        height: undefined,
+        //height: undefined,
         min_height: 200,
         width: '100%',
         customs: []
@@ -71,11 +71,33 @@ const customizations = {
         })
     }
 }
+
+const tpyAltEnter = (editor) => {
+    editor.on('keydown', (e) => {
+        if (e.keyCode == 13 && e.altKey) {
+            const node = editor.selection.getNode();
+            const $node = tinymce.dom.DomQuery(node);
+            if (node.parentElement) {
+                editor.selection.select(node.parentElement);
+                editor.selection.collapse(false);
+            }
+            return false;
+        }
+    });
+}
 const registerCustoms = (editor, customs) => {
+    //tpyAltEnter(editor);
     for(let i = 0; i < customs.length; i++) {
         customizations[customs[i]] && customizations[customs[i]].apply(null, [editor]);
     }
 };
+
+//Allow interactions for tinymce editor
+$.widget("ui.dialog", $.ui.dialog, {
+    _allowInteraction: function (event) {
+        return !!$(event.target).closest(".tox-tinymce-aux, .moxman-window, .tam-assetmanager-root").length || this._super(event);
+    }
+});
 
 export const tinymceCtrl = { };
 export const htmleditor = {
@@ -91,16 +113,19 @@ export const htmleditor = {
         var content, elemType,
             tag = this;
         tinymceCtrl.instances++;
-        // Prevent jQuery UI dialog from blocking focusin
-        if (!tinymceCtrl.focusin) {
-            tinymceCtrl.focusin = true;
-            $(document).on('focusin', this.focusin);
-        }
+//        // Prevent jQuery UI dialog from blocking focusin
+//        if (!tinymceCtrl.focusin) {
+//            tinymceCtrl.focusin = true;
+//            $(document).on('focusin', this.focusin);
+//        }
         this.id = tagCtx.id = newid();
     },
     onBind: function(tagCtx) {
-        const settings = this.ctxPrm('settings');
-        const preset = presets[settings.preset || 'default'];
+        const settings = this.ctxPrm('settings')||{};
+
+        const preset = (typeof settings.preset === 'object')
+            ? settings.preset
+            : presets[settings.preset || 'default'];
 
         const stylesheets = [];
 
@@ -119,19 +144,25 @@ export const htmleditor = {
                 visualblocks_default_state: true,
                 formats: {},
                 toolbar_mode: 'wrap',
-                setup: function(editor) {
-                    // Store widget instance
-                    tag.widget = editor;
-                    editor.on('Change', function() {
-                        const content = editor.getContent();
-                        tag.ctxPrm("content", content); //Two way binding;
-                    });
-
-                    registerCustoms(editor, preset.customs);
-                }
             };
 
         const config = Object.assign(defaultConfig, preset);
+        config.setup = function(editor) {
+            // Store widget instance
+            tag.widget = editor;
+            editor.on('Change', function() {
+                const content = editor.getContent();
+                tag.ctxPrm("content", content); //Two way binding;
+            });
+            if (preset.customs) {
+                registerCustoms(editor, preset.customs);
+            }
+
+            if (preset.customize && isFunction(preset.customize)) {
+                preset.customize.apply(null, [editor, tag]);
+            }
+        }
+
         mainElem = tag.mainElem;
         if (!mainElem || !mainElem[0]) {
             // This may be due to using {{myWidget}} No element found here {{/myWidget}} 

@@ -249,7 +249,7 @@ export class Component {
                         this.$host.get(0)[property.prop] = value;
                 }
             }
-            else { //Property is stored as a class
+            else if (!property.memory) { //Property is stored as a class
                 this.host.classList.remove(...property.options);
                 this.host.classList.add(value);
                 if (this.$host) { //Apply the property on the host also
@@ -267,7 +267,7 @@ export class Component {
         else if (property.prop) {
             property.value = this.host[property.prop];
         }
-        else { //Property is stored as a class
+        else if (!property.memory) { //Property is stored as a class
             for(let opt of property.options) {
                 if (this.host.classList.contains(opt)) {
                     property.value = opt;
