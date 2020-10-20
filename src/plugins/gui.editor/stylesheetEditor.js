@@ -113,6 +113,7 @@ export class StylesheetEditor {
 
     submit() {
         const css = this.editor.getValue();
+        console.log(css);
         const blob = new Blob([css], {type : 'text/css'});
         console.log(blob);
         const resource = {
@@ -121,12 +122,13 @@ export class StylesheetEditor {
             size: Math.round(blob.size / 1024) + ' KB',
             createdAt: moment(new Date()).unix(), // .format('YYYY-MM-DD HH:mm'),
             extension: '.css',
+            //path: '/content/css/'+this.file.filename,
             blob
         }
         const priv = _(this);
         this.file.content = css;
         console.log(resource);
-        App.data.dco.addResource(resource, '/content/css').then(response => {
+        App.data.dco.addResource(resource, '/content/css/').then(response => {
             priv.resolve(this.file);
             priv.close(true);
         }, (error) => {
