@@ -276,11 +276,23 @@
                 const $actionEl = $(this.host);
                 const me = this;
                 if (this.wait) {
-                    $actionEl.one('tpy:component-completed', function(data) {
+                    const onComplete = function(data) {
                         me.stop();
                         resolve(data);
-                    });
-                    //$actionEl.show(); //ToDo:Is this the right start action?
+                    }
+                    const actid = this.host.getAttribute('data-act-id');
+                    if (actid) {
+                        const handler = function (ev, $el, data) {
+                            if (data.id == actid) {
+                                onComplete.apply(this, [data]);
+                                $(dhbgApp).off('jpit:activity:completed', handler);
+                            }
+                        };
+                        $(dhbgApp).on('jpit:activity:completed', handler)
+                    }
+                    else {
+                        $actionEl.one('tpy:component-completed', onComplete);
+                    }
                     this._display($actionEl);
                 }
                 else {

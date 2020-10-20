@@ -1,4 +1,6 @@
 import moment from 'moment';
+import { isFunction } from './utils';
+
 let App;
 const resourceTypes = {
     'image': {
@@ -189,7 +191,7 @@ export class ResourceTreeManager {
             else if (this.filter instanceof RegExp) {
                 this.leafFilter = (r) => this.filter.pattern.test(r.extension);
             }
-            else if ({}.toString.call(this.filter) === '[object Function]') {
+            else if (isFunction(this.filter)) {
                 this.leafFilter = (r) => this.filter(r);
             }
         }
