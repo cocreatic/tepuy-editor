@@ -502,7 +502,7 @@ export class GuiEditor {
             parent = parent.parent;
         }
         ed.parent = parent; //Set the parent so it can be used to get properties required on their children
-        ed.setActivitiesAllowed(this.container == 'content');
+        //ed.setActivitiesAllowed(this.container == 'content');
         ed.show({
             $refEl: $cmpt
         }).then((child) => {
