@@ -178,6 +178,7 @@ export class ContentTreeManager {
     }
 
     getSelection() {
+        if (!this.tree) return null;
         const selected = this.tree.get_selected();
         return this.tree.get_node(selected[0])
     }

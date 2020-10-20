@@ -57,6 +57,7 @@ export class GuiEditor {
 
     activateTab(tab, oldTab) {
         let id = this.canEdit ? tab.data().tabId : CONTENT_TAB;
+        this.prevContentTemplate = this.contentModel.template;
         this.activeTab = id;
         switch(id) {
             case SHARE_TAB:
@@ -112,6 +113,12 @@ export class GuiEditor {
         }
         $.observable(this.contentModel).setProperty('template', ['#gui-editor-', CONTENT_TAB, '-content', App.ui.responsive ? '-responsive': ''].join(''));
         this.headRendered = false;
+        if (this.prevContentTemplate != this.contentModel.template) {
+            const selected = this.contentTreeManager.getSelection();
+            if (selected) {
+                this.contentTreeSelectionHandler(selected);
+            }
+        }
         //this.renderFirst();
     }
 
@@ -140,10 +147,12 @@ export class GuiEditor {
 
     contentTreeSelectionHandler(node) {
         if (!this.headRendered) {
-            this.renderHead(node);
+            this.renderHead(node).then(() => this.render(node));
             this.headRendered = true;
         }
-        this.render(node);
+        else {
+            this.render(node);
+        }
     }
 
     loadResourceTab() {
