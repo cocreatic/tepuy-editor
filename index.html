@@ -17,7 +17,8 @@
     <script>
       var TepuyAPI = parent.window.TepuyAPI;
       if (TepuyAPI) {
-        tepuyEditor.App.init({
+
+        var props = {
           authentication: 'moodle',
           storage: 'moodle',
           theme: 'light',
@@ -26,7 +27,23 @@
             action: 'https://cocreatic.org/',
             target: top
           }
-        });
+        };
+
+        if (TepuyAPI.tpl) {
+          props.viewParams = {
+           afterTemplatesLoadOnce: (view, templates) => {
+             if (templates && templates.length) {
+               templates.forEach(template => {
+                 if (template.id == TepuyAPI.tpl) {
+                   view.createObjectFromTemplate(template);
+                 }
+               });
+             }
+           }
+         };
+        }
+
+        tepuyEditor.App.init(props);
       }
       else {
         tepuyEditor.App.init({
