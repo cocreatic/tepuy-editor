@@ -70,9 +70,9 @@ export class ActivityQuiz extends Component {
 
     updateProperties(value) {
         super.updateProperties(value);
-        if (this.$host) {
+        /*if (this.$host) {
             this.$host.jpitActivityQuiz();
-        }
+        }*/
     }
 
 }

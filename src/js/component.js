@@ -213,6 +213,9 @@ export class Component {
             if (prop == 'id') continue;
             this.setPropertyValue(prop, value[prop]);
         }
+        if (this.$host && this.constructor.tepuyPluginName) {
+            this.$host[this.constructor.tepuyPluginName](); //Run the component plugin name on the just added html
+        }
         return true;
     }
 
@@ -249,6 +252,16 @@ export class Component {
                         this.$host.get(0)[property.prop] = value;
                 }
             }
+            else if (property.toggleclass) {
+                if (value) {
+                    this.host.classList.add(property.toggleclass);
+                    if (this.$host) this.$host.addClass(property.toggleclass);
+                }
+                else {
+                    this.host.classList.remove(property.toggleclass);
+                    if (this.$host) this.$host.removeClass(property.toggleclass);
+                }
+            }
             else if (!property.memory) { //Property is stored as a class
                 this.host.classList.remove(...property.options);
                 this.host.classList.add(value);
@@ -266,6 +279,9 @@ export class Component {
         }
         else if (property.prop) {
             property.value = this.host[property.prop];
+        }
+        else if (property.toggleclass) {
+            property.value = this.host.classList.contains(property.toggleclass);
         }
         else if (!property.memory) { //Property is stored as a class
             for(let opt of property.options) {

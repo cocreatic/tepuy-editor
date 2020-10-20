@@ -284,7 +284,7 @@ export class ActivityDroppable extends Component {
             width: '100%',
             table_grid: false,
             invalid_elements: 'feedback',
-            customs: [],
+            customs: ['tpyMobileOnly'],
             customize: (editor, tag) => {
                 //Setup target group elements
                 //const toclear = this.host.querySelector('feedback,br.clear');

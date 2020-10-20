@@ -233,7 +233,11 @@ export class Tepuy {
         this.indexDoc = parser.parseFromString(html, 'text/html');
         const $body = $(this.indexDoc).find('body');
         const bodyData = $body.data();
-        const root = new Section($body.find('main')[0]);
+        const main = $body.find('main')[0];
+        if (!main.hasAttribute('data-cmpt-type')) {
+            main.setAttribute('data-cmpt-type', 'section');
+        }
+        const root = new Section(main);
         this.registerAllComponents(root, 'index');
         this.home = {
             config: {...bodyData},

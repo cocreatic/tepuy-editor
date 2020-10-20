@@ -28,10 +28,6 @@
 </script>
 
 
-<script id="gui-editor-tab-2-content" type="text/x-template">
-        <p>Apariencia - Pendiente de implementar</p>
-</script>
-
 <script id="gui-editor-tab-3-content" type="text/x-template">
     <div class="resource-list">
         <div class="title">
@@ -147,10 +143,12 @@
                     <input type="checkbox" value="layout" id="c_layout" data-link="filter.categories.layout" />
                     <label for="c_layout" data-i18n="component.category.layout"></label>
                 </div>
+                {^{if allowActivities}}
                 <div>
                     <input type="checkbox" value="activity" id="c_activity" data-link="filter.categories.activity" />
                     <label for="c_activity" data-i18n="component.category.activity"></label>
                 </div>
+                {{/if}}
             </div>
         </div>
         <div class="tpy-component-list-viewer">
@@ -206,6 +204,14 @@
             </div>
         </div>
     </div>
+    {{/if}}
+</script>
+
+<script id="gui-editor-stylesheet-editor" type="text/x-template">
+    {^{if mode=='loading' }}
+    <div class="loading" data-i18n="general.loading">Cargando...</div>
+    {{else mode=='edit'}}
+    <pre id="aceeditor" data-link="html{:css}"></pre>
     {{/if}}
 </script>
 

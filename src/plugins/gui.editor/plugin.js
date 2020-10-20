@@ -7,6 +7,7 @@ import { ContentTreeManager } from './contentTreeManager';
 import { ResourceTreeManager } from '../../js/resourceTreeManager';
 import { ComponentEditor } from './componentEditor';
 import { MetadataEditor } from './metadataEditor';
+import { StylesheetEditor } from './stylesheetEditor';
 import { downloadFile, filenamify } from '../../js/utils';
 
 const templateMap = {
@@ -31,6 +32,8 @@ export class GuiEditor {
         //Guarantee this context
         this.editProperties = this.editProperties.bind(this);
         this.onDocumentChanged = this.onDocumentChanged.bind(this);
+        this.onStyleSheetSelected = this.onStyleSheetSelected.bind(this);
+        this.onStyleSheetUpdated = this.onStyleSheetUpdated.bind(this);
 
         $(document).on('tpy:document-changed', this.onDocumentChanged); //New components are create in this document
     }
@@ -65,6 +68,10 @@ export class GuiEditor {
                 this.loadContentTab();
                 break;
             case CONTENT_TAB:
+                this.loadContentTab();
+                break;
+            case LOOK_TAB:
+                this.loadLookAndFeelSidebar();
                 this.loadContentTab();
                 break;
             case RESOURCES_TAB:
@@ -200,6 +207,48 @@ export class GuiEditor {
             }
         });
         App.ui.$sidebar.localize();
+    }
+
+    loadLookAndFeelSidebar() {
+        let tree = $('#look_stylesheets').jstree({
+            plugins: ['wholerow', 'types'],
+            core: {
+                multiple: false
+            },
+            types: {
+                default: {
+                    icon: 'fas fa-file-code'
+                }
+            }
+        });
+        if (tree.on) {
+            tree.on('select_node.jstree', this.onStyleSheetSelected);
+        }
+    }
+
+    onStyleSheetSelected(ev, data) {
+        const filename = [this.dco.manifest.baseUrl.replace(/\/+$/, ''), 'css', data.node.id].join('/');
+        const onSuccess = this.onStyleSheetUpdated;
+        const onError = err => {};
+        $.get(filename).done((css) => {
+            const editor = new StylesheetEditor({filename: data.node.id, content: css});
+            editor.show().then(onSuccess, onError);
+        })
+        .fail((jqxhr, statusText, error) => {
+            console.log(`Failed to load ${filename}. ${statusText} - ${error}`);
+            const editor = new StylesheetEditor({filename: data.node.id, content: ''});
+            editor.show().then(onSuccess, onError);
+        });
+    }
+
+    onStyleSheetUpdated(file) {
+        const _$ = this.editorWindow.$;
+        if (!_$) return;
+        var style = _$.find('head > link[href*="'+file.filename+'"]');
+        if (style && style.length) {
+            const queryString = '?r=' + new Date().getTime();
+            style.href = style.href.replace(/\?.*|$/, queryString);
+        }
     }
 
     openMetadataEditor() {
@@ -452,7 +501,8 @@ export class GuiEditor {
             options.position = 'after';
             parent = parent.parent;
         }
-        ed.parent = parent; //Set the parent so it can be used to get properties required on their children        
+        ed.parent = parent; //Set the parent so it can be used to get properties required on their children
+        ed.setActivitiesAllowed(this.container == 'content');
         ed.show({
             $refEl: $cmpt
         }).then((child) => {

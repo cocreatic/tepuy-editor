@@ -47,6 +47,14 @@ export class GuiDefault {
     }
 
     initializeGuiApi() {
+
+        //Allow interactions for tinymce editor and ace editor
+        $.widget("ui.dialog", $.ui.dialog, {
+            _allowInteraction: function (event) {
+                return !!$(event.target).closest(".tox-tinymce-aux, .moxman-window, .tam-assetmanager-root, .ace_editor").length || this._super(event);
+            }
+        });
+
         App.ui = {
             load: this.load.bind(this),
             registerMenuItem: this.registerMenuItem.bind(this),

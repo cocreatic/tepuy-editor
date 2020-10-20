@@ -7,7 +7,8 @@
     "share": "Edición compartida",
     "new": "Nuevo",
     "edit": "Editar",
-    "closepreview": "Cerrar vista previa"
+    "closepreview": "Cerrar vista previa",
+    "lookxx": ""
   },
   "editor": {
     "content": {
@@ -17,6 +18,9 @@
     "resources": {
       "folders": "Gestión de recursos",
       "actions": "Acciones"
+    },
+    "look": {
+      "customstyles": "Hojas de estilo"
     }
   },
   "menu": {
@@ -154,12 +158,14 @@
       "getspeclists": "Ha ocurrido un error al obtener la lista de especificaciones",
       "getspeclist": "",
       "downloadFailure": "Ha ocurrido un error y no se puede descargar el archivo en este momento. Por favor intente mas tarde.",
-      "missingInformation": "Falta diligenciar campos requeridos o algunos campos tienen información inválida. Por favor verifique antes de continuar."
+      "missingInformation": "Falta diligenciar campos requeridos o algunos campos tienen información inválida. Por favor verifique antes de continuar.",
+      "cssUpdateFailed": "Ha ocurrido un error y no se pudo actualizar el archivo en este momento. Por favor intente mas tarde."
     },
     "downloadFailure": "",
     "metadataWindowTitle": "Metadatos y publicación",
     "publishTitle": "",
-    "publishNotification": "El objeto ha sido publicado con éxito"
+    "publishNotification": "El objeto ha sido publicado con éxito",
+    "stylesheetWindowTitle": "Editor de estilos"
   },
   "permissions": {
     "edit": "Puede editar",

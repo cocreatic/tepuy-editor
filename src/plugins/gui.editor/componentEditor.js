@@ -33,15 +33,19 @@ export class ComponentEditor {
                 activity: true
             }
         };
+
+        this.allowActivities = true;
+
+        this.allCategories = [
+            { id: 'textblock', label:'component.category.textblock', enabled: true },
+            { id: 'multimedia', label:'component.category.multimedia', enabled: true },
+            { id: 'layout', label:'component.category.layout', enabled: true },
+            { id: 'activity', label:'component.category.activity', enabled: true },
+        ];
     }
 
     get categories() {
-        return [
-            { id: 'textblock', label:'component.category.textblock'},
-            { id: 'multimedia', label:'component.category.multimedia'},
-            { id: 'layout', label:'component.category.layout'},
-            { id: 'activity', label:'component.category.activity'},
-        ];
+        return this.allCategories.filter(c => c.enabled);
     }
 
     get components() {
@@ -59,6 +63,12 @@ export class ComponentEditor {
         const oldvalue = this.filteredComponents;
         this.filteredComponents = items.filter(filterFn);
         $.observable(this)._trigger(this, {change: "set", path: 'components', value: this.filteredComponents, oldValue: oldvalue, remove: undefined});
+    }
+
+    setActivitiesAllowed(allowed) {
+        this.allowActivities = allowed;
+        this.filter.categories['activity'] = allowed;
+        this.applyFilter();
     }
 
     setTitle(title) {
