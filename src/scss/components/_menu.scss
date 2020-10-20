@@ -5,6 +5,11 @@
     background-color: var(--tpy-header-bg);
     display: flex;
 
+    [aria-expanded="true"] .ui-menu-item .ui-menu-item-wrapper {
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+    }
+
     &> li { /* Menubar buttons */
         display: inline-block;
         &> div {
@@ -23,7 +28,7 @@
             }
         }
     }
-    
+
     &> li > ul > li { /* Menubar buttons inside dropdown */
         display: block;
     }
