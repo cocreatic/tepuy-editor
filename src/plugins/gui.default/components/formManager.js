@@ -543,6 +543,7 @@ export class FormBuilder {
     }
 
     static longDuration(value, settings) {
+        if (!settings.defaultValue) settings.defaultValue = {};
         return FormBuilder.control(FormBuilder.templates.longDuration.default, value, settings);
     }
 
