@@ -239,11 +239,13 @@ export class Tepuy {
         const $body = $(this.indexDoc).find('body');
         const bodyData = $body.data();
         const main = $body.find('main')[0];
-        if (!main.hasAttribute('id')) {
-            main.setAttribute('id', newid());
-        }
-        if (!main.hasAttribute('data-cmpt-type')) {
-            main.setAttribute('data-cmpt-type', 'section');
+        if (main) {
+            if (!main.hasAttribute('id')) {
+                main.setAttribute('id', newid());
+            }
+            if (!main.hasAttribute('data-cmpt-type')) {
+                main.setAttribute('data-cmpt-type', 'section');
+            }
         }
         const root = new Section(main);
         this.registerAllComponents(root, 'index');
