@@ -244,8 +244,9 @@ export class GuiEditor {
     onStyleSheetUpdated(file) {
         const _$ = this.editorWindow.$;
         if (!_$) return;
-        var style = _$.find('head > link[href*="'+file.filename+'"]');
-        if (style && style.length) {
+        //Reload stylesheet
+        const style = _$('link[href*="'+file.filename+'"]').get(0);
+        if (style) {
             const queryString = '?r=' + new Date().getTime();
             style.href = style.href.replace(/\?.*|$/, queryString);
         }

@@ -47,7 +47,6 @@ export class StylesheetEditor {
     }
 
     show() {
-        console.log('loading editor');
         const priv = _(this);
         const dlg = priv.dlg;
         const me = this;
@@ -113,9 +112,7 @@ export class StylesheetEditor {
 
     submit() {
         const css = this.editor.getValue();
-        console.log(css);
         const blob = new Blob([css], {type : 'text/css'});
-        console.log(blob);
         const resource = {
             type: 'F',
             name: this.file.filename,
@@ -127,10 +124,9 @@ export class StylesheetEditor {
         }
         const priv = _(this);
         this.file.content = css;
-        console.log(resource);
-        App.data.dco.addResource(resource, '/content/css/').then(response => {
+        App.data.dco.addResource(resource, '/css/').then(response => {
             priv.resolve(this.file);
-            priv.close(true);
+            priv.dlg.close(true);
         }, (error) => {
             App.ui.components.Dialog.message(App.i18n.t('dco.errors.cssUpdateFailed'), App.i18n.t('tepuy'));
             console.log(error);

@@ -164,6 +164,7 @@
     "downloadFailure": "",
     "metadataWindowTitle": "Metadatos y publicación",
     "publishTitle": "",
+    "publishConfirmation": "¿Está seguro de que desea públicar este objeto ahora?",
     "publishNotification": "El objeto ha sido publicado con éxito",
     "stylesheetWindowTitle": "Editor de estilos"
   },
