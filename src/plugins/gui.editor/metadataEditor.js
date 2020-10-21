@@ -299,7 +299,7 @@ export class MetadataEditor {
                 type = 'duration'; //options.type;
                 break;
             case 'duration':
-                type = 'longduration';
+                type = 'longDuration';
                 break;
             case 'int':
                 type = 'number';
