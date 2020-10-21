@@ -35,7 +35,8 @@
     "share": "",
     "new": "",
     "edit": "",
-    "closepreview": ""
+    "closepreview": "",
+    "lookxx": ""
   },
   "editor": {
     "content": {
@@ -45,6 +46,9 @@
     "resources": {
       "folders": "",
       "actions": ""
+    },
+    "look": {
+      "customstyles": ""
     }
   },
   "resources": {
@@ -110,14 +114,16 @@
     "deleteTitle": "",
     "errors": {
       "getspeclist": "",
-      "missingInformation": ""
+      "missingInformation": "",
+      "cssUpdateFailed": ""
     },
     "downloadFailure": "",
     "removeAccessConfirmation": "",
     "removeAccessTitle": "",
     "metadataWindowTitle": "",
     "publishTitle": "",
-    "publishNotification": ""
+    "publishNotification": "",
+    "stylesheetWindowTitle": ""
   },
   "device": {
     "iphone": "",

@@ -19,7 +19,20 @@
             </div>
             {{/if}}
         </div>
-        <div id="tab-2" data-i18n="sidebar.look"></div>
+        <div id="tab-2">
+            <!--<h3 class="ui-widget ui-widget-header" data-i18n="sidebar.look"></h3>-->
+            <div class="tpy-toolset tpy-object-tree">
+                <h3 class="ui-widget-header" data-i18n="editor.look.customstyles"></h3>
+                <div class="tpy-toolset-content">
+                    <div id="look_stylesheets" class="tpy-jstree">
+                      <ul>
+                        <li id="custom.css">custom.css</li>
+                        <li id="custommobile.css">custommobile.css</li>
+                      </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="tab-3" class="tpy-object-tree">
             {^{if resources}}
             <h3 class="ui-widget ui-widget-header" data-i18n="sidebar.resources"></h3>

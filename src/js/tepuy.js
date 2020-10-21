@@ -1,5 +1,5 @@
 import { Page, Section } from './component';
-import { b64DecodeUnicode, b64EncodeUnicode, privateMap, _ } from './utils';
+import { b64DecodeUnicode, b64EncodeUnicode, privateMap, _, newid } from './utils';
 
 const dependencies = {
     "jquery-ui.min.css": { type: 'style', src: "vendor/tepuy/components/jquery/css/custom/jquery-ui.min.css" },
@@ -98,7 +98,12 @@ export class Tepuy {
                 if (it.type == 'style') {
                     const media = it.media ? ' media="' + it.media + '"' : '';
                     let source = it.src;
-                    if (source == undefined && srcs[i]) source = srcs[i].src;
+                    if (source == undefined) {
+                        if (srcs[i]) source = srcs[i].src;
+                    } 
+                    else {
+                        source = local + '/' + it.src;
+                    }
                     source && $head.append(['<link href="', source, '" rel="stylesheet" type="text/css"', media, '/>'].join(''));
                 }
                 else {
@@ -233,7 +238,14 @@ export class Tepuy {
         this.indexDoc = parser.parseFromString(html, 'text/html');
         const $body = $(this.indexDoc).find('body');
         const bodyData = $body.data();
-        const root = new Section($body.find('main')[0]);
+        const main = $body.find('main')[0];
+        if (!main.hasAttribute('id')) {
+            main.setAttribute('id', newid());
+        }
+        if (!main.hasAttribute('data-cmpt-type')) {
+            main.setAttribute('data-cmpt-type', 'section');
+        }
+        const root = new Section(main);
         this.registerAllComponents(root, 'index');
         this.home = {
             config: {...bodyData},

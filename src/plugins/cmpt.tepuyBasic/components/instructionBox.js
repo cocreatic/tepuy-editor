@@ -33,10 +33,16 @@ export class InstructionBox extends Component {
             }
         };
         type.value = this.getAttribute(type.attr);
+        const notmobile = {name: 'notmobile', type: 'boolean', toggleclass: 'notmobile', editSettings: { label: 'cmpt.tepuyBasic:general.notmobile', defaultValue: false }};
+        //notmobile.value = this.host.classList.contains(notmobile.classtoggle);
+        const onlymobile = {name: 'onlymobile', type: 'boolean', toggleclass: 'onlymobile', editSettings: { label: 'cmpt.tepuyBasic:general.onlymobile', defaultValue: false }};
+        //onlymobile.value = this.host.classList.contains(onlymobile.classtoggle);
+        this.resolvePropertyValue(onlymobile);
+        this.resolvePropertyValue(notmobile);
 
         const content = {name: 'content', type: 'html', prop: 'innerHTML', editSettings: { label: 'cmpt.tepuyBasic:instruction-box.content' }};
         content.value = this.host.innerHTML;
 
-        _(this).properties = [type, content];
+        _(this).properties = [type, content, notmobile, onlymobile];
     }
 }

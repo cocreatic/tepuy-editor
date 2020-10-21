@@ -92,5 +92,9 @@
     "resultBoxText": "Resultados",
     "resultBoxTooltip": "Insertar contenedor de resultados",
     "autoalign": "Autoalinear"
+  },
+  "general": {
+    "onlymobile": "Mostrar solo en móviles",
+    "notmobile": "Ocultar en móviles"
   }
 }

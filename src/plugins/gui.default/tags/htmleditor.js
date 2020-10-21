@@ -7,7 +7,7 @@ const presets = {
         //height: undefined,
         min_height: 200,
         width: '100%',
-        customs: []
+        customs: ['tpyMobileOnly']
     },
     default: {
         height: 500,
@@ -69,6 +69,16 @@ const customizations = {
                 editor.insertContent('<span class="placeholder mceNonEditable">&nbsp;</span>');
             }
         })
+    },
+    tpyMobileOnly: (editor) => {
+        editor.ui.registry.addButton('tpyMobileOnly', {
+            icon: 'fas-mobile-alt',
+            tooltip: 'Mostrar solo en móviles',
+            onAction: function() {
+                const node = editor.selection.getNode();
+                node.classList.add('onlymobile');
+            }
+        })
     }
 }
 
@@ -91,13 +101,6 @@ const registerCustoms = (editor, customs) => {
         customizations[customs[i]] && customizations[customs[i]].apply(null, [editor]);
     }
 };
-
-//Allow interactions for tinymce editor
-$.widget("ui.dialog", $.ui.dialog, {
-    _allowInteraction: function (event) {
-        return !!$(event.target).closest(".tox-tinymce-aux, .moxman-window, .tam-assetmanager-root").length || this._super(event);
-    }
-});
 
 export const tinymceCtrl = { };
 export const htmleditor = {

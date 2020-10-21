@@ -35,7 +35,8 @@ const vendorjs = [
     'node_modules/i18next/i18next.min.js',
     'vendor/js/jstree.js',
     'vendor/js/tinymce.min.js',
-    'vendor/js/jquery.tinymce.min.js'
+    'vendor/js/jquery.tinymce.min.js',
+    'vendor/ace/ace.js'
 ];
 
 const vendorcss = [

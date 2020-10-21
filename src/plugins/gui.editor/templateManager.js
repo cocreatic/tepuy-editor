@@ -6,7 +6,8 @@ const templateMap = {
     pageView: 'script#gui-editor-page',
     pageViewStyles: 'script#gui-editor-page-styles',
     componentLookup: 'script#gui-editor-component-lookup',
-    metadataEditor: 'script#gui-editor-metadata-editor'
+    metadataEditor: 'script#gui-editor-metadata-editor',
+    stylesheetEditor: 'script#gui-editor-stylesheet-editor'
 }
 
 export const TemplateManager = {
