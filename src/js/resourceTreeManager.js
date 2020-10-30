@@ -183,6 +183,15 @@ export class ResourceTreeManager {
             }
         };
 
+        this.setFilter();
+        const jtConfig = { core, types, contextmenu, dnd, events, toolbar };
+        return { jtData, jtConfig };
+        //$.observable(this.sidebarModel).setProperty();
+    }
+
+    setFilter(filter) {
+        this.filter = filter || this.filter;
+        this.leafFilter = null;
         if (this.filter) {
             const resType = resourceTypes[this.filter]
             if (resType) {
@@ -199,10 +208,6 @@ export class ResourceTreeManager {
         if (!this.leafFilter) {
             this.leafFilter = (r) => true;
         }
-
-        const jtConfig = { core, types, contextmenu, dnd, events, toolbar };
-        return { jtData, jtConfig };
-        //$.observable(this.sidebarModel).setProperty();
     }
 
     getNodePath(node) {

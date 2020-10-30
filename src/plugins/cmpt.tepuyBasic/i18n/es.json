@@ -31,6 +31,7 @@
     "title": "Video interactivo",
     "source": "Video Url",
     "autoplay": "Iniciar automáticamente",
+    "autoplayHelp": "Habilitar el checkbox hará que la reproducción del vídeo se realice automáticamente sin hacer clic previo.",
     "triggerAt": "Mostrar en",
     "hideAt": "Ocultar en",
     "waitFor": "Pausar video",
@@ -38,7 +39,9 @@
   },
   "activity": {
     "title": "Título",
-    "activityId": "Id de la actividad",
+    "titleHelp": "Ingrese el titulo de la actividad",
+    "activityId": "Nombre corto",
+    "activityIdHelp": "Identificador único para la actividad",
     "allowretry": "Permitir reintentar",
     "feedbackOk": "Mensaje respuesta correcta",
     "feedbackWrong": "Mensaje respuesta incorrecta",
@@ -62,7 +65,7 @@
     "types": {
       "simplechoice": "Selección única",
       "multichoice": "Selección múltiple",
-      "complete": "Cloze",
+      "complete": "Completar",
       "label": "Etiqueta",
       "defineterm": "Definición",
       "multisetchoice": "Selección múltiple en conjunto"

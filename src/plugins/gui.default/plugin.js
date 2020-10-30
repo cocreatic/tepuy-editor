@@ -13,6 +13,7 @@ import { resourceInput } from './tags/resourceInput';
 
 import { FormManager, FormBuilder, FormArray, FormControl, FormGroup } from './components/formManager';
 import { Dialog } from './components/dialog';
+import { ResourceLookup } from './components/resourceLookup';
 
 let layoutInitialized = false;
 
@@ -64,7 +65,8 @@ export class GuiDefault {
                 FormArray,
                 FormGroup,
                 FormControl,
-                Dialog
+                Dialog,
+                ResourceLookup
             }
         };
         App.validation = { validators: {...Validators }};

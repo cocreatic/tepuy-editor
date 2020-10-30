@@ -69,7 +69,8 @@
     "keyword": "Palabra clave",
     "exitTitle": "Tepuy Editor - {{action}}",
     "exitConfirmation": "¿Está seguro que desea {{action}}?",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "id": "ID"
   },
   "detail": {
     "description": "Descripción"
@@ -154,6 +155,7 @@
     "deleteConfirmation": "¿Está seguro de eliminar el objeto seleccionado? <br/>No se podrá recuperar luego la información que contiene.",
     "removeAccessConfirmation": "¿Desea quitar el acceso al usuario?",
     "removeAccessTitle": "Tepuy Editor - Remover acceso",
+    "objectInfo": "información del objeto",
     "errors": {
       "getspeclists": "Ha ocurrido un error al obtener la lista de especificaciones",
       "getspeclist": "",
@@ -211,6 +213,7 @@
   },
   "component": {
     "id": "Id",
+    "idHelp": "El ID asignado por defecto puede cambiarlo. Recuerde que el ID debe ser único",
     "name": "Nombre",
     "categoryLabel": "Categoría",
     "category": {

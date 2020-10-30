@@ -1,9 +1,11 @@
+import { App } from '../../../js/app';
 import { newid, isFunction } from '../../../js/utils';
+import { ResourceLookup } from '../components/resourceLookup';
 
 const presets = {
     basic: {
-        toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter alignright alignjustify |',
-        plugins: 'searchreplace paste',
+        toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter alignright alignjustify | image |',
+        plugins: 'searchreplace paste image',
         //height: undefined,
         min_height: 200,
         width: '100%',
@@ -21,7 +23,7 @@ const presets = {
             ' tableinsertcolbefore tableinsertcolafter tabledeletecol |' +
             ' bullist numlist outdent indent |' +
             ' removeformat |' +
-            ' media |' +
+            ' image media |' +
             ' tpyBlockquote tpyAccordion tpyTwoColumns |' +
             ' code |' +
             ' help',
@@ -82,6 +84,29 @@ const customizations = {
     }
 }
 
+const filePicker = (callback, value, meta) => {
+    let lookup = tinymceCtrl.resourceLookup;
+    const filter = parseFilter(meta.filetype);
+    if (!lookup) {
+        lookup = new ResourceLookup(filter, 'body');
+        tinymceCtrl.lookup = lookup;
+    }
+    else {
+        lookup.setFilter(filter);
+    }
+
+    lookup.showModal().then(selected => {
+        callback(selected.path, meta);
+    }, error => {});
+    lookup.dlg.$dlg.closest(".ui-widget.ui-dialog").css({ "z-index": 1400 });
+}
+
+const parseFilter = (filetype) => {
+    if (filetype == 'image') return 'image';
+    if (filetype == 'media') return 'video';
+    return undefined;
+}
+
 const tpyAltEnter = (editor) => {
     editor.on('keydown', (e) => {
         if (e.keyCode == 13 && e.altKey) {
@@ -102,7 +127,7 @@ const registerCustoms = (editor, customs) => {
     }
 };
 
-export const tinymceCtrl = { };
+export const tinymceCtrl = {};
 export const htmleditor = {
 // ============================= JSTREE =============================
     argDefault: false, // Do not default missing arg to #data
@@ -125,7 +150,6 @@ export const htmleditor = {
     },
     onBind: function(tagCtx) {
         const settings = this.ctxPrm('settings')||{};
-
         const preset = (typeof settings.preset === 'object')
             ? settings.preset
             : presets[settings.preset || 'default'];
@@ -150,6 +174,10 @@ export const htmleditor = {
             };
 
         const config = Object.assign(defaultConfig, preset);
+        config.file_picker_callback = filePicker;
+        const baseURI = App.ui && App.ui.editorPlugin && App.ui.editorPlugin.dco && App.ui.editorPlugin.dco.manifest && App.ui.editorPlugin.dco.manifest.baseUrl;
+        config.document_base_url = settings.baseURI || baseURI;
+        config.base_url = 'vendor/assets/tinymce';
         config.setup = function(editor) {
             // Store widget instance
             tag.widget = editor;

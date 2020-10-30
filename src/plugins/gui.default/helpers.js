@@ -45,8 +45,8 @@ const iconMap = {
 };
 
 export const helpers = {
-    translate: (key) => {
-        return App.i18n.t(key);
+    translate: (key, def) => {
+        return App.i18n.t(key, def);
     },
     icon: (icon) => {
         if (!icon || !iconMap[icon]) return '';

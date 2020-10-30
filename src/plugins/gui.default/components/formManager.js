@@ -483,6 +483,9 @@ export class FormBuilder {
             },
             vcard: {
                 default: '#gui-default-form-vcard'
+            },
+            label: {
+                default: '#gui-default-form-label'
             }
         };
     }
@@ -549,6 +552,10 @@ export class FormBuilder {
 
     static vcard(value, settings) {
         return FormBuilder.control(FormBuilder.templates.vcard.default, value, settings);
+    }
+
+    static label(value, settings) {
+        return FormBuilder.control(FormBuilder.templates.label.default, value, settings);
     }
 
     static group(controlsConfig, settings){

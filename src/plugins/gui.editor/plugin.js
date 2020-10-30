@@ -46,6 +46,7 @@ export class GuiEditor {
         this.sidebarModel = { canEdit: this.canEdit, closePreview: this.initialize.bind(this) };
         this.contentModel = { responsiveDevice: defaultDevice };
         this.dco = App.data.dco;
+        App.ui.editorPlugin = this;
 
         contentTpl.link(App.ui.$content, this.contentModel);
         sidebarTpl.link(App.ui.$sidebar, this.sidebarModel);
@@ -290,6 +291,9 @@ export class GuiEditor {
         const config = this.dco.manifest;
         const formConfig = builder.array([
             builder.group({
+                id: ['label', config.id, { label: 'general.id', small: true }],
+            }, { label: '' }),
+            builder.group({
                 shareAsTemplate: ['yesno', config.shareAsTemplate, { label: 'dco.shareAsTemplate', column: 1 }],
                 interactionMode: ['radio', config.interactionMode, { label: 'dco.interactionMode', validators: [ validators.required ], options: interactionModes, column: 1 }],
                 preview: ['imageInput', config.preview, { label: 'dco.imagePreview', validators: [], column: 2 }]
@@ -305,8 +309,8 @@ export class GuiEditor {
         let manager = new App.ui.components.FormManager({formConfig, titleText});
         setTimeout(() => {
             manager.openDialog({ width: '60vw'}).then(updatedProperties => {
-                let properties = Object.assign({}, updatedProperties[0]);
-                properties = Object.assign(properties, updatedProperties[1]);
+                let properties = Object.assign({}, updatedProperties[1]);
+                properties = Object.assign(properties, updatedProperties[2]);
                 this.dco.update(properties);
             }).catch((err) => {
                 console.log(err);

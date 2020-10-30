@@ -43,7 +43,13 @@ export class ActivityQuiz extends Component {
         const validators = App.validation.validators;
 
         const title = {name: 'title', type: 'text', attr: 'data-act-title', editSettings: { label: 'cmpt.tepuyBasic:activity.title', validators: [ validators.required ] }};
-        const activityId = {name: 'activityId', type: 'text', attr: 'data-act-id', editSettings: { label: 'cmpt.tepuyBasic:activity.activityId', defaultValue: this.id, validators: [ validators.required ] }};
+        const activityId = {name: 'activityId', type: 'text', attr: 'data-act-id', editSettings: {
+            label: 'cmpt.tepuyBasic:activity.activityId',
+            small: true,
+            maxLength: 30,
+            defaultValue: this.id,
+            validators: [ validators.required ]
+        }};
         const shuffle = {name: 'shuffle', type: 'boolean', attr: 'data-shuffle', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.shuffle', defaultValue: true }};
         const prefix = {name: 'prefix', type: 'optionList', attr: 'data-prefixtype', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.prefixtype', options: prefixes, defaultValue: '0' }};
         const requireAll = {name: 'requireAll', type: 'boolean', attr: 'data-requiredall', editSettings: { label: 'cmpt.tepuyBasic:activity-quiz.requiredall', defaultValue: true }};

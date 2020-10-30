@@ -161,6 +161,26 @@
   </div>
 </script>
 
+<script id="gui-default-form-control-errorYYY" type="text/x-template">
+  <div class="tpy-context-help-wrapper" data-link="id{:'t-wrapper-'+id}">
+    <div data-link="id{:'help-'+id}" class="context-help">
+    {^{if invalid && errors}}
+    <ul data-link="id{:'errors-list-'+id}" class="tpy-validation-error-list"><!-- ui-tooltip ui-widget-content ui-widget-shadow ui-corner-all-->
+      {^{for errors}}
+        <li>{{:msg}}</li>
+      {{/for}}
+    </ul>
+    {{/if}}
+    <div>
+      <p>Ayuda contextual</p>
+    </div>
+    </div>
+    {^{tooltip contentid="help-"+id _position=tooltipPos }}
+      <i class="tpy-context-flag fas fa-question-circle" title=""></i>
+    {{/tooltip}}
+  </div>
+</script>
+
 <script id="gui-default-form-control-error" type="text/x-template">
   {^{if invalid && errors}}
   <div class="tpy-validation-error">
@@ -215,17 +235,32 @@
   </div>
 </script>
 
+<script id="gui-default-form-control-label" type="text/x-template">
+  {^{tooltip content=~translate(label+'Help', '') }}
+  <span data-link="data-i18n{:label}" title=""></span>{{:~suffix}}
+  {{/tooltip}}
+  {^{if invalid && errors}}
+  <div class="tpy-validation-error">
+    <ul data-link="id{:'errors-list-'+id}" class="tpy-validation-error-list"><!-- ui-tooltip ui-widget-content ui-widget-shadow ui-corner-all-->
+      {^{for errors}}
+        <li>{{:msg}}</li>
+      {{/for}}
+    </ul>
+    {^{tooltip tmpl='<i class="tpy-error-flag fas fa-exclamation-circle" title=""></i>' contentid="errors-list-"+id /}}
+  </div>
+  {{/if}}
+</script>
 
 <script id="gui-default-form-text" type="text/x-template">
   {^{if visible()}}
   <div class="tpy-form-control" data-link="
+    id{:id}
     class{merge:settings.small toggle='text-small'}
     class{merge:invalid toggle='invalid'}
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     <input type="text" data-link=" 
       {:value:}
@@ -244,8 +279,7 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     <input type="text" data-link=" 
       {:value:}
@@ -263,8 +297,7 @@
     class{merge:required toggle='required'}
     ">
     <label for="checkbox1">
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     <input type="checkbox" data-link="value" name="checkbox1" />
   </div>
@@ -277,15 +310,14 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
-      {^{controlgroup}}
-        {^{radiogroup value convert='toYesNo' convertBack='fromYesNo' }}
-          {^{radio label=~translate('general.yes') value="yes"/}}
-          {^{radio label=~translate('general.not') value="not"/}}
-        {{/radiogroup}}
-      {{/controlgroup}}
+    {^{controlgroup}}
+      {^{radiogroup value convert='toYesNo' convertBack='fromYesNo' }}
+        {^{radio label=~translate('general.yes') value="yes"/}}
+        {^{radio label=~translate('general.not') value="not"/}}
+      {{/radiogroup}}
+    {{/controlgroup}}
   </div>
 </script>
 
@@ -295,14 +327,13 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
-      <div class="tpy-radiogroup" data-link="{radiogroup value}">
-        {^{for settings.options}}
-          <label><input type="radio" value="{{:value}}"/>{{:~translate(label)}}</label>
-        {{/for}}
-      </div>
+    <div class="tpy-radiogroup" data-link="{radiogroup value}">
+      {^{for settings.options}}
+        <label><input type="radio" value="{{:value}}"/>{{:~translate(label)}}</label>
+      {{/for}}
+    </div>
   </div>
 </script>
 
@@ -313,16 +344,15 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
-      <div class="tpy-optionlist-wrapper">
-        <select class="tpy-optionlist" data-link="{:value:}">
-          {^{for settings.options}}
-            <option value="{{:value}}">{{:~translate(label)}}</option>
-          {{/for}}
-        </div>
+    <div class="tpy-optionlist-wrapper">
+      <select class="tpy-optionlist" data-link="{:value:}">
+        {^{for settings.options}}
+          <option value="{{:value}}">{{:~translate(label)}}</option>
+        {{/for}}
       </div>
+    </div>
   </div>
   {{/if}}
 </script>
@@ -333,8 +363,7 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     <div class="tpy-share-list" data-link="{shareList value editable=true deleteConfirmation=settings.askForDeleteConfirmation}"></div>
   </div>
@@ -346,8 +375,7 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     <div data-link="{imageInput value editable=true}"></div>
   </div>
@@ -359,8 +387,7 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     <div data-link="{resourceInput value settings=settings editable=true}"></div>
   </div>
@@ -372,8 +399,7 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     {^{htmleditor value settings=settings /}}
   </div>
@@ -385,8 +411,7 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     {{include ^tmpl=settings.tagTemplate onErrorxx="Unable to load custom template" /}}
   </div>
@@ -399,8 +424,7 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>&nbsp;([h:]mm:ss)
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label" ~suffix="&nbsp;([h:]mm:ss)"/}}
     </label>
     <input type="text" data-link="
       {:value:}
@@ -418,8 +442,7 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     <div class="tpy-form form-array" data-link="{formCollection #data settings=settings editable=true}"></div>
   </div>
@@ -431,8 +454,7 @@
     class{merge:required toggle='required'}
     ">
     <label>
-      <span data-link="data-i18n{:label}"></span>&nbsp;([h:]mm:ss)
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     <div>
       <input type="text" data-link="{:value.years:}"/>
@@ -448,8 +470,7 @@
 <script id="gui-default-form-vcard" type="text/x-template">
   <div class="tpy-form-control text-small" data-link="class{merge:invalid toggle='invalid'}">
     <label>
-      <span data-link="data-i18n{:label}"></span>&nbsp;([h:]mm:ss)
-      {{include tmpl="#gui-default-form-control-error"/}}
+      {{include tmpl="#gui-default-form-control-label"/}}
     </label>
     <div>
       <input type="text" data-link="{:value.name:}"/>
@@ -458,4 +479,19 @@
       <input type="text" data-link="{:value.email:}"/>
     </div>
   </div>
+</script>
+
+<script id="gui-default-form-label" type="text/x-template">
+  {^{if visible()}}
+  <div class="tpy-form-control" data-link="
+    class{merge:settings.small toggle='text-small'}
+    class{merge:invalid toggle='invalid'}
+    class{merge:required toggle='required'}
+    ">
+    <label>
+      {{include tmpl="#gui-default-form-control-label"/}}
+    </label>
+    <span class="input">{^{:value}}</span>
+  </div>
+  {{/if}}
 </script>
