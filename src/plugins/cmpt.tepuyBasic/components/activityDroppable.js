@@ -212,21 +212,21 @@ export class ActivityDroppable extends Component {
         const htmlpreset = this.defineHtmlSettings();
         const title = {name: 'title', type: 'text', attr: 'data-act-title', editSettings: {
             label: 'cmpt.tepuyBasic:activity.title',
-            tooltip: 'cmpt.tepuyBasic:activity.titleHelpXXX',
+            required: true,
             validators: [ validators.required ] }
         };
         const activityId = {name: 'activityId', type: 'text', attr: 'data-act-id', editSettings: {
             label: 'cmpt.tepuyBasic:activity.activityId',
-            tooltip: 'cmpt.tepuyBasic:activity.activityIdHelp',
             small: true,
             maxLength: 30,
+            required: true,
             defaultValue: this.id,
             validators: [ validators.required ]
         }};
         const verifyTarget = {name: 'verifyTarget', type: 'text', attr: 'data-verify-target', editSettings: { visible: false }};
         const content = { name: 'content', type: 'html', prop: 'innerHTML', editSettings: {
             label: 'cmpt.tepuyBasic:activity-droppable.content',
-            tooltip: 'cmpt.tepuyBasic:activity-droppable.contentHelp',
+            required: true,
             validators: [ validators.required ],
             preset: htmlpreset
         }};

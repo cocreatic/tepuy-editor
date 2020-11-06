@@ -143,7 +143,7 @@ export class ComponentEditor {
 
         const cmpt = this.selected;
         const controls = {
-            id: ['text', cmpt.id, { label: 'component.id', validators: [ validators.required, validators.pattern(validators.patterns.HTMLCLASSNAME)] }],
+            id: ['text', cmpt.id, { label: 'component.id', required: true, validators: [ validators.required, validators.pattern(validators.patterns.HTMLCLASSNAME)] }],
             //name: ['text', cmpt.name, { label: 'component.name', validators: [validators.required, validators.maxLength(60) ], maxLength: 60, default: true }],
         };
         cmpt.onEditBefore({

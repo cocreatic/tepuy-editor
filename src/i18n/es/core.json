@@ -213,7 +213,7 @@
   },
   "component": {
     "id": "Id",
-    "idHelp": "El ID asignado por defecto puede cambiarlo. Recuerde que el ID debe ser único",
+    "idHelp": "El ID debe ser único en todo el paquete. Puede ser personalizado y sirve para referenciar el componente en otros lugares como por ejemplo las hojas de estilos. No use espacios en blanco ni caracteres especiales, solamente letras, números y guión medio \"-\" o bajo \"_\". Además, debe iniciar con una letra.",
     "name": "Nombre",
     "categoryLabel": "Categoría",
     "category": {
@@ -242,5 +242,13 @@
     "duration": "El valor ingresado no es una duración válida. Debe ingrear el valor en el formato [h:]mm:ss.",
     "greatherThan": "El valor del campo debe ser mayor que el valor del campo $t({{refCtrl.label}})."
   },
-  "tepuy": "Tepuy Editor"
+  "tepuy": "Tepuy Editor",
+  "longduration": {
+    "years": "",
+    "months": "",
+    "days": "",
+    "hours": "",
+    "minutes": "",
+    "seconds": ""
+  }
 }

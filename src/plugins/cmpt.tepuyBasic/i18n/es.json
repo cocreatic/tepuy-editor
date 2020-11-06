@@ -6,6 +6,7 @@
   "content-box": {
     "title": "Bloque de Texto",
     "type": "Tipo",
+    "typeHelp": "Define la apariencia del bloque de texto, según el énfasis que se quiera dar.",
     "label": "Título",
     "types": {
       "important": "Importante",
@@ -19,7 +20,9 @@
   "instruction-box": {
     "title": "Instrucción",
     "type": "Tipo",
+    "typeHelp": "Define la apariencia de la instrucción, según el énfasis o el uso que se le quiera dar.",
     "content": "Contenido",
+    "contentHelp": "Normalmente se presenta en una única línea, no debe contener información demasiado extensa ni con formatos de contenido que alteren su presentación.",
     "types": {
       "info": "Información",
       "danger": "Peligro",
@@ -30,8 +33,9 @@
   "interactive-video": {
     "title": "Video interactivo",
     "source": "Video Url",
+    "sourceHelp": "Indique la dirección externa del video, incluido el protocolo (http o https). Si es un video interno, seleccionelo de los archivos locales.",
     "autoplay": "Iniciar automáticamente",
-    "autoplayHelp": "Habilitar el checkbox hará que la reproducción del vídeo se realice automáticamente sin hacer clic previo.",
+    "autoplayHelp": "Habilitar el checkbox hará que la reproducción del vídeo se realice automáticamente al cargar la página, sin hacer clic previamente.",
     "triggerAt": "Mostrar en",
     "hideAt": "Ocultar en",
     "waitFor": "Pausar video",
@@ -41,17 +45,22 @@
     "title": "Título",
     "titleHelp": "Ingrese el titulo de la actividad",
     "activityId": "Nombre corto",
-    "activityIdHelp": "Identificador único para la actividad",
+    "activityIdHelp": "Este identificador es especial para paquetes SCORM. Es el nombre con el que se reconocerá la actividad en el informe de resultados del paquete. Utilice un identificador simple pero que le permita reconocer la actividad en dicho informe cuando se visualice desde el LMS donde se publique el paquete.",
     "allowretry": "Permitir reintentar",
+    "allowretryHelp": "Habilitar el checkbox permitirá reintentar el envío de respuestas de la actividad una vez haya finalizado",
     "feedbackOk": "Mensaje respuesta correcta",
     "feedbackWrong": "Mensaje respuesta incorrecta",
-    "modalFeedback": "Retroalimentación modal"
+    "modalFeedback": "Retroalimentación modal",
+    "modalFeedbackHelp": "Indica si se muestra la retroalimentación en una ventana modal flotante."
   },
   "activity-quiz": {
     "title": "Cuestionario",
     "shuffle": "Desordenar",
+    "shuffleHelp": "Habilitar el checkbox mostrará las preguntas del cuestionario en orden aleatorio.",
     "prefixtype": "Tipo de numeración",
+    "prefixtypeHelp": "Indica la manera como se numeran las preguntas y respuestas dentro del cuestionario.",
     "requiredall": "Debe responder todas",
+    "requiredallHelp": "Habilitar el checkbox restringe el envío de la respuesta cuando tenga todas las preguntas del cuestionario diligenciadas",
     "paginationnumber": "Paginación inicia en",
     "questions": "Preguntas",
     "addChildText": "Agregar pregunta",

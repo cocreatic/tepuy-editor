@@ -45,6 +45,7 @@ export class ActivityQuiz extends Component {
         const title = {name: 'title', type: 'text', attr: 'data-act-title', editSettings: { label: 'cmpt.tepuyBasic:activity.title', validators: [ validators.required ] }};
         const activityId = {name: 'activityId', type: 'text', attr: 'data-act-id', editSettings: {
             label: 'cmpt.tepuyBasic:activity.activityId',
+            required: true,
             small: true,
             maxLength: 30,
             defaultValue: this.id,
@@ -58,6 +59,7 @@ export class ActivityQuiz extends Component {
         const modalFeedback = {name: 'modalFeedback', type: 'boolean', attr: 'data-modal-feedback', editSettings: { label: 'cmpt.tepuyBasic:activity.modalFeedback', defaultValue: false }};
         const questions = {name: 'questions', type: 'customtag', prop: 'innerHTML', editSettings: {
             label: 'cmpt.tepuyBasic:activity-quiz.questions',
+            required: true,
             tagTemplate: '{^{tpyBasicQuestionaire value settings /}}',
             validators: [ validators.required ]
         }};
