@@ -25,7 +25,7 @@ const defaultDevice = 'iphone';
 export class GuiEditor {
 
     constructor() {
-        App.registerHook('gui_view_editor', this.initialize.bind(this, true));
+        App.registerHook('gui_view_editor', this.initialize.bind(this));
         App.registerHook('gui_menu_initialize', this.registerMenu.bind(this));
 
         //Guarantee this context
@@ -35,14 +35,28 @@ export class GuiEditor {
         $(document).on('tpy:document-changed', this.onDocumentChanged); //New components are create in this document
     }
 
-    initialize(canEdit) {
-        const sidebarTpl = TemplateManager.get('sidebar');
-        const contentTpl = TemplateManager.get('content');
+    initialize(properties) {
+        // For compatibility. In the initial definition canEdit was the default parameter.
+        if (typeof properties == 'boolean') {
+            properties = { canEdit: properties };
+        }
+        else {
+            properties = properties || { canEdit: true };
+        }
+
         //if (canEdit == undefined) this.canEdit = false;
-        this.canEdit = !(canEdit === false);
+        this.canEdit = !(properties.canEdit === false);
         this.sidebarModel = { canEdit: this.canEdit, closePreview: this.initialize.bind(this) };
         this.contentModel = { responsiveDevice: defaultDevice };
+
         this.dco = App.data.dco;
+        this.initializeUI();
+
+    }
+
+    initializeUI() {
+        const sidebarTpl = TemplateManager.get('sidebar');
+        const contentTpl = TemplateManager.get('content');
 
         contentTpl.link(App.ui.$content, this.contentModel);
         sidebarTpl.link(App.ui.$sidebar, this.sidebarModel);
@@ -443,7 +457,7 @@ export class GuiEditor {
             options.position = 'after';
             parent = parent.parent;
         }
-        ed.parent = parent; //Set the parent so it can be used to get properties required on their children        
+        ed.parent = parent; //Set the parent so it can be used to get properties required on their children
         ed.show({
             $refEl: $cmpt
         }).then((child) => {

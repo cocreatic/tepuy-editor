@@ -74,7 +74,23 @@ class App {
                 this.invokeHook('gui_initialize');
                 return this.auth.authenticate().then(userInfo => {
                     this.data.user = userInfo;
-                    this.ui.load(this.options.defaultView);
+                    var params = {};
+
+                    if (options.autoload) {
+                        this.storage.getObject(options.autoload).then(manifest => {
+                            if (manifest) {
+                                this.data.dco = new this.DcoManager(manifest, this.storage);
+                                this.ui.load('editor', null);
+                            }
+                            else {
+                                console.log('Object not found: ' + options.autoload);
+                                this.ui.load(this.options.defaultView, params);
+                            }
+                        });
+                        return true;
+                    }
+
+                    this.ui.load(this.options.defaultView, params);
                     return true;
                 }, err => {
                     console.log('Authenticate failed');
