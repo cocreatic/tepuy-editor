@@ -70,7 +70,8 @@
     "exitTitle": "Tepuy Editor - {{action}}",
     "exitConfirmation": "¿Está seguro que desea {{action}}?",
     "loading": "Cargando...",
-    "id": "ID"
+    "id": "ID",
+    "preview": "Vista previa"
   },
   "detail": {
     "description": "Descripción"

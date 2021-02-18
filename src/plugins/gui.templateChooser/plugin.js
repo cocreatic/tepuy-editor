@@ -112,10 +112,18 @@ export class GuiTemplateChooser {
         $.observable(this.model).setProperty('activeTemplate', template);
         App.ui.$content.localize();
 
+        let $tpl = $target.data('templateDetail');
+
+        if (!$tpl) {
+            $tpl = $("#templateDetail").clone(true);
+            $target.data('templateDetail', $tpl);
+        }
+
         this.modal = new App.ui.components.Dialog({
-            host: "#templateDetail",
+            host: $tpl,
             width: '60%',
-            centerOnContent: true
+            centerOnContent: true,
+            title: template.name
         });
         this.modal.setButtons([]);
         this.modal.showModal();
