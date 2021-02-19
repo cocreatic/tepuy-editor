@@ -13,6 +13,8 @@ const defaultOptions = {
     container: "#tepuy-editor",
     defaultView: 'home', //home|editor
     theme: 'light',
+    profileMenu: true,
+    autoload: null,
     exit: {
         action: 'https://cocreatic.org/'
     }

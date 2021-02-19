@@ -153,7 +153,7 @@ export class GuiTemplateChooser {
     createObject(e, args) {
         this.closeDetail(true);
         App.storage.getSpecList().then(specs => {
-            this.showNewObjectForm(specs.map(spec => ({ value: spec.id, label: spec.name})));
+            this.showNewObjectForm(specs.map(spec => ({ value: spec.id, label: spec.name, description: spec.description })));
         })
         .catch(err => {
             App.ui.components.Dialog.message(App.i18n.t('dco.errors.getspeclist'), App.i18n.t('tepuy'));
@@ -166,9 +166,15 @@ export class GuiTemplateChooser {
         const builder = App.ui.components.FormBuilder;
         const validators = App.validation.validators;
 
+        let defaultType = types.length > 0 ? types[0].value : '';
+
+        let typesInfo = '<ul>';
+        types.forEach(type => { typesInfo += '<li><strong>' + type.label + ':</strong>' + type.description + '</li>'; });
+        typesInfo += '</ul>';
+
         let formConfig = builder.group({
             name: ['text', '', { label: 'dco.name', validators: [ validators.required ]}],
-            type: ['radio', 'rea', { label: 'dco.type', validators: [ validators.required ], options: types }],
+            type: ['radio', defaultType, { label: 'dco.type', validators: [ validators.required ], options: types, info: typesInfo }],
             shareWith: ['shareList', [], { label: 'dco.shareList', validators: [] }]
         });
         const titleText = 'dco.newTitle';
